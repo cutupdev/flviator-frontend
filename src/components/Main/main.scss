@@ -680,6 +680,10 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
   @media (max-width: 1314px) {
     right: 50%;
     font-size: 60px;
+
+    &.wait {
+      top: 22%;
+    }
   }
 
   &.red {

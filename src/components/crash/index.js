@@ -56,15 +56,15 @@ export default function WebGLStarter() {
       {/* <div className="canvas">
         <canvas ref={canvasRef} width={500} height={500}></canvas>
       </div> */}
-      {state.gameState.GameState === "BET" ? (
-        <div className={`crashtext wait font-9`} >
-          <div className="rotate">
-            <svg fill="red" className="svg" version="1.1" id="Capa_1"
-              viewBox="0 0 510.991 510.991" >
-              <g>
-                <path d="M255.19,312.694h-0.01c-4.142,0-7.495,3.358-7.495,7.5s3.363,7.5,7.505,7.5s7.5-3.358,7.5-7.5
+      {/* {state.gameState.GameState === "BET" ? ( */}
+      <div className={`crashtext wait font-9`} >
+        <div className="rotate">
+          <svg fill="red" className="svg" version="1.1" id="Capa_1"
+            viewBox="0 0 510.991 510.991" >
+            <g>
+              <path d="M255.19,312.694h-0.01c-4.142,0-7.495,3.358-7.495,7.5s3.363,7.5,7.505,7.5s7.5-3.358,7.5-7.5
 		S259.332,312.694,255.19,312.694z"/>
-                <path d="M500.676,441.447L309.241,330.922c-0.095-0.058-0.191-0.114-0.29-0.167l-14.297-8.255c0.044-0.764,0.073-1.532,0.073-2.307
+              <path d="M500.676,441.447L309.241,330.922c-0.095-0.058-0.191-0.114-0.29-0.167l-14.297-8.255c0.044-0.764,0.073-1.532,0.073-2.307
 		c0-19.285-13.875-35.381-32.165-38.853v-10.426l58.181-25.858c8.778-3.901,13.673-13.221,11.903-22.663
 		c-0.024-0.131-0.053-0.262-0.084-0.393L288.443,40.805c-1.915-9.641-10.392-16.616-20.243-16.616
 		c-11.38,0-20.638,9.258-20.638,20.638v221.051c-0.002,0.111-0.002,0.221,0,0.333v15.168c-18.183,3.558-31.948,19.605-31.948,38.814
@@ -82,22 +82,22 @@ export default function WebGLStarter() {
 		C275.79,337.247,266.343,344.75,255.17,344.75z M495.24,462.139c-1.356,2.349-4.197,3.398-6.754,2.5
 		c-0.126-0.044-0.253-0.085-0.382-0.123l-178.919-52.373c-2.387-0.915-3.856-3.3-3.586-5.857l5.996-56.686l181.581,104.836
 		C495.868,455.992,496.794,459.447,495.24,462.139z"/>
-              </g>
-            </svg>
-          </div>
-          <div>WAITING FOR NEXT ROUND</div>
-          <div className="waiting">
-            <div style={{ width: `${(5000 - state.gameState.time) * 100 / 5000}%` }}></div>
-          </div>
+            </g>
+          </svg>
         </div>
-      ) : (
+        <div>WAITING FOR NEXT ROUND</div>
+        <div className="waiting">
+          <div style={{ width: `${(5000 - state.gameState.time) * 100 / 5000}%` }}></div>
+        </div>
+      </div>
+      {/* ) : (
         <div className={`crashtext ${state.gameState.GameState === "GAMEEND" && "red"}`}>
           {state.gameState.GameState === "GAMEEND" && <div style={{ color: "white", fontSize: "40px", marginTop: "-47px" }}>FLEW AWAY!</div>}
           <div>
             {state.gameState.currentNum ? Number(state.gameState.currentNum).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
