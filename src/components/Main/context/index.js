@@ -2,12 +2,15 @@ import React, { createContext, useContext, useEffect, useReducer } from "react";
 import uniqid from 'uniqid';
 import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
+import { GIF } from "gif.js";
 
 const URL = 'http://192.168.115.178:5000/';
 // const URL = 'http://52.23.171.79/';
 let id = uniqid();
 let secondId = uniqid();
 let totalData;
+let fautoBetFinished = false;
+let sautoBetFinished = false;
 
 const socket = io(URL);
 const CrashContext = createContext();
@@ -120,7 +123,10 @@ export default function Provider({ children }) {
               type: "fbetted",
               payload: false
             })
-            callCashOut(totalData.fcashOutAt, "f");
+            if (!fautoBetFinished) {
+              callCashOut(totalData.fcashOutAt, "f");
+              fautoBetFinished = true;
+            }
           }
         }
       }
@@ -131,7 +137,10 @@ export default function Provider({ children }) {
               type: "sbetted",
               payload: false
             })
-            callCashOut(totalData.scashOutAt, "s");
+            if (!sautoBetFinished) {
+              callCashOut(totalData.scashOutAt, "s");
+              sautoBetFinished = true;
+            }
           }
         }
       }
@@ -193,6 +202,8 @@ export default function Provider({ children }) {
 
   useEffect(() => {
     if (state.gameState.GameState === "BET") {
+      fautoBetFinished = false;
+      sautoBetFinished = false;
       if (state.fauto) {
         if (state.fautoCound > 0) {
           if (state.fbetState) {

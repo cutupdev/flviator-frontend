@@ -661,7 +661,7 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
 
 .crashtext {
   position: absolute;
-  top: 44%;
+  top: 45%;
   width: 100%;
   left: 0;
   display: flex;
@@ -672,6 +672,10 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
   font-size: 100px;
   font-weight: 700;
   color: white;
+
+  &.wait {
+    top: 35%;
+  }
 
   @media (max-width: 1314px) {
     right: 50%;
