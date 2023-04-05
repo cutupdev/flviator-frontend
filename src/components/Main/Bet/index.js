@@ -45,7 +45,7 @@ export default function Bet(props) {
         if (betOpt === btnNum) {
             dispatch({
                 type: `${index}betAmount`,
-                payload: (state[`${index}betAmount`] + amount).toFixed(2)
+                payload: (Number(state[`${index}betAmount`]) + amount).toFixed(2)
             })
         } else {
             dispatch({

@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useCrashContext } from "./context";
 
 export default function History() {
   const [state] = useCrashContext();
+
+  const [showHistory, setShowHistory] = useState(false);
 
   return (
     <div className="stats">
@@ -14,14 +17,29 @@ export default function History() {
           ))}
         </div>
       </div>
-      <div className="button-block">
+      <div className="button-block" onClick={() => setShowHistory(!showHistory)}>
         <div className="button dropdown-toggle">
           <div className="trigger">
             <div className="history-icon"></div>
-            <div className="dd-icon"></div>
+            <div className={`dd-icon ${showHistory ? "up" : ""}`}></div>
           </div>
         </div>
       </div>
+      {showHistory && <div className="dropdown-menu">
+        <div className="wrapper">
+          <div className="header-2">
+            <div> Round history </div>
+          </div>
+          <div className="payouts-block">
+            {state.history && state.history.map((item, key) => (key < 123 &&
+              <div key={key} className="payout">
+                <div className={`bubble-multiplier ${Number(item) < 2 ? "blue" : Number(item) < 10 ? "purple" : "big"}`}>{Number(item).toFixed(2)}x</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      }
     </div>
   );
 }

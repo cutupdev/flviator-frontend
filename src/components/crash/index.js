@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { useCrashContext } from "../Main/context";
 import "./index.scss";
+import Unity, { UnityContext } from "react-unity-webgl";
+
+const unityContext = new UnityContext({
+  loaderUrl: "build/Build/AirCrash.loader.js",
+  dataUrl: "build/Build/AirCrash.data",
+  frameworkUrl: "build/Build/AirCrash.framework.js",
+  codeUrl: "build/Build/AirCrash.wasm"
+});
+
 // let maxAmount = 1 + 0.98 / (Math.random() + 0.00001);
 
 export default function WebGLStarter() {
@@ -23,10 +32,11 @@ export default function WebGLStarter() {
       myInterval = setInterval(() => {
         getCurrentTime();
       }, 20);
-    } else if (state.gameState.GameState === "GMAEEND") {
+    } else if (state.gameState.GameState === "GAMEEND") {
       setTarget(state.gameState.currentNum);
     } else if (state.gameState.GameState === "BET") {
       let startWaiting = Date.now() - state.gameState.time;
+      setTarget(1);
 
       myInterval = setInterval(() => {
         setWaiting(Date.now() - startWaiting);
@@ -38,9 +48,12 @@ export default function WebGLStarter() {
 
   return (
     <div className="crash-container">
-      {/* <div className="canvas">
-        <canvas ref={canvasRef} width={500} height={500}></canvas>
-      </div> */}
+      <div className="canvas">
+        <Unity
+          unityContext={unityContext}
+          matchWebGLToCanvasSize={true}
+        />
+      </div>
       {state.gameState.GameState === "BET" ? (
         <div className={`crashtext wait font-9`} >
           <div className="rotate">
@@ -70,7 +83,7 @@ export default function WebGLStarter() {
               </g>
             </svg>
           </div>
-          <div>WAITING FOR NEXT ROUND</div>
+          <div className="waiting-font">WAITING FOR NEXT ROUND</div>
           <div className="waiting">
             <div style={{ width: `${(5000 - waiting) * 100 / 5000}%` }}></div>
           </div>
