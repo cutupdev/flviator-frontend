@@ -45,6 +45,19 @@ html::-webkit-scrollbar-thumb {
   background: rgba(87, 96, 102, .5) !important;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0;
+  /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+  /* Firefox */
+}
+
 input {
   margin: 0;
   font-family: inherit;
@@ -108,7 +121,7 @@ code {
   }
 
   .logo-container {
-    width: 84px;
+    width: 32px;
     margin-left: 10px;
     height: 100%;
     display: flex;

@@ -1,70 +1,55 @@
+import { useEffect, useState } from "react";
 import { useCrashContext } from "../Main/context";
 import "./index.scss";
 // let maxAmount = 1 + 0.98 / (Math.random() + 0.00001);
 
 export default function WebGLStarter() {
   const [state] = useCrashContext();
-  // const canvasRef = useRef(null);
-  // const gifRef = useRef(null);
-  // const frameIndexRef = useRef(0);
-  // const lastRenderTimeRef = useRef(null);
-  // useEffect(() => {
-  //   const canvas = canvasRef.current;
-  //   const ctx = canvas.getContext("2d");
+  const [target, setTarget] = useState(1);
+  const [waiting, setWaiting] = useState();
 
-  //   gifRef.current = new GIF({
-  //     workerScript: '/path/to/gif.worker.js', // Path to worker script file
-  //     width: canvas.width,
-  //     height: canvas.height
-  //   });
+  useEffect(() => {
+    let myInterval;
+    if (state.gameState.GameState === "PLAYING") {
+      let startTime = Date.now() - state.gameState.time;
+      let currentTime;
+      let currentNum;
+      const getCurrentTime = () => {
+        currentTime = (Date.now() - startTime) / 1000;
+        currentNum = 1 + 0.06 * currentTime + Math.pow((0.06 * currentTime), 2) - Math.pow((0.04 * currentTime), 3) + Math.pow((0.04 * currentTime), 4);
+        setTarget(currentNum);
+      }
 
-  //   gifRef.current.on('finished', () => {
-  //     // Draw first frame of GIF once it has loaded
-  //     ctx.drawImage(gifRef.current.frames[0], 0, 0);
-  //     // Start animation loop
-  //     renderNextFrame(Date.now());
-  //   });
-  //   // gifRef.current.load(bgGif);
+      myInterval = setInterval(() => {
+        getCurrentTime();
+      }, 20);
+    } else if (state.gameState.GameState === "GMAEEND") {
+      setTarget(state.gameState.currentNum);
+    } else if (state.gameState.GameState === "BET") {
+      let startWaiting = Date.now() - state.gameState.time;
 
-  //   function renderNextFrame(timestamp) {
-  //     if (!lastRenderTimeRef.current) {
-  //       lastRenderTimeRef.current = timestamp;
-  //     }
-  //     const timeElapsed = timestamp - lastRenderTimeRef.current;
+      myInterval = setInterval(() => {
+        setWaiting(Date.now() - startWaiting);
+      }, 20);
+    }
 
-  //     // Check if enough time has elapsed to render next frame
-  //     if (timeElapsed >= gifRef.current.frames[frameIndexRef.current].delay * 10) {
-  //       lastRenderTimeRef.current = timestamp;
-
-  //       // Clear canvas before drawing next frame
-  //       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  //       // Draw next frame of GIF
-  //       ctx.drawImage(gifRef.current.frames[frameIndexRef.current], 0, 0);
-
-  //       // Increment frame index
-  //       frameIndexRef.current = (frameIndexRef.current + 1) % gifRef.current.frames.length;
-  //     }
-
-  //     // Request next animation frame
-  //     requestAnimationFrame((ts) => renderNextFrame(ts));
-  //   }
-  // }, []);
+    return () => clearInterval(myInterval);
+  }, [state.gameState.GameState])
 
   return (
     <div className="crash-container">
       {/* <div className="canvas">
         <canvas ref={canvasRef} width={500} height={500}></canvas>
       </div> */}
-      {/* {state.gameState.GameState === "BET" ? ( */}
-      <div className={`crashtext wait font-9`} >
-        <div className="rotate">
-          <svg fill="red" className="svg" version="1.1" id="Capa_1"
-            viewBox="0 0 510.991 510.991" >
-            <g>
-              <path d="M255.19,312.694h-0.01c-4.142,0-7.495,3.358-7.495,7.5s3.363,7.5,7.505,7.5s7.5-3.358,7.5-7.5
+      {state.gameState.GameState === "BET" ? (
+        <div className={`crashtext wait font-9`} >
+          <div className="rotate">
+            <svg fill="red" className="svg" version="1.1" id="Capa_1"
+              viewBox="0 0 510.991 510.991" >
+              <g>
+                <path d="M255.19,312.694h-0.01c-4.142,0-7.495,3.358-7.495,7.5s3.363,7.5,7.505,7.5s7.5-3.358,7.5-7.5
 		S259.332,312.694,255.19,312.694z"/>
-              <path d="M500.676,441.447L309.241,330.922c-0.095-0.058-0.191-0.114-0.29-0.167l-14.297-8.255c0.044-0.764,0.073-1.532,0.073-2.307
+                <path d="M500.676,441.447L309.241,330.922c-0.095-0.058-0.191-0.114-0.29-0.167l-14.297-8.255c0.044-0.764,0.073-1.532,0.073-2.307
 		c0-19.285-13.875-35.381-32.165-38.853v-10.426l58.181-25.858c8.778-3.901,13.673-13.221,11.903-22.663
 		c-0.024-0.131-0.053-0.262-0.084-0.393L288.443,40.805c-1.915-9.641-10.392-16.616-20.243-16.616
 		c-11.38,0-20.638,9.258-20.638,20.638v221.051c-0.002,0.111-0.002,0.221,0,0.333v15.168c-18.183,3.558-31.948,19.605-31.948,38.814
@@ -82,22 +67,22 @@ export default function WebGLStarter() {
 		C275.79,337.247,266.343,344.75,255.17,344.75z M495.24,462.139c-1.356,2.349-4.197,3.398-6.754,2.5
 		c-0.126-0.044-0.253-0.085-0.382-0.123l-178.919-52.373c-2.387-0.915-3.856-3.3-3.586-5.857l5.996-56.686l181.581,104.836
 		C495.868,455.992,496.794,459.447,495.24,462.139z"/>
-            </g>
-          </svg>
+              </g>
+            </svg>
+          </div>
+          <div>WAITING FOR NEXT ROUND</div>
+          <div className="waiting">
+            <div style={{ width: `${(5000 - waiting) * 100 / 5000}%` }}></div>
+          </div>
         </div>
-        <div>WAITING FOR NEXT ROUND</div>
-        <div className="waiting">
-          <div style={{ width: `${(5000 - state.gameState.time) * 100 / 5000}%` }}></div>
-        </div>
-      </div>
-      {/* ) : (
+      ) : (
         <div className={`crashtext ${state.gameState.GameState === "GAMEEND" && "red"}`}>
           {state.gameState.GameState === "GAMEEND" && <div style={{ color: "white", fontSize: "40px", marginTop: "-47px" }}>FLEW AWAY!</div>}
           <div>
-            {state.gameState.currentNum ? Number(state.gameState.currentNum).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
+            {state.gameState.currentNum ? Number(target).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
           </div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

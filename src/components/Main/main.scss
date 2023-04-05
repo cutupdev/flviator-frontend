@@ -357,9 +357,6 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
                       padding-right: 5px;
                     }
 
-                    &.disabled {
-                      background-color: #131313b3;
-                    }
                   }
                 }
               }
@@ -699,6 +696,10 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
   }
 }
 
+.disabled {
+  background-color: #131313b3 !important;
+}
+
 .waiting {
   margin-top: 10px;
   width: 250px;
@@ -965,10 +966,6 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
                   font-weight: 700;
                   padding: 0;
                 }
-              }
-
-              &.disabled {
-                background-color: rgba(19, 19, 19, 0.7019607843);
               }
             }
           }

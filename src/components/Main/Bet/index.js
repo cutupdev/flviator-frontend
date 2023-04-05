@@ -22,7 +22,7 @@ export default function Bet(props) {
         } else {
             dispatch({
                 type: `${index + type}`,
-                payload: Number(state[`${index + type}`]) - 0.1
+                payload: (Number(state[`${index + type}`]) - 0.1).toFixed(2)
             })
         }
     }
@@ -31,12 +31,12 @@ export default function Bet(props) {
         if (state[`${index + type}`] + 0.1 > state.balance) {
             dispatch({
                 type: `${index + type}`,
-                payload: state.balance
+                payload: Number(state.balance).toFixed(2)
             })
         } else {
             dispatch({
                 type: `${index + type}`,
-                payload: Number(state[`${index + type}`]) + 0.1
+                payload: (Number(state[`${index + type}`]) + 0.1).toFixed(2)
             })
         }
     }
@@ -45,12 +45,12 @@ export default function Bet(props) {
         if (betOpt === btnNum) {
             dispatch({
                 type: `${index}betAmount`,
-                payload: state[`${index}betAmount`] + amount
+                payload: (state[`${index}betAmount`] + amount).toFixed(2)
             })
         } else {
             dispatch({
                 type: `${index}betAmount`,
-                payload: amount
+                payload: Number(amount).toFixed(2)
             })
             setBetOpt(btnNum);
         }
@@ -74,7 +74,7 @@ export default function Bet(props) {
             } else {
                 dispatch({
                     type: index + type,
-                    payload: e
+                    payload: Number(e).toFixed(2)
                 })
             }
         } else {
@@ -136,21 +136,26 @@ export default function Bet(props) {
         });
     }
 
-    const onAutoBetClick = () => {
+    const onAutoBetClick = (state) => {
         dispatch({
             type: `${index}betState`,
-            payload: !state[`${index}betState`]
+            payload: state
         });
         dispatch({
             type: `${index}auto`,
             payload: !state[`${index}auto`]
         })
+
+        if (!state) {
+            setCount(0);
+        }
     }
 
     const onStartBtnClick = () => {
+        console.log(state[`${index}autoCound`]);
         if (state[`${index}autoCound`] > 0) {
             if (state[`${index}deState`] || state[`${index}inState`]) {
-                onAutoBetClick();
+                onAutoBetClick(true);
                 setShowModal(false);
             } else {
                 toast.error("Please, specify decrease or exceed stop point");
@@ -164,39 +169,68 @@ export default function Bet(props) {
             <div className="controls">
                 <div className="navigation">
                     <div className="navigation-switcher">
-                        <button className={gameType === "manual" ? "active" : ""} onClick={() => changeBetType("manual")}>MANUAL</button>
-                        <button className={gameType === "auto" ? "active" : ""} onClick={() => changeBetType("auto")}>AUTO</button>
+                        {state[`${index}betted`] || state[`1${index}betState`] ?
+                            <>
+                                <button className={gameType === "manual" ? "active" : ""} >MANUAL</button>
+                                <button className={gameType === "auto" ? "active" : ""} >AUTO</button>
+                            </> :
+                            <>
+                                <button className={gameType === "manual" ? "active" : ""} onClick={() => changeBetType("manual")}>MANUAL</button>
+                                <button className={gameType === "auto" ? "active" : ""} onClick={() => changeBetType("auto")}>AUTO</button>
+                            </>
+                        }
                     </div>
                 </div>
                 <div className="first-row">
                     <div className="bet-block">
                         <div className="bet-spinner">
-                            <div className="spinner">
+                            <div className={`spinner ${state[`${index}betState`] || state[`${index}betted`] ? "disabled" : ""}`}>
                                 <div className="buttons">
                                     <button className="minus" onClick={() => minus("betAmount")}></button>
                                 </div>
                                 <div className="input">
-                                    <input value={state[`${index}betAmount`]} onChange={(e) => dispatch({ type: `${index}betAmount`, payload: e.target.value })}></input>
+                                    {state[`${index}betState`] || state[`${index}betted`] ?
+                                        <input type="number" value={state[`${index}betAmount`]} readOnly ></input>
+                                        :
+                                        <input type="number" value={state[`${index}betAmount`]} onChange={(e) => dispatch({ type: `${index}betAmount`, payload: e.target.value })}></input>
+                                    }
                                 </div>
                                 <div className="buttons">
                                     <button className="plus" onClick={() => plus("betAmount")}></button>
                                 </div>
                             </div>
                         </div>
-                        <div className="bet-opt-list">
-                            <button onClick={() => manualPlus(1, "1")} className="bet-opt">
-                                <span>1</span>
-                            </button>
-                            <button onClick={() => manualPlus(2, "2")} className="bet-opt">
-                                <span>2</span>
-                            </button>
-                            <button onClick={() => manualPlus(5, "5")} className="bet-opt">
-                                <span>5</span>
-                            </button>
-                            <button onClick={() => manualPlus(10, "10")} className="bet-opt">
-                                <span>10</span>
-                            </button>
-                        </div>
+                        {state[`${index}betState`] || state[`${index}betted`] ?
+                            <div className="bet-opt-list">
+                                <button className="bet-opt disabled">
+                                    <span>1</span>
+                                </button>
+                                <button className="bet-opt disabled">
+                                    <span>2</span>
+                                </button>
+                                <button className="bet-opt disabled">
+                                    <span>5</span>
+                                </button>
+                                <button className="bet-opt disabled">
+                                    <span>10</span>
+                                </button>
+                            </div>
+                            :
+                            <div className="bet-opt-list">
+                                <button onClick={() => manualPlus(1, "1")} className="bet-opt">
+                                    <span>1</span>
+                                </button>
+                                <button onClick={() => manualPlus(2, "2")} className="bet-opt">
+                                    <span>2</span>
+                                </button>
+                                <button onClick={() => manualPlus(5, "5")} className="bet-opt">
+                                    <span>5</span>
+                                </button>
+                                <button onClick={() => manualPlus(10, "10")} className="bet-opt">
+                                    <span>10</span>
+                                </button>
+                            </div>
+                        }
                     </div>
                     <div className="buttons-block">
                         {state[`${index}betted`] ? state.gameState.GameState === "PLAYING" ?
@@ -240,7 +274,7 @@ export default function Bet(props) {
                             <div className="auto-bet-wrapper">
                                 <div className="auto-bet">
                                     {state[`${index}auto`] ? (
-                                        <button onClick={onAutoBetClick} className="auto-play-btn btn-danger" >{state[`${index}autoCound`]}</button>
+                                        <button onClick={() => onAutoBetClick(false)} className="auto-play-btn btn-danger" >{state[`${index}autoCound`]}</button>
                                     ) : (
                                         <button onClick={() => { setShowModal(true); }} className="auto-play-btn btn-primary">AUTO PLAY</button>
                                     )}
@@ -249,22 +283,28 @@ export default function Bet(props) {
                             <div className="cashout-block">
                                 <div className="cashout-switcher">
                                     <label className="label">Auto Cash Out</label>
-                                    <div onClick={() => { dispatch({ type: `${index}autoCashoutState`, payload: !state[`${index}autoCashoutState`] }) }} className={`input-switch ${state[`${index}autoCashoutState`] ? "" : "off"}`}>
-                                        <span className="oval"></span>
-                                    </div>
+                                    {state[`${index}betted`] || state[`${index}betState`] ? (
+                                        <div className={`input-switch ${state[`${index}autoCashoutState`] ? "" : "off"}`}>
+                                            <span className="oval"></span>
+                                        </div>
+                                    ) : (
+                                        <div onClick={() => { dispatch({ type: `${index}autoCashoutState`, payload: !state[`${index}autoCashoutState`] }) }} className={`input-switch ${state[`${index}autoCashoutState`] ? "" : "off"}`}>
+                                            <span className="oval"></span>
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="cashout-snipper-wrapper">
                                     <div className="cashout-snipper">
-                                        <div className={`snipper small ${!state[`${index}autoCashoutState`] ? "disabled" : ""}`}>
+                                        <div className={`snipper small ${state[`${index}autoCashoutState`] && !state[`${index}betState`] ? "" : "disabled"}`}>
                                             <div className="input">
-                                                {!state[`${index}autoCashoutState`] ? (
-                                                    <input value={Number(state[`${index}cashOutAt`]).toFixed(2)} readOnly />
-                                                ) : (
-                                                    <input
+                                                {state[`${index}autoCashoutState`] && !state[`${index}betState`] ? (
+                                                    <input type="number"
                                                         onChange={(e) => dispatch({ type: `${index}cashOutAt`, payload: e.target.value })}
                                                         value={state[`${index}cashOutAt`]}
                                                         onBlur={(e) => onChangeBlur(e.target.value, "cashOutAt")}
                                                     />
+                                                ) : (
+                                                    <input type="number" value={Number(state[`${index}cashOutAt`]).toFixed(2)} readOnly />
                                                 )}
                                             </div>
                                             <span className="text">x</span>
@@ -328,7 +368,7 @@ export default function Bet(props) {
                                                     <button onClick={() => minus("decrease")} className="minus"></button>
                                                 </div>
                                                 <div className="input">
-                                                    <input onChange={(e) => dispatch({ type: `${index}decrease`, payload: e.target.value })} value={state[`${index}decrease`]}
+                                                    <input type="number" onChange={(e) => dispatch({ type: `${index}decrease`, payload: e.target.value })} value={state[`${index}decrease`]}
                                                         onBlur={(e) => onChangeBlur(e.target.value, "decrease")}
                                                     />
                                                 </div>
@@ -341,7 +381,7 @@ export default function Bet(props) {
                                                     <button disabled onClick={() => minus("decrease")} className="minus"></button>
                                                 </div>
                                                 <div className="input">
-                                                    <input readOnly value={Number(state[`${index}decrease`]).toFixed(2)} />
+                                                    <input type="number" readOnly value={Number(state[`${index}decrease`]).toFixed(2)} />
                                                 </div>
                                                 <div className="buttons">
                                                     <button disabled onClick={() => plus("decrease")} className="plus"></button>
@@ -368,7 +408,7 @@ export default function Bet(props) {
                                                 <button onClick={() => minus("increase")} className="minus"></button>
                                             </div>
                                             <div className="input">
-                                                <input onChange={(e) => dispatch({ type: `${index}increase`, payload: e.target.value })} value={state[`${index}increase`]}
+                                                <input type="number" onChange={(e) => dispatch({ type: `${index}increase`, payload: e.target.value })} value={state[`${index}increase`]}
                                                     onBlur={(e) => onChangeBlur(e.target.value, "increase")}
                                                 />
                                             </div>
@@ -380,7 +420,7 @@ export default function Bet(props) {
                                                 <button disabled onClick={() => minus("increase")} className="minus"></button>
                                             </div>
                                             <div className="input">
-                                                <input readOnly value={Number(state[`${index}increase`]).toFixed(2)} />
+                                                <input type="number" readOnly value={Number(state[`${index}increase`]).toFixed(2)} />
                                             </div>
                                             <div className="buttons">
                                                 <button disabled onClick={() => plus("increase")} className="plus"></button>
@@ -408,7 +448,7 @@ export default function Bet(props) {
                                                     <button onClick={() => minus("singleAmount")} className="minus"></button>
                                                 </div>
                                                 <div className="input">
-                                                    <input onChange={(e) => dispatch({ type: `${index}singleAmount`, payload: e.target.value })} value={state[`${index}singleAmount`]}
+                                                    <input type="number" onChange={(e) => dispatch({ type: `${index}singleAmount`, payload: e.target.value })} value={state[`${index}singleAmount`]}
                                                         onBlur={(e) => onChangeBlur(e.target.value, "singleAmount")}
                                                     />
                                                 </div>
@@ -422,7 +462,7 @@ export default function Bet(props) {
                                                 </div>
                                                 <div className="input">
 
-                                                    <input readOnly value={Number(state[`${index}singleAmount`]).toFixed(2)} />
+                                                    <input type="number" readOnly value={Number(state[`${index}singleAmount`]).toFixed(2)} />
                                                 </div>
                                                 <div className="buttons">
                                                     <button disabled onClick={() => plus("singleAmount")} className="plus"></button>

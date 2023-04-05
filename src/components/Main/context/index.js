@@ -210,6 +210,7 @@ export default function Provider({ children }) {
             var data = {
               token: id,
               betAmount: state.fbetAmount,
+              target: state.fcashOutAt,
               auto: state.fauto
             }
             socket.emit("playBet", data);
@@ -232,6 +233,7 @@ export default function Provider({ children }) {
         var fbetdata = {
           token: id,
           betAmount: state.fbetAmount,
+          target: state.fcashOutAt,
           auto: state.fauto
         }
         socket.emit("playBet", fbetdata);
@@ -265,6 +267,7 @@ export default function Provider({ children }) {
         var sbetdata = {
           token: secondId,
           betAmount: state.sbetAmount,
+          target: state.scashOutAt,
           auto: state.sauto
         }
         socket.emit("playBet", sbetdata);
