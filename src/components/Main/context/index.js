@@ -5,16 +5,17 @@ import { toast } from 'react-toastify';
 import Unity, { UnityContext } from "react-unity-webgl";
 
 const unityContext = new UnityContext({
-  loaderUrl: "build/Build/myBuild.loader.js",
-  dataUrl: "build/Build/myBuild.data",
-  frameworkUrl: "build/Build/myBuild.framework.js",
-  codeUrl: "build/Build/myBuild.wasm"
+  loaderUrl: "build/Build/AirCrash.loader.js",
+  dataUrl: "build/Build/AirCrash.data",
+  frameworkUrl: "build/Build/AirCrash.framework.js",
+  codeUrl: "build/Build/AirCrash.wasm"
 });
 
-// const URL = 'http://192.168.115.178:5000/';
-const URL = 'http://52.23.171.79/';
+const URL = 'http://192.168.115.178:5000/';
+// const URL = 'http://52.23.171.79/';
 let id = uniqid();
 let secondId = uniqid();
+let myTokenId = uniqid();
 let totalData;
 let fautoBetFinished = false;
 let sautoBetFinished = false;
@@ -36,7 +37,7 @@ const init_state = {
   history: [],
   bettedUsers: [],
   gameState: [],
-  balance: 3000,
+  balance: 5000,
   width: 1500,
   fbetState: false,
   fbetted: false,
@@ -67,23 +68,48 @@ const init_state = {
   sauto: false,
   sdefaultBetAmount: 1,
   unityState: false,
-  myUnityContext: unityContext
+  myUnityContext: unityContext,
+  unityLoading: false
 };
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, init_state);
 
   totalData = state;
 
+  // Here are Unity all events
+  useEffect(function () {
+    unityContext.on("GameController", function (message) {
+      if (message == "Ready") {
+        dispatch({
+          type: "unityState",
+          payload: true
+        });
+      }
+    });
+    unityContext.on("progress", (progression) => {
+      if (progression === 1) {
+        dispatch({
+          type: "unityLoading",
+          payload: true
+        })
+      }
+    })
+    // unityContext.removeAllEventListeners();
+  }, []);
+
+  // Here are socket all events
   useEffect(() => {
     var data = {
       token: id,
       name: id,
-      type: "f"
+      type: "f",
+      myToken: myTokenId
     }
     var sData = {
       token: secondId,
       name: secondId,
-      type: "s"
+      type: "s",
+      myToken: myTokenId
     }
     socket.emit("enterRoom", data);
     socket.emit("enterRoom", sData);
@@ -196,17 +222,6 @@ export default function Provider({ children }) {
     socket.on("success", (data) => {
       toast.success(data);
     })
-
-    unityContext.on("GameController", function (message) {
-      if (message === "Ready") {
-        dispatch({
-          type: "unityState",
-          payload: true
-        });
-        console.log(unityContext);
-      }
-    });
-
     return () => {
       socket.off('connect');
       socket.off('disconnect');

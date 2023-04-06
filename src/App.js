@@ -9,11 +9,17 @@ import propeller from "./assets/images/propeller.png"
 function App() {
   const [state] = useCrashContext();
   useEffect(() => {
-    console.log(state.myUnityContext.isLoading);
-  }, [state.myUnityContext])
+    console.log(state.myUnitycontext);
+    if (state.myUnitycontext) {
+      console.log(state.myUnitycontext);
+      state.myUnitycontext.on("progress", (progression) => {
+        console.log(progression);
+      })
+    }
+  }, [state.myUnitycontext])
   return (
     <div className="main-container">
-      {state.myUnityContext?.isLoading ?
+      {!state.unityLoading &&
         <div className="myloading">
           <div className="loading-container">
             <div className="rotation">
@@ -21,15 +27,13 @@ function App() {
             </div>
             <p>Loading ....</p>
           </div>
-        </div> :
-        <>
-          <Header />
-          <div className="game-container">
-            <BetsUsers />
-            <Main />
-          </div>
-        </>
+        </div>
       }
+      <Header />
+      <div className="game-container">
+        <BetsUsers />
+        <Main />
+      </div>
     </div>
   );
 }

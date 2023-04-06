@@ -192,7 +192,7 @@ export default function Bet(props) {
                                     {state[`${index}betState`] || state[`${index}betted`] ?
                                         <input type="number" value={state[`${index}betAmount`]} readOnly ></input>
                                         :
-                                        <input type="number" value={state[`${index}betAmount`]} onChange={(e) => dispatch({ type: `${index}betAmount`, payload: e.target.value })}></input>
+                                        <input type="number" value={state[`${index}betAmount`]} onInput={(e) => dispatch({ type: `${index}betAmount`, payload: e.target.value })}></input>
                                     }
                                 </div>
                                 <div className="buttons">
@@ -378,13 +378,13 @@ export default function Bet(props) {
                                             </div> :
                                             <div className="m-spinner disabled">
                                                 <div className="buttons">
-                                                    <button disabled onClick={() => minus("decrease")} className="minus"></button>
+                                                    <button disabled className="minus"></button>
                                                 </div>
                                                 <div className="input">
                                                     <input type="number" readOnly value={Number(state[`${index}decrease`]).toFixed(2)} />
                                                 </div>
                                                 <div className="buttons">
-                                                    <button disabled onClick={() => plus("decrease")} className="plus"></button>
+                                                    <button disabled className="plus"></button>
                                                 </div>
                                             </div>}
                                     </div>
@@ -417,13 +417,13 @@ export default function Bet(props) {
                                             </div>
                                         </div> : <div className="m-spinner disabled">
                                             <div className="buttons">
-                                                <button disabled onClick={() => minus("increase")} className="minus"></button>
+                                                <button disabled className="minus"></button>
                                             </div>
                                             <div className="input">
                                                 <input type="number" readOnly value={Number(state[`${index}increase`]).toFixed(2)} />
                                             </div>
                                             <div className="buttons">
-                                                <button disabled onClick={() => plus("increase")} className="plus"></button>
+                                                <button disabled className="plus"></button>
                                             </div>
                                         </div>}
                                     </div>
@@ -458,14 +458,14 @@ export default function Bet(props) {
                                             </div> :
                                             <div className="m-spinner disabled">
                                                 <div className="buttons ">
-                                                    <button disabled onClick={() => minus("singleAmount")} className="minus"></button>
+                                                    <button disabled className="minus"></button>
                                                 </div>
                                                 <div className="input">
 
                                                     <input type="number" readOnly value={Number(state[`${index}singleAmount`]).toFixed(2)} />
                                                 </div>
                                                 <div className="buttons">
-                                                    <button disabled onClick={() => plus("singleAmount")} className="plus"></button>
+                                                    <button disabled className="plus"></button>
                                                 </div>
                                             </div>
                                         }

@@ -49,11 +49,11 @@ export default function WebGLStarter() {
   }, [state.gameState.GameState, state.unityState])
 
   useEffect(() => {
-    state.myUnityContext.send("GameManager", "RequestToken", JSON.stringify({
+    state.myUnityContext?.send("GameManager", "RequestToken", JSON.stringify({
       gameState: flag
     }));
     currentFlag = flag;
-  }, [flag]);
+  }, [flag, state.myUnityContext]);
 
   return (
     <div className="crash-container">
