@@ -2,10 +2,17 @@ import React, { createContext, useContext, useEffect, useReducer } from "react";
 import uniqid from 'uniqid';
 import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
-import { GIF } from "gif.js";
+import Unity, { UnityContext } from "react-unity-webgl";
 
-const URL = 'http://192.168.115.178:5000/';
-// const URL = 'http://52.23.171.79/';
+const unityContext = new UnityContext({
+  loaderUrl: "build/Build/myBuild.loader.js",
+  dataUrl: "build/Build/myBuild.data",
+  frameworkUrl: "build/Build/myBuild.framework.js",
+  codeUrl: "build/Build/myBuild.wasm"
+});
+
+// const URL = 'http://192.168.115.178:5000/';
+const URL = 'http://52.23.171.79/';
 let id = uniqid();
 let secondId = uniqid();
 let totalData;
@@ -59,6 +66,8 @@ const init_state = {
   ssingle: false,
   sauto: false,
   sdefaultBetAmount: 1,
+  unityState: false,
+  myUnityContext: unityContext
 };
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, init_state);
@@ -187,6 +196,16 @@ export default function Provider({ children }) {
     socket.on("success", (data) => {
       toast.success(data);
     })
+
+    unityContext.on("GameController", function (message) {
+      if (message === "Ready") {
+        dispatch({
+          type: "unityState",
+          payload: true
+        });
+        console.log(unityContext);
+      }
+    });
 
     return () => {
       socket.off('connect');

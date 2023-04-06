@@ -1,5 +1,4 @@
 import logo from "../assets/images/logo.png";
-import help from "../assets/images/help.svg";
 import "../index.scss";
 import { useCrashContext } from "./Main/context";
 export default function Header() {
