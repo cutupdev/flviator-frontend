@@ -11,8 +11,8 @@ const unityContext = new UnityContext({
   codeUrl: "build/Build/AirCrash.wasm"
 });
 
-const URL = 'http://192.168.115.178:5000/';
-// const URL = 'http://52.23.171.79/';
+// const URL = 'http://192.168.115.178:5000/';
+const URL = 'http://52.23.171.79/';
 let id = uniqid();
 let secondId = uniqid();
 let myTokenId = uniqid();
@@ -69,7 +69,8 @@ const init_state = {
   sdefaultBetAmount: 1,
   unityState: false,
   myUnityContext: unityContext,
-  unityLoading: false
+  unityLoading: false,
+  currentProgress: 0
 };
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, init_state);
@@ -87,6 +88,11 @@ export default function Provider({ children }) {
       }
     });
     unityContext.on("progress", (progression) => {
+      console.log(progression, " : <=================================================progress");
+      dispatch({
+        type: "currentProgress",
+        payload: progression * 100
+      })
       if (progression === 1) {
         dispatch({
           type: "unityLoading",

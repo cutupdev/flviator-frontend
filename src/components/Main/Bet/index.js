@@ -7,10 +7,6 @@ export default function Bet(props) {
     const [gameType, setGameType] = useState("manual");
     const [betOpt, setBetOpt] = useState("1");
     const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        console.log(showModal);
-    }, [showModal])
     const { index } = props;
 
     const minus = (type) => {
@@ -152,7 +148,6 @@ export default function Bet(props) {
     }
 
     const onStartBtnClick = () => {
-        console.log(state[`${index}autoCound`]);
         if (state[`${index}autoCound`] > 0) {
             if (state[`${index}deState`] || state[`${index}inState`]) {
                 onAutoBetClick(true);

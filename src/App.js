@@ -25,7 +25,10 @@ function App() {
             <div className="rotation">
               <img alt="propeller" src={propeller}></img>
             </div>
-            <p>Loading ....</p>
+            <div className="waiting">
+              <div style={{ width: `${state.currentProgress}%` }}></div>
+            </div>
+            <p>{Number(state.currentProgress).toFixed(2)}%</p>
           </div>
         </div>
       }
