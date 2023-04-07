@@ -2,21 +2,11 @@ import Header from "./components/header";
 import BetsUsers from "./components/betsUsers";
 import Main from "./components/Main/main";
 import { useCrashContext } from "./components/Main/context";
-import { useEffect } from "react";
 import propeller from "./assets/images/propeller.png"
 // import "./App.scss";
 
 function App() {
   const [state] = useCrashContext();
-  useEffect(() => {
-    console.log(state.myUnitycontext);
-    if (state.myUnitycontext) {
-      console.log(state.myUnitycontext);
-      state.myUnitycontext.on("progress", (progression) => {
-        console.log(progression);
-      })
-    }
-  }, [state.myUnitycontext])
   return (
     <div className="main-container">
       {!state.unityLoading &&

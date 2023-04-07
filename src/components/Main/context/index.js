@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useReducer } from "react";
 import uniqid from 'uniqid';
 import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
-import Unity, { UnityContext } from "react-unity-webgl";
+import { UnityContext } from "react-unity-webgl";
 
 const unityContext = new UnityContext({
   loaderUrl: "build/Build/AirCrash.loader.js",
@@ -11,8 +11,8 @@ const unityContext = new UnityContext({
   codeUrl: "build/Build/AirCrash.wasm"
 });
 
-// const URL = 'http://192.168.115.178:5000/';
-const URL = 'http://52.23.171.79/';
+const URL = 'http://192.168.115.178:5000/';
+// const URL = 'http://52.23.171.79/';
 let id = uniqid();
 let secondId = uniqid();
 let myTokenId = uniqid();
@@ -88,7 +88,6 @@ export default function Provider({ children }) {
       }
     });
     unityContext.on("progress", (progression) => {
-      console.log(progression, " : <=================================================progress");
       dispatch({
         type: "currentProgress",
         payload: progression * 100
@@ -128,6 +127,7 @@ export default function Provider({ children }) {
     });
 
     socket.on("myBetState", (data) => {
+      console.log(data, secondId);
       if (!data.auto) {
         dispatch({
           type: `${data.type}betState`,
@@ -280,7 +280,7 @@ export default function Provider({ children }) {
       }
       if (state.sauto) {
         if (state.sautoCound > 0) {
-          if (state.fbetState) {
+          if (state.sbetState) {
             var betdata = {
               token: secondId,
               betAmount: state.sbetAmount,
