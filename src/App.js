@@ -1,5 +1,5 @@
 import Header from "./components/header";
-import BetsUsers from "./components/betsUsers";
+import BetsUsers from "./components/BetUsers/betsUsers";
 import Main from "./components/Main/main";
 import { useCrashContext } from "./components/Main/context";
 import propeller from "./assets/images/propeller.png"
@@ -16,9 +16,9 @@ function App() {
               <img alt="propeller" src={propeller}></img>
             </div>
             <div className="waiting">
-              <div style={{ width: `${state.currentProgress}%` }}></div>
+              <div className="width-transition" style={{ width: `${state.currentProgress * 1.111}%` }}></div>
             </div>
-            <p>{Number(state.currentProgress).toFixed(2)}%</p>
+            <p>{Number(state.currentProgress * 1.111 + 0.01).toFixed(2)}%</p>
           </div>
         </div>
       }

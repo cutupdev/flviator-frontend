@@ -9,15 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider>
-      <App />
-      <ToastContainer
-        position="top-center"
-        theme="dark"
-      />
-    </Provider>
-  </React.StrictMode>
+  <Provider>
+    <App />
+    <ToastContainer
+      position="top-center"
+      theme="dark"
+    />
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

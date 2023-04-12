@@ -1,0 +1,134 @@
+.navigation-switcher-wrapper {
+    min-height: 24px;
+    max-height: 24px;
+    display: flex;
+    justify-content: center;
+    font-size: 12px;
+    margin-bottom: 5px;
+
+    .navigation-switcher {
+        height: 100%;
+        background: #141516;
+        border-radius: 10px;
+        border: solid 1px #141516;
+        position: relative;
+
+        .slider {
+            height: 100%;
+            position: absolute;
+            border-radius: 10px;
+            transition: transform .5s ease;
+            background: rgb(44, 45, 48);
+            width: 100px;
+        }
+
+        .tab {
+            height: 100%;
+            position: relative;
+            text-align: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #9ea0a3;
+            padding: 0;
+            width: 100px;
+
+            &.active {
+                color: #fff;
+                cursor: default;
+            }
+        }
+    }
+}
+
+.top-list-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
+    .top-items-list {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative !important;
+
+        .bet-item {
+            color: #9ea0a3;
+            font-size: 12px;
+            margin-top: 5px;
+
+            .main {
+                height: 80px;
+                background: #101112;
+                position: relative;
+                align-items: center;
+                display: flex;
+
+                .icon {
+                    margin-left: 30px;
+                    position: absolute;
+
+                    .avatar {
+                        width: 30px;
+                        height: 30px;
+                        vertical-align: middle;
+                        border-style: none;
+                    }
+
+                    .username {
+                        font-size: 13px;
+                    }
+                }
+
+                .bets {
+                    margin-left: 20px;
+                    justify-content: flex-end;
+                }
+
+                .amount {
+                    font-size: 14px;
+                    color: white;
+                }
+
+                .justify-center {
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+    .scroll-restyle .scroll-y {
+        margin: 0 0 0 5px;
+        overflow-y: scroll !important;
+    }
+}
+
+.d-flex {
+    display: flex;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.justify-content-end {
+    justify-content: flex-end;
+}
+
+.ml-3 {
+    margin-left: 20px;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.w-50 {
+    width: 50%;
+}

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 export default function Bet(props) {
     const [state, dispatch, callCashOut] = useCrashContext();
     const [gameType, setGameType] = useState("manual");
-    const [betOpt, setBetOpt] = useState("1");
+    const [betOpt, setBetOpt] = useState("20");
     const [showModal, setShowModal] = useState(false);
     const { index } = props;
 
@@ -166,12 +166,12 @@ export default function Bet(props) {
                     <div className="navigation-switcher">
                         {state[`${index}betted`] || state[`1${index}betState`] ?
                             <>
-                                <button className={gameType === "manual" ? "active" : ""} >MANUAL</button>
-                                <button className={gameType === "auto" ? "active" : ""} >AUTO</button>
+                                <button className={gameType === "manual" ? "active" : ""} >Bet</button>
+                                <button className={gameType === "auto" ? "active" : ""} >Auto</button>
                             </> :
                             <>
-                                <button className={gameType === "manual" ? "active" : ""} onClick={() => changeBetType("manual")}>MANUAL</button>
-                                <button className={gameType === "auto" ? "active" : ""} onClick={() => changeBetType("auto")}>AUTO</button>
+                                <button className={gameType === "manual" ? "active" : ""} onClick={() => changeBetType("manual")}>Bet</button>
+                                <button className={gameType === "auto" ? "active" : ""} onClick={() => changeBetType("auto")}>Auto</button>
                             </>
                         }
                     </div>
@@ -198,31 +198,31 @@ export default function Bet(props) {
                         {state[`${index}betState`] || state[`${index}betted`] ?
                             <div className="bet-opt-list">
                                 <button className="bet-opt disabled">
-                                    <span>1</span>
+                                    <span>20</span>
                                 </button>
                                 <button className="bet-opt disabled">
-                                    <span>2</span>
+                                    <span>50</span>
                                 </button>
                                 <button className="bet-opt disabled">
-                                    <span>5</span>
+                                    <span>100</span>
                                 </button>
                                 <button className="bet-opt disabled">
-                                    <span>10</span>
+                                    <span>1000</span>
                                 </button>
                             </div>
                             :
                             <div className="bet-opt-list">
-                                <button onClick={() => manualPlus(1, "1")} className="bet-opt">
-                                    <span>1</span>
+                                <button onClick={() => manualPlus(20, "20")} className="bet-opt">
+                                    <span>20</span>
                                 </button>
-                                <button onClick={() => manualPlus(2, "2")} className="bet-opt">
-                                    <span>2</span>
+                                <button onClick={() => manualPlus(50, "50")} className="bet-opt">
+                                    <span>50</span>
                                 </button>
-                                <button onClick={() => manualPlus(5, "5")} className="bet-opt">
-                                    <span>5</span>
+                                <button onClick={() => manualPlus(100, "100")} className="bet-opt">
+                                    <span>100</span>
                                 </button>
-                                <button onClick={() => manualPlus(10, "10")} className="bet-opt">
-                                    <span>10</span>
+                                <button onClick={() => manualPlus(1000, "1000")} className="bet-opt">
+                                    <span>1000</span>
                                 </button>
                             </div>
                         }
@@ -234,7 +234,7 @@ export default function Bet(props) {
                                     <label>CASHOUT</label>
                                     <label className="amount">
                                         <span>{Number(state[`${index}betAmount`] * state.gameState.currentNum).toFixed(2)}</span>
-                                        <span className="currency">USD</span>
+                                        <span className="currency">INR</span>
                                     </label>
                                 </span>
                             </button>
@@ -254,7 +254,7 @@ export default function Bet(props) {
                                     <label>BET</label>
                                     <label className="amount">
                                         <span>{Number(state[`${index}betAmount`]).toFixed(2)}</span>
-                                        <span className="currency">USD</span>
+                                        <span className="currency">INR</span>
                                     </label>
                                 </span>
                             </button>
@@ -383,7 +383,7 @@ export default function Bet(props) {
                                                 </div>
                                             </div>}
                                     </div>
-                                    <span >USD</span>
+                                    <span >INR</span>
                                 </div>
                                 <div className="content-part">
                                     <div className={`input-switch ${state[`${index}inState`] ? "" : "off"}`}
@@ -422,7 +422,7 @@ export default function Bet(props) {
                                             </div>
                                         </div>}
                                     </div>
-                                    <span >USD</span>
+                                    <span >INR</span>
                                 </div>
                                 <div className="content-part">
                                     <div className={`input-switch ${state[`${index}single`] ? "" : "off"}`}
@@ -465,7 +465,7 @@ export default function Bet(props) {
                                             </div>
                                         }
                                     </div>
-                                    <span >USD</span>
+                                    <span >INR</span>
                                 </div>
                             </div>
                             <div className="modal-footer">

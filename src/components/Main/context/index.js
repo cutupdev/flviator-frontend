@@ -1,21 +1,46 @@
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 import uniqid from 'uniqid';
-import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
 import { UnityContext } from "react-unity-webgl";
+import { io } from 'socket.io-client';
+import axios from "axios";
+
+// axios.defaults.baseURL = "http://192.168.115.178:5000/api"
+axios.defaults.baseURL = "http://52.23.171.79/api"
 
 const unityContext = new UnityContext({
   loaderUrl: "build/Build/AirCrash.loader.js",
-  dataUrl: "build/Build/AirCrash.data",
-  frameworkUrl: "build/Build/AirCrash.framework.js",
-  codeUrl: "build/Build/AirCrash.wasm"
+  dataUrl: "build/Build/AirCrash.data.unityweb",
+  frameworkUrl: "build/Build/AirCrash.framework.js.unityweb",
+  codeUrl: "build/Build/AirCrash.wasm.unityweb"
 });
 
-const URL = 'http://192.168.115.178:5000/';
-// const URL = 'http://52.23.171.79/';
-let id = uniqid();
-let secondId = uniqid();
-let myTokenId = uniqid();
+// const URL = 'http://192.168.115.178:5000/';
+const URL = 'http://52.23.171.79/';
+let id;
+let secondId;
+let myTokenId;
+if (localStorage.getItem("myToken")) {
+  myTokenId = localStorage.getItem("myToken");
+} else {
+  myTokenId = uniqid();
+  localStorage.setItem("myToken", myTokenId);
+}
+
+if (localStorage.getItem("gameToken")) {
+  let tokens = JSON.parse(localStorage.getItem("gameToken"));
+  id = tokens["id"];
+  secondId = tokens["secondId"];
+} else {
+  id = uniqid();
+  secondId = uniqid();
+  let tokens = {
+    id, secondId
+  }
+  localStorage.setItem("gameToken", JSON.stringify(tokens));
+}
+
+// let myTokenId = uniqid();
 let totalData;
 let fautoBetFinished = false;
 let sautoBetFinished = false;
@@ -37,11 +62,13 @@ const init_state = {
   history: [],
   bettedUsers: [],
   gameState: [],
+  previousHand: [],
+  myBets: [],
   balance: 5000,
   width: 1500,
   fbetState: false,
   fbetted: false,
-  fbetAmount: 1,
+  fbetAmount: 20,
   fcashOutAt: 2,
   fautoCashoutState: false,
   fautoCound: 0,
@@ -55,7 +82,7 @@ const init_state = {
   fdefaultBetAmount: 1,
   sbetState: false,
   sbetted: false,
-  sbetAmount: 1,
+  sbetAmount: 20,
   scashOutAt: 2,
   sautoCashoutState: false,
   sautoCound: 0,
@@ -119,6 +146,8 @@ export default function Provider({ children }) {
     socket.emit("enterRoom", data);
     socket.emit("enterRoom", sData);
 
+    // socket.on('disconnect', onDisconnect);
+
     socket.on("bettedUserInfo", (data) => {
       dispatch({
         type: "bettedUsers",
@@ -127,7 +156,6 @@ export default function Provider({ children }) {
     });
 
     socket.on("myBetState", (data) => {
-      console.log(data, secondId);
       if (!data.auto) {
         dispatch({
           type: `${data.type}betState`,
@@ -144,6 +172,13 @@ export default function Provider({ children }) {
       })
     })
 
+    socket.on("myInfo", (data) => {
+      dispatch({
+        type: "balance",
+        payload: data.balance
+      })
+    })
+
     socket.on("history", (data) => {
       dispatch({
         type: "history",
@@ -152,6 +187,7 @@ export default function Provider({ children }) {
     });
 
     socket.on("gameState", (data) => {
+
       dispatch({
         type: "gameState",
         payload: data
@@ -186,6 +222,14 @@ export default function Provider({ children }) {
         }
       }
     });
+
+    socket.on("previousHand", (data) => {
+      console.log(data, "previous hand");
+      dispatch({
+        type: "previousHand",
+        payload: data
+      })
+    })
 
     socket.on("finishGame", (data) => {
       dispatch({
@@ -238,7 +282,7 @@ export default function Provider({ children }) {
       socket.off('history');
       socket.off('myBetState');
     }
-  }, [])
+  }, [socket])
 
   useEffect(() => {
     if (state.gameState.GameState === "BET") {
@@ -331,8 +375,19 @@ export default function Provider({ children }) {
     socket.emit("cashOut", data);
   }
 
+  const getMyBets = async () => {
+    let result = await axios.post('/myInfo', { name: myTokenId });
+    if (result.data.status) {
+      dispatch({
+        type: "myBets",
+        payload: result.data.data
+      })
+      console.log(result.data.data);
+    }
+  }
+
   return (
-    <CrashContext.Provider value={[state, dispatch, callCashOut]}>
+    <CrashContext.Provider value={[state, dispatch, callCashOut, getMyBets]}>
       {children}
     </CrashContext.Provider>
   );

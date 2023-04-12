@@ -27,21 +27,21 @@ $box-color: rgb(25, 25, 52);
   border-radius: 5px !important;
 }
 
-html::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 5px !important;
   background: #2c2d31 !important;
 }
 
-html::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 5px !important;
   background: #2c2d31 !important;
 }
 
-html::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: rgba(87, 96, 102, .5) !important;
 }
 
-html::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: rgba(87, 96, 102, .5) !important;
 }
 
@@ -51,6 +51,15 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
   /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+h3 {
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+h6 {
+  font-size: 1rem;
 }
 
 input[type=number] {
@@ -69,6 +78,8 @@ body {
   margin: 0;
   height: 100%;
   font-family: Roboto, sans-serif;
+  user-select: none;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: $back-color;
@@ -121,12 +132,78 @@ code {
   }
 
   .logo-container {
-    width: 32px;
+    width: 84px;
     margin-left: 10px;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    @media (max-width:900px) {
+      width: 72px;
+    }
+  }
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-gray {
+  color: #d2d2d2;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.p-1r {
+  padding: 1rem !important;
+}
+
+.under-a {
+  color: red;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.modal-bg {
+  background: #e69308 !important;
+  color: #965419 !important;
+  font-weight: 400 !important;
+}
+
+.modal-close {
+  color: #49290c !important;
+}
+
+.m-body-bg {
+  background-color: #f5a623;
+}
+
+.m-f-bg {
+  padding: 0 !important;
+  background-color: #e69308 !important;
+
+  button {
+    cursor: pointer;
+    color: #5f3816 !important;
+    border-radius: 20px;
+    margin: 0.25rem auto;
+    padding: 0.25rem 0.5rem;
+    font-size: .875rem;
+    background-color: transparent;
+    border: none;
+    line-height: 1.5;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -162,6 +239,10 @@ code {
       display: inline-block;
       padding-left: 5px;
       vertical-align: middle;
+
+      @media (max-width:900px) {
+        display: none;
+      }
     }
   }
 
@@ -356,7 +437,14 @@ code {
         background: none;
         border: none;
         color: #9ea0a3;
+        cursor: pointer;
         padding: 0;
+      }
+
+      .click {
+        background: rgb(44, 45, 48);
+        border-radius: 10px;
+        color: white;
       }
     }
   }
@@ -369,8 +457,10 @@ code {
 
     .all-bets-block {
       font-size: 14px;
-      height: 25px;
-      padding: 0 10px;
+      line-height: 1.2;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px 5px;
       display: flex;
       justify-content: space-between;
 
@@ -395,6 +485,20 @@ code {
         &:hover {
           .history-i {
             background: url(assets/images/history-i-hover.svg) no-repeat center center/contain;
+          }
+
+          span {
+            color: red;
+          }
+        }
+
+        &.click {
+          .history-i {
+            background: url(assets/images/history-i-hover.svg) no-repeat center center/contain;
+          }
+
+          span {
+            color: red;
           }
         }
       }
@@ -444,8 +548,28 @@ code {
         text-align: right;
         white-space: nowrap;
       }
+
+      .date {
+        min-width: 48px;
+        max-width: 48px;
+      }
+
+      .bet-100 {
+        display: flex;
+        width: 100%;
+      }
+
+      .tools {
+        min-width: 35px;
+        max-width: 35px;
+        height: 100%;
+      }
     }
 
+    .history-scroll {
+      margin: 0 0 0 5px;
+      height: 100% !important;
+    }
   }
 
   .cdk-virtual-scroll-viewport {
@@ -520,6 +644,29 @@ code {
           flex: 1;
           padding-right: 5px;
           text-align: right;
+        }
+
+        .tools {
+          min-width: 40px;
+          max-width: 40px;
+          padding-right: 5px !important;
+          align-items: center;
+          display: flex;
+
+          .fairness-i {
+            background: url(./assets/images/provabyfire.svg) no-repeat center center/contain;
+            width: 14px;
+            height: 16px;
+            cursor: pointer;
+          }
+
+          .share-i {
+            background: url(./assets/images/share.svg) no-repeat center center/contain;
+            width: 16px;
+            height: 14px;
+            cursor: pointer;
+            margin-left: 5px;
+          }
         }
 
         &.celebrated {
@@ -632,4 +779,182 @@ code {
 
 .bg-1 {
   background-color: rgb(31, 31, 31);
+}
+
+.title-2 {
+  text-transform: uppercase !important;
+  margin: 30px 0 10px 0;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.w-99 {
+  width: 100% !important;
+  margin: auto !important;
+}
+
+.pt-5 {
+  padding-top: 60px;
+  margin: 0;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+
+  .step-item {
+    flex: 0 0 240px;
+
+    h3 {
+      font-weight: 700 !important;
+      font-size: 24px !important;
+      margin-top: 20px !important;
+    }
+
+    .step-bg-img {
+      width: 240px;
+      height: 140px;
+      border-radius: 20px;
+      border: 1px solid #4e4e4e;
+      background: url(./assets/images/rule-1.png);
+    }
+
+    .step-bg-img-2 {
+      width: 240px;
+      height: 140px;
+      border-radius: 20px;
+      border: 1px solid #4e4e4e;
+      background: url(./assets/images/rul-2.png);
+    }
+
+    .step-bg-img-3 {
+      width: 240px;
+      height: 140px;
+      border-radius: 20px;
+      border: 1px solid #4e4e4e;
+      background: url(./assets/images/rul-3.png);
+    }
+
+    .step-text {
+      margin-top: 10px;
+      background: url(./assets/images/01.svg) no-repeat top left;
+      background-size: 36px 36px;
+      padding-left: 40px;
+      min-height: 36px;
+      font-weight: 700;
+
+      span {
+        text-transform: uppercase;
+        color: red;
+      }
+    }
+  }
+}
+
+.pt-2 {
+  padding-top: 10px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.pr-2 {
+  padding: 0 5px;
+}
+
+.text-grey {
+  color: #d2d2d2;
+}
+
+.rules-list {
+  padding: 20px 20px 0;
+
+  .rules-list-title {
+    margin-left: -20px;
+    margin-bottom: 10px;
+  }
+
+  .list-group {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    border-radius: 0.25rem;
+
+    .list-group-item {
+      margin: 0;
+      border: 0;
+      background: transparent url(./assets/images/right.svg) no-repeat 0 3px;
+      padding: 2px 0 2px 14px;
+      color: #d2d2d2;
+      position: relative;
+      display: block;
+
+      .icon-fair {
+        background-image: url(./assets/images/provabyfire.svg);
+        background-repeat: no-repeat;
+        min-width: 14px;
+        height: 16px;
+        display: inline-block;
+        background-size: contain;
+        transform: translateY(4px);
+      }
+
+      &:first-child {
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+      }
+    }
+  }
+}
+
+.bets-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #000;
+  border: 1px solid #2a2b2e;
+  font-size: 11px;
+  padding: 0 10px;
+  color: #5e6269;
+
+  .provably-fair-block {
+    display: flex;
+    height: 16px;
+
+    .provably-fair {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+
+      .i-fair {
+        background: url("./assets/images/provabyfire.svg") no-repeat center center/contain;
+        width: 14px;
+        height: 16px;
+        margin: 0 4px 0 6px;
+      }
+
+      .text-provably-fair {
+        font-size: 12px;
+        color: #bbbfc5;
+        line-height: 1px;
+      }
+    }
+  }
+
+  .logo-block {
+    display: flex;
+    height: 14px;
+
+    .i-logo {
+      background: url(./assets/images/i-logo.svg) no-repeat center center/contain;
+      width: 34px;
+      height: 14px;
+      margin-left: 4px;
+      cursor: pointer;
+    }
+  }
 }
