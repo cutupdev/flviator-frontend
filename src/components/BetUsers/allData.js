@@ -1,4 +1,3 @@
-import avatar from "../../assets/images/av-5.png"
 import { useCrashContext } from "../Main/context";
 
 const AllData = (props) => {
@@ -31,7 +30,10 @@ const AllData = (props) => {
                     {allData?.map((user, key) => (
                         <div className={`bet-item ${user.cashouted ? "celebrated" : ""}`} key={key}>
                             <div className="user">
-                                <img className="avatar" src={avatar} alt="avatar" />
+                                {user.img ?
+                                    <img className="avatar" src={`./avatars/${user.img}`} alt="avatar" /> :
+                                    <img className="avatar" src="./avatars/av-5.png" alt="avatar" />
+                                }
                                 <div className="username">{user.name?.slice(0, 1) + "***" + user.name?.slice(-1)}</div>
                             </div>
                             <div className="bet">

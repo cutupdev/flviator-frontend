@@ -5,7 +5,7 @@ import { useCrashContext } from "./Main/context";
 export default function Header() {
   const [state] = useCrashContext();
   const [howto, setHowto] = useState("howto");
-  const [fireSystem, setFireSystem] = useState(false);
+  const [, setFireSystem] = useState(false);
   return (
     <div className="header flex-none items-center">
       <div className="header-container">
@@ -44,8 +44,8 @@ export default function Header() {
             <div className="modal-body m-body-bg">
               <div className="youtube">
                 <div className="embed-responsive">
-                  {/* <iframe className="embed-responsive-item" src="https://www.youtube.com/embed/PZejs3XDCSY?playsinline=1" /> */}
-                  <iframe className="embed-responsive-item" src="https://www.youtube.com/watch?v=bBeZSuHI4Qc" />
+                  <iframe title="tutorial" className="embed-responsive-item" src="https://www.youtube.com/embed/PZejs3XDCSY?playsinline=1" />
+                  {/* <iframe className="embed-responsive-item" src="https://www.youtube.com/watch?v=bBeZSuHI4Qc" /> */}
                 </div>
               </div>
               <div className="step">
@@ -97,7 +97,7 @@ export default function Header() {
               <h6 className="title-2"> How to play </h6>
               <div className="youtube w-99">
                 <div className="embed-responsive">
-                  <iframe className="embed-responsive-item" src="https://www.youtube.com/embed/PZejs3XDCSY?playsinline=1" />
+                  <iframe title="tutorial" className="embed-responsive-item" src="https://www.youtube.com/embed/PZejs3XDCSY?playsinline=1" />
                 </div>
               </div>
               <h6 className="pt-5"> Aviator is as easy to play as 1-2-3: </h6>

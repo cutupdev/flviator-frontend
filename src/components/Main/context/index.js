@@ -107,7 +107,7 @@ export default function Provider({ children }) {
   // Here are Unity all events
   useEffect(function () {
     unityContext.on("GameController", function (message) {
-      if (message == "Ready") {
+      if (message === "Ready") {
         dispatch({
           type: "unityState",
           payload: true
