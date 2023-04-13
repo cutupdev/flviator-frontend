@@ -16,7 +16,7 @@ function App() {
               <img alt="propeller" src={propeller}></img>
             </div>
             <div className="waiting">
-              <div className="width-transition" style={{ width: `${state.currentProgress * 1.111}%` }}></div>
+              <div className="width-transition" style={{ width: `${state.currentProgress * 1.111 + 0.01}%` }}></div>
             </div>
             <p>{Number(state.currentProgress * 1.111 + 0.01).toFixed(2)}%</p>
           </div>

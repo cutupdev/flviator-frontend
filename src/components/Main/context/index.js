@@ -5,8 +5,8 @@ import { UnityContext } from "react-unity-webgl";
 import { io } from 'socket.io-client';
 import axios from "axios";
 
-// axios.defaults.baseURL = "http://192.168.115.178:5000/api"
-axios.defaults.baseURL = "http://52.23.171.79/api"
+axios.defaults.baseURL = "http://192.168.115.178:5000/api"
+// axios.defaults.baseURL = "http://52.23.171.79/api";
 
 const unityContext = new UnityContext({
   loaderUrl: "build/Build/AirCrash.loader.js",
@@ -15,8 +15,8 @@ const unityContext = new UnityContext({
   codeUrl: "build/Build/AirCrash.wasm.unityweb"
 });
 
-// const URL = 'http://192.168.115.178:5000/';
-const URL = 'http://52.23.171.79/';
+const URL = 'http://192.168.115.178:5000/';
+// const URL = "http://52.23.171.79/";
 let id;
 let secondId;
 let myTokenId;
@@ -97,7 +97,9 @@ const init_state = {
   unityState: false,
   myUnityContext: unityContext,
   unityLoading: false,
-  currentProgress: 0
+  currentProgress: 0,
+  maxBet: 1000,
+  minBet: 0.1
 };
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, init_state);
@@ -187,7 +189,6 @@ export default function Provider({ children }) {
     });
 
     socket.on("gameState", (data) => {
-
       dispatch({
         type: "gameState",
         payload: data
@@ -224,7 +225,6 @@ export default function Provider({ children }) {
     });
 
     socket.on("previousHand", (data) => {
-      console.log(data, "previous hand");
       dispatch({
         type: "previousHand",
         payload: data
@@ -272,6 +272,18 @@ export default function Provider({ children }) {
     socket.on("success", (data) => {
       toast.success(data);
     })
+
+    socket.on("getBetLimits", (data) => {
+      dispatch({
+        type: "maxBet",
+        payload: data.max
+      })
+      dispatch({
+        type: "minBet",
+        payload: data.min
+      })
+      console.log(data);
+    })
     return () => {
       socket.off('connect');
       socket.off('disconnect');
@@ -281,6 +293,7 @@ export default function Provider({ children }) {
       socket.off('gameState');
       socket.off('history');
       socket.off('myBetState');
+      socket.off('getBetLimits');
     }
   }, [socket])
 
@@ -382,7 +395,6 @@ export default function Provider({ children }) {
         type: "myBets",
         payload: result.data.data
       })
-      console.log(result.data.data);
     }
   }
 

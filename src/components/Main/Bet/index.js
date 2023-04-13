@@ -10,10 +10,10 @@ export default function Bet(props) {
     const { index } = props;
 
     const minus = (type) => {
-        if (state[`${index + type}`] - 0.1 < 0.1) {
+        if (state[`${index + type}`] - 0.1 < state.minBet) {
             dispatch({
                 type: `${index + type}`,
-                payload: 0.1
+                payload: state.minBet
             })
         } else {
             dispatch({
@@ -25,24 +25,59 @@ export default function Bet(props) {
 
     const plus = (type) => {
         if (state[`${index + type}`] + 0.1 > state.balance) {
-            dispatch({
-                type: `${index + type}`,
-                payload: Number(state.balance).toFixed(2)
-            })
+            if (state[`${index + type}`] + 0.1 > state.maxBet) {
+                dispatch({
+                    type: `${index + type}`,
+                    payload: Number(state.maxBet).toFixed(2)
+                })
+            } else {
+                dispatch({
+                    type: `${index + type}`,
+                    payload: Number(state.balance).toFixed(2)
+                })
+            }
         } else {
-            dispatch({
-                type: `${index + type}`,
-                payload: (Number(state[`${index + type}`]) + 0.1).toFixed(2)
-            })
+            if (state[`${index + type}`] + 0.1 > state.maxBet) {
+                dispatch({
+                    type: `${index + type}`,
+                    payload: Number(state.maxBet).toFixed(2)
+                })
+            } else {
+                dispatch({
+                    type: `${index + type}`,
+                    payload: (Number(state[`${index + type}`]) + 0.1).toFixed(2)
+                })
+            }
         }
     }
 
     const manualPlus = (amount, btnNum) => {
         if (betOpt === btnNum) {
-            dispatch({
-                type: `${index}betAmount`,
-                payload: (Number(state[`${index}betAmount`]) + amount).toFixed(2)
-            })
+            if (Number(state[`${index}betAmount`]) + amount > state.maxBet) {
+                if (Number(state[`${index}betAmount`]) + amount > state.balance) {
+                    dispatch({
+                        type: `${index}betAmount`,
+                        payload: state.balance
+                    })
+                } else {
+                    dispatch({
+                        type: `${index}betAmount`,
+                        payload: state.maxBet
+                    })
+                }
+            } else {
+                if (Number(state[`${index}betAmount`]) + amount > state.balance) {
+                    dispatch({
+                        type: `${index}betAmount`,
+                        payload: state.balance
+                    })
+                } else {
+                    dispatch({
+                        type: `${index}betAmount`,
+                        payload: (Number(state[`${index}betAmount`]) + amount).toFixed(2)
+                    })
+                }
+            }
         } else {
             dispatch({
                 type: `${index}betAmount`,
