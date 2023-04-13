@@ -87,14 +87,14 @@ interface ContextDataType {
 	ssingle: boolean
 	sauto: boolean
 	sdefaultBetAmount: number
-	unityState: boolean
 	myUnityContext: UnityContext
-	unityLoading: boolean
-	currentProgress: number
 }
 
 
 interface ContextType extends ContextDataType {
+	unityState: boolean
+	unityLoading: boolean
+	currentProgress: number
 	update(attrs: Partial<ContextDataType>)
 	getMyBets()
 }
@@ -163,10 +163,8 @@ const init_state = {
 	ssingle: false,
 	sauto: false,
 	sdefaultBetAmount: 1,
-	unityState: false,
 	myUnityContext: unityContext,
-	unityLoading: false,
-	currentProgress: 0
+	
 } as ContextDataType;
 
 const Context = React.createContext<ContextType>(null!);
@@ -233,7 +231,11 @@ initUser()
 
 export const Provider = ({ children }: any) => {
 	const [state, setState] = React.useState<ContextDataType>(init_state)
-	
+	const [unity, setUnity] = React.useState({
+		unityState: false,
+		unityLoading: false,
+		currentProgress: 0
+	})
 	const update = (attrs: Partial<ContextDataType>) => {
 		setState({...state, ...attrs})
 	}
@@ -241,18 +243,19 @@ export const Provider = ({ children }: any) => {
 	React.useEffect(function () {
 		unityContext.on("GameController", function (message) {
 			if (message === "Ready") {
-				update({unityState: true})
+				setUnity({currentProgress: 100, unityLoading: true, unityState: true})
 			}
 		});
 		unityContext.on("progress", (progression) => {
+			// console.log('progression', unity)
 			const currentProgress = progression * 100
 			if (progression === 1) {
-				update({currentProgress, unityLoading: true})
+				setUnity({currentProgress, unityLoading: true, unityState: true})
 			} else {
-				update({currentProgress})
+				setUnity({currentProgress, unityLoading: false, unityState: false})
 			}
 		})
-		// unityContext.removeAllEventListeners();
+		return () => unityContext.removeAllEventListeners();
 	}, []);
 
 	React.useEffect(() => {
@@ -275,7 +278,8 @@ export const Provider = ({ children }: any) => {
 		// socket.on('disconnect', onDisconnect);
 
 		socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
-			update({bettedUsers})
+			console.log("bettedUsers.length", bettedUsers.length)
+			if (!!bettedUsers.length)update({bettedUsers})
 		});
 
 		socket.on("myBetState", (user: UserType) => {
@@ -476,7 +480,7 @@ export const Provider = ({ children }: any) => {
 	}
 
 	return (
-		<Context.Provider value={{ ...state, getMyBets, update}}>
+		<Context.Provider value={{ ...state, ...unity, getMyBets, update}}>
 			{children}
 		</Context.Provider>
 	);
