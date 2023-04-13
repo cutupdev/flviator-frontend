@@ -30,7 +30,7 @@ export default function BetsUsers() {
     if (pre) {
       setAllData(previousHand);
     } else {
-      setAllData(bettedUsers);
+      if (!!bettedUsers.length) setAllData(bettedUsers);
     }
   }, [pre, bettedUsers, previousHand])
 
