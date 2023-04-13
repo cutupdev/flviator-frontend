@@ -1,15 +1,19 @@
-import { useCrashContext } from "../Main/context";
-import { useEffect, useState } from "react";
-import AllData from "./allData";
-import MyBets from "./myBets";
-import TopHistory from "./topHistory";
+import React from "react";
+// import { useCrashContext } from "../Main/context";
+// import { useEffect, useState } from "react";
+import AllData from "./all-data";
+import MyBets from "./my-bets";
+import TopHistory from "./top-history";
+import Context, { BettedUserType, UserType } from "../../context";
+
 
 export default function BetsUsers() {
-  const [state, , , getMyBets] = useCrashContext();
+  const {previousHand, bettedUsers, getMyBets} = React.useContext(Context)
+  // const [state, , , getMyBets] = useCrashContext();
 
-  const [headerType, setHeaderType] = useState("all");
-  const [allData, setAllData] = useState([]);
-  const [pre, setPre] = useState(false);
+  const [headerType, setHeaderType] = React.useState("all");
+  const [allData, setAllData] = React.useState<UserType[]|BettedUserType[]>([]);
+  const [pre, setPre] = React.useState(false);
 
   const header = [
     { type: "all", value: "All Bets" },
@@ -22,13 +26,13 @@ export default function BetsUsers() {
       getMyBets();
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (pre) {
-      setAllData(state.previousHand);
+      setAllData(previousHand);
     } else {
-      setAllData(state.bettedUsers);
+      setAllData(bettedUsers);
     }
-  }, [pre, state.bettedUsers, state.previousHand])
+  }, [pre, bettedUsers, previousHand])
 
   return (
     <div className="info-board">
@@ -60,7 +64,7 @@ export default function BetsUsers() {
         </div>
         <div className="logo-block">
           <span>Powered by</span>
-          <a target="_blank" href="https://spribe.co">
+          <a target="_blank" href="https://spribe.co" rel="noreferrer">
             <div className="i-logo"></div>
           </a>
         </div>

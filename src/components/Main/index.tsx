@@ -1,7 +1,7 @@
 import "./main.scss";
 import History from "./history";
 import Crash from "../crash/index";
-import Bet from "./Bet";
+import Bet from "./bet";
 
 export default function Main() {
   return (

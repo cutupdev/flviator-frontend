@@ -1,11 +1,16 @@
-import { useState } from "react";
+import React from "react";
 import logo from "../assets/images/logo.svg";
 import "../index.scss";
-import { useCrashContext } from "./Main/context";
+// import { useCrashContext } from "./Main/context";
+import Context from "../context";
+
 export default function Header() {
-  const [state] = useCrashContext();
-  const [howto, setHowto] = useState("howto");
-  const [, setFireSystem] = useState(false);
+  const {balance} = React.useContext(Context)
+
+  // const [state] = useCrashContext();
+  const [howto, setHowto] = React.useState<'howto'|'short'|'more'|''>("howto");
+  const [, setFireSystem] = React.useState(false);
+  
   return (
     <div className="header flex-none items-center">
       <div className="header-container">
@@ -19,7 +24,7 @@ export default function Header() {
           </button>
           <div className="d-flex">
             <div className="balance">
-              <span className="amount">{Number(state.balance).toFixed(2)} </span>
+              <span className="amount">{Number(balance).toFixed(2)} </span>
               <span className="currency">&nbsp;INR</span>
             </div>
           </div>
@@ -37,7 +42,7 @@ export default function Header() {
           <div className="modal-content">
             <div className="modal-header modal-bg text-uppercase">
               <span>How to Play?</span>
-              <button onClick={() => setHowto(false)} className="close modal-close">
+              <button onClick={() => setHowto('')} className="close modal-close">
                 <span>×</span>
               </button>
             </div>

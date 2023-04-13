@@ -1,7 +1,10 @@
-import { useCrashContext } from "../Main/context";
+import React from "react";
+// import { useCrashContext } from "../Main/context";
+import Context from "../../context";
 
 const MyBets = () => {
-    const [state] = useCrashContext();
+    const state = React.useContext(Context)
+    // const [state] = useCrashContext();
 
     return (
         <>

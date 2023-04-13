@@ -1,8 +1,8 @@
-import { useState } from "react";
-import bets from "./bets.scss"
+import React from 'react'
+import './bets.scss'
 
 const TopHistory = () => {
-    const [type, setType] = useState(0);
+    const [type, setType] = React.useState(0);
     return (
         <>
             <div className="navigation-switcher-wrapper">
@@ -24,7 +24,7 @@ const TopHistory = () => {
                     <div className="bet-item">
                         <div className="main">
                             <div className="icon">
-                                <img className="avatar"></img>
+                                <img className="avatar" alt="avatar"></img>
                                 <div className="username">d***3</div>
                             </div>
                             <div className="w-100">

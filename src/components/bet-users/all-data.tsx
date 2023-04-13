@@ -1,8 +1,16 @@
-import { useCrashContext } from "../Main/context";
+import React from "react"
+import Context, { BettedUserType, UserType } from "../../context";
+// import { useCrashContext } from "../Main/context";
 
-const AllData = (props) => {
-    const { pre, setPre, allData } = props;
-    const [state] = useCrashContext();
+interface AllDataProps {
+    pre: boolean
+    setPre: React.Dispatch<React.SetStateAction<boolean>>
+    allData: UserType[]|BettedUserType[]
+}
+
+const AllData = ({ pre, setPre, allData }: AllDataProps) => {
+    const state = React.useContext(Context)
+    // const [state] = useCrashContext();
 
     return (
         <>

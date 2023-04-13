@@ -22,8 +22,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set PORT=4002 && react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
+    "start1": "set PORT=4002 && react-scripts start",
+    "build1": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -46,8 +48,23 @@
     ]
   },
   "devDependencies": {
+    "@types/react": "^18.0.35",
+    "@types/react-dom": "^18.0.11",
+    "@types/react-router-dom": "^5.3.3",
     "autoprefixer": "^10.4.14",
+    "browserify-assets": "^1.6.1",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
     "postcss": "^8.4.21",
-    "tailwindcss": "^3.2.7"
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.2.7",
+    "typescript": "^5.0.4",
+    "url": "^0.11.0",
+    "webpack": "^5.79.0"
   }
 }

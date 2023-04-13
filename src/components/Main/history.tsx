@@ -1,16 +1,17 @@
-import { useState } from "react";
-import { useCrashContext } from "./context";
+import React from "react";
+// import { useCrashContext } from "./context";
+import Context from "../../context";
 
 export default function History() {
-  const [state] = useCrashContext();
+  const {history} = React.useContext(Context)
 
-  const [showHistory, setShowHistory] = useState(false);
+  const [showHistory, setShowHistory] = React.useState(false);
 
   return (
     <div className="stats">
       <div className="payouts-wrapper">
         <div className="payouts-block">
-          {state.history && state.history.map((item, key) => (
+          {!!history.length && history.map((item, key) => (
             <div key={key} className="payout">
               <div className={`item opacity-${100 - 2 * key} ${Number(item) < 2 ? "blue" : Number(item) < 10 ? "purple" : "big"}`}>{Number(item).toFixed(2)}x</div>
             </div>
@@ -25,13 +26,13 @@ export default function History() {
           </div>
         </div>
       </div>
-      {showHistory && <div className="dropdown-menu">
+      {!!showHistory && <div className="dropdown-menu">
         <div className="wrapper">
           <div className="header-2">
             <div> Round history </div>
           </div>
           <div className="payouts-block">
-            {state.history && state.history.map((item, key) => (key < 123 &&
+            {!!history.length && history.map((item, key) => (key < 123 &&
               <div key={key} className="payout">
                 <div className={`bubble-multiplier ${Number(item) < 2 ? "blue" : Number(item) < 10 ? "purple" : "big"}`}>{Number(item).toFixed(2)}x</div>
               </div>
