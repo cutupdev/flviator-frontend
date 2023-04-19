@@ -4,45 +4,46 @@ import { toast } from 'react-toastify';
 import Context, { callCashOut } from "../../context";
 
 interface BetProps {
-	index: 'f'|'s'
+	index: 'f' | 's'
 }
-type FieldNameType = 'betAmount'|'decrease'|'increase'|'singleAmount'
-type BetOptType = '20'|'50'|'100'|'1000'
-type GameType = 'manual'|'auto'
+type FieldNameType = 'betAmount' | 'decrease' | 'increase' | 'singleAmount'
+type BetOptType = '20' | '50' | '100' | '1000'
+type GameType = 'manual' | 'auto'
 
-const Bet = ({index}: BetProps) => {
+const Bet = ({ index }: BetProps) => {
 	const state = React.useContext(Context)
 	const {
 		balance,
-		fauto, sauto, 
-		fbetted, sbetted, 
-		fdeState, sdeState, 
-		finState, sinState, 
-		fbetState, sbetState, 
-		fdecrease, sdecrease, 
-		fincrease, sincrease, 
-		fautoCound, sautoCound, 
-		fbetAmount, sbetAmount, 
-		fautoCashoutState, sautoCashoutState, 
-		fcashOutAt, scashOutAt, 
+		fauto, sauto,
+		fbetted, sbetted,
+		fdeState, sdeState,
+		finState, sinState,
+		fbetState, sbetState,
+		fdecrease, sdecrease,
+		fincrease, sincrease,
+		fautoCound, sautoCound,
+		fbetAmount, sbetAmount,
+		fautoCashoutState, sautoCashoutState,
+		fcashOutAt, scashOutAt,
 		fsingle, ssingle,
 		fsingleAmount, ssingleAmount,
-		update} = state
+		GameState, currentNum,
+		update, updateUserBetState } = state
 	// const [state, dispatch, callCashOut] = useCrashContext();
 
-	const auto = index==='f' ? fauto : sauto
-	const betted = index==='f' ? fbetted : sbetted
-	const deState = index==='f' ? fdeState : sdeState
-	const inState = index==='f' ? finState : sinState
-	const betState = index==='f' ? fbetState : sbetState
-	const decrease = index==='f' ? fdecrease : sdecrease
-	const increase = index==='f' ? fincrease : sincrease
-	const autoCound = index==='f' ? fautoCound : sautoCound
-	const betAmount = index==='f' ? fbetAmount : sbetAmount
-	const autoCashoutState = index==='f' ? fautoCashoutState : sautoCashoutState
-	const cashOutAt = index==='f' ? fcashOutAt : scashOutAt
-	const single = index==='f' ? fsingle : ssingle
-	const singleAmount = index==='f' ? fsingleAmount : ssingleAmount
+	const auto = index === 'f' ? fauto : sauto
+	const betted = index === 'f' ? fbetted : sbetted
+	const deState = index === 'f' ? fdeState : sdeState
+	const inState = index === 'f' ? finState : sinState
+	const betState = index === 'f' ? fbetState : sbetState
+	const decrease = index === 'f' ? fdecrease : sdecrease
+	const increase = index === 'f' ? fincrease : sincrease
+	const autoCound = index === 'f' ? fautoCound : sautoCound
+	const betAmount = index === 'f' ? fbetAmount : sbetAmount
+	const autoCashoutState = index === 'f' ? fautoCashoutState : sautoCashoutState
+	const cashOutAt = index === 'f' ? fcashOutAt : scashOutAt
+	const single = index === 'f' ? fsingle : ssingle
+	const singleAmount = index === 'f' ? fsingleAmount : ssingleAmount
 
 	const [gameType, setGameType] = React.useState<GameType>("manual");
 	const [betOpt, setBetOpt] = React.useState<BetOptType>("20");
@@ -68,7 +69,7 @@ const Bet = ({index}: BetProps) => {
 			// 	payload: 
 			// })
 		}
-		update({[`${index + type}`]: value})
+		update({ [`${index + type}`]: value })
 	}
 
 	const plus = (type: FieldNameType) => {
@@ -87,7 +88,7 @@ const Bet = ({index}: BetProps) => {
 			// 	payload: (Number(state[`${index + type}`]) + 0.1).toFixed(2)
 			// })
 		}
-		update({[`${index + type}`]: value})
+		update({ [`${index + type}`]: value })
 	}
 
 	const manualPlus = (amount: number, btnNum: BetOptType) => {
@@ -106,11 +107,11 @@ const Bet = ({index}: BetProps) => {
 			// })
 			setBetOpt(btnNum);
 		}
-		update({[`${index}betAmount`]: value})
+		update({ [`${index}betAmount`]: value })
 	}
 
 	const changeBetType = (e: GameType) => {
-		update({[`${index}betState`]: false})
+		updateUserBetState({ [`${index}betState`]: false });
 		// dispatch({
 		// 	type: "betState",
 		// 	payload: false
@@ -118,7 +119,7 @@ const Bet = ({index}: BetProps) => {
 		setGameType(e);
 	}
 
-	const onChangeBlur = (e: number, type: 'cashOutAt'|'decrease'|'increase'|'singleAmount') => {
+	const onChangeBlur = (e: number, type: 'cashOutAt' | 'decrease' | 'increase' | 'singleAmount') => {
 		let value = 0
 		if (type === "cashOutAt") {
 			if (e < 1.01) {
@@ -149,18 +150,18 @@ const Bet = ({index}: BetProps) => {
 				// })
 			}
 		}
-		update({[`${index + type}`]: value})
+		update({ [`${index + type}`]: value })
 	}
 
 	const onBetClick = () => {
-		update({[`${index}betState`]: !betState})
+		updateUserBetState({ [`${index}betState`]: !betState })
 		// dispatch({
 		// 	type: `${index}betState`,
 		// 	payload: !betState
 		// });
 	}
 	const setCount = (amount: number) => {
-		update({[`${index}autoCound`]: !amount})
+		update({ [`${index}autoCound`]: amount })
 		// dispatch({
 		// 	type: `${index}autoCound`,
 		// 	payload: amount
@@ -209,9 +210,10 @@ const Bet = ({index}: BetProps) => {
 
 	const onAutoBetClick = (_betState: boolean) => {
 		update({
-			[`${index}betState`]: _betState,
 			[`${index}auto`]: !auto
 		})
+
+		updateUserBetState({ [`${index}betState`]: _betState });
 		// dispatch({
 		// 	type: `${index}betState`,
 		// 	payload: state
@@ -307,12 +309,12 @@ const Bet = ({index}: BetProps) => {
 						}
 					</div>
 					<div className="buttons-block">
-						{betted ? state.gameState.GameState === "PLAYING" ?
-							<button className="btn-waiting" onClick={() => { callCashOut(state.gameState.currentNum, index) }}>
+						{betted ? GameState === "PLAYING" ?
+							<button className="btn-waiting" onClick={() => { callCashOut(currentNum, index) }}>
 								<span>
 									<label>CASHOUT</label>
 									<label className="amount">
-										<span>{Number(betAmount * state.gameState.currentNum).toFixed(2)}</span>
+										<span>{Number(betAmount * currentNum).toFixed(2)}</span>
 										<span className="currency">INR</span>
 									</label>
 								</span>
@@ -322,7 +324,7 @@ const Bet = ({index}: BetProps) => {
 								<div className="btn-tooltip">Waiting for next round</div>
 								<button className="btn-danger h-[70%]" onClick={() => {
 									onBetClick();
-									update({[`${index}auto`]: false})
+									update({ [`${index}auto`]: false })
 									// dispatch({
 									// 	type: `${index}auto`,
 									// 	payload: false
@@ -427,7 +429,7 @@ const Bet = ({index}: BetProps) => {
 								<div className="content-part">
 									<div className={`input-switch ${deState ? "" : "off"}`}
 										onClick={() => {
-											update({[`${index}deState`]: !deState})
+											update({ [`${index}deState`]: !deState })
 										}}
 									>
 										<span className="oval"></span>
@@ -465,7 +467,7 @@ const Bet = ({index}: BetProps) => {
 								<div className="content-part">
 									<div className={`input-switch ${inState ? "" : "off"}`}
 										onClick={() => {
-											update({[`${index}inState`]: !inState})
+											update({ [`${index}inState`]: !inState })
 										}}
 									>
 										<span className="oval"></span>
@@ -501,7 +503,7 @@ const Bet = ({index}: BetProps) => {
 								<div className="content-part">
 									<div className={`input-switch ${single ? "" : "off"}`}
 										onClick={() => {
-											update({[`${index}single`]: !single})
+											update({ [`${index}single`]: !single })
 										}}
 									>
 										<span className="oval"></span>

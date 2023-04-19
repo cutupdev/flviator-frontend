@@ -3,7 +3,7 @@ import React from "react";
 import Context from "../../context";
 
 export default function History() {
-  const {history} = React.useContext(Context)
+  const { history } = React.useContext(Context);
 
   const [showHistory, setShowHistory] = React.useState(false);
 

@@ -5,7 +5,7 @@ import Context, { BettedUserType, UserType } from "../../context";
 interface AllDataProps {
     pre: boolean
     setPre: React.Dispatch<React.SetStateAction<boolean>>
-    allData: UserType[]|BettedUserType[]
+    allData: UserType[] | BettedUserType[]
 }
 
 const AllData = ({ pre, setPre, allData }: AllDataProps) => {

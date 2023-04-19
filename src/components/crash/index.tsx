@@ -10,17 +10,17 @@ let currentFlag = 0;
 // let maxAmount = 1 + 0.98 / (Math.random() + 0.00001);
 
 export default function WebGLStarter() {
-	const state = React.useContext(Context)
+	const { GameState, currentNum, time, unityState, myUnityContext } = React.useContext(Context)
 	// const [state] = useCrashContext();
-	const [target, setTarget] = React.useState(1);
+	const [, setTarget] = React.useState(1);
 	const [waiting, setWaiting] = React.useState(0);
 	const [flag, setFlag] = React.useState(1);
 
 	React.useEffect(() => {
 		let myInterval;
-		if (state.gameState.GameState === "PLAYING") {
+		if (GameState === "PLAYING") {
 			setFlag(2);
-			let startTime = Date.now() - state.gameState.time;
+			let startTime = Date.now() - time;
 			let currentTime;
 			let currentNum;
 			const getCurrentTime = (e) => {
@@ -36,12 +36,12 @@ export default function WebGLStarter() {
 			myInterval = setInterval(() => {
 				getCurrentTime(currentFlag);
 			}, 20);
-		} else if (state.gameState.GameState === "GAMEEND") {
+		} else if (GameState === "GAMEEND") {
 			setFlag(5);
-			setTarget(state.gameState.currentNum);
-		} else if (state.gameState.GameState === "BET") {
+			setTarget(currentNum);
+		} else if (GameState === "BET") {
 			setFlag(1);
-			let startWaiting = Date.now() - state.gameState.time;
+			let startWaiting = Date.now() - time;
 			setTarget(1);
 
 			myInterval = setInterval(() => {
@@ -49,22 +49,22 @@ export default function WebGLStarter() {
 			}, 20);
 		}
 		return () => clearInterval(myInterval);
-	}, [state.gameState.GameState, state.unityState])
+	}, [GameState, unityState])
 
 	React.useEffect(() => {
-		state.myUnityContext?.send("GameManager", "RequestToken", JSON.stringify({
+		myUnityContext?.send("GameManager", "RequestToken", JSON.stringify({
 			gameState: flag
 		}));
 		currentFlag = flag;
-	}, [flag, state.myUnityContext]);
+	}, [flag, myUnityContext]);
 
 	return (
 		<div className="crash-container">
 			<div className="canvas">
-				<Unity unityContext={state.myUnityContext} matchWebGLToCanvasSize={true}/>
+				<Unity unityContext={myUnityContext} matchWebGLToCanvasSize={true} />
 			</div>
 			<div className="crash-text-container">
-				{state.gameState.GameState === "BET" ? (
+				{GameState === "BET" ? (
 					<div className={`crashtext wait font-9`} >
 						<div className="rotate">
 							<img width={100} height={100} src={propeller} alt="propellar"></img>
@@ -75,10 +75,10 @@ export default function WebGLStarter() {
 						</div>
 					</div>
 				) : (
-					<div className={`crashtext ${state.gameState.GameState === "GAMEEND" && "red"}`}>
-						{state.gameState.GameState === "GAMEEND" && <div className="flew-away">FLEW AWAY!</div>}
+					<div className={`crashtext ${GameState === "GAMEEND" && "red"}`}>
+						{GameState === "GAMEEND" && <div className="flew-away">FLEW AWAY!</div>}
 						<div>
-							{state.gameState.currentNum ? Number(target).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
+							{currentNum ? Number(currentNum).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
 						</div>
 					</div>
 				)}

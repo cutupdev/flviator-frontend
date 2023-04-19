@@ -8,11 +8,11 @@ import Context, { BettedUserType, UserType } from "../../context";
 
 
 export default function BetsUsers() {
-  const {previousHand, bettedUsers, getMyBets} = React.useContext(Context)
+  const { previousHand, bettedUsers, getMyBets } = React.useContext(Context)
   // const [state, , , getMyBets] = useCrashContext();
 
   const [headerType, setHeaderType] = React.useState("all");
-  const [allData, setAllData] = React.useState<UserType[]|BettedUserType[]>([]);
+  const [allData, setAllData] = React.useState<UserType[] | BettedUserType[]>([]);
   const [pre, setPre] = React.useState(false);
 
   const header = [

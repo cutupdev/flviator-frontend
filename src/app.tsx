@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "./components/header";
 import BetsUsers from "./components/bet-users";
-import Main from "./components/main";
+import Main from "./components/Main";
 // import { useCrashContext } from "./components/Main/context";
 import propeller from "./assets/images/propeller.png"
 
@@ -9,7 +9,7 @@ import Context from "./context";
 // import "./App.scss";
 
 function App() {
-  const {unityLoading, currentProgress} = React.useContext(Context)
+  const { unityLoading, currentProgress } = React.useContext(Context)
   // console.log('unityLoading, currentProgress', unityLoading, currentProgress)
   // const [state] = useCrashContext();
   return (

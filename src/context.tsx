@@ -8,8 +8,8 @@ import { toast } from 'react-toastify';
 import config from './config.json'
 
 export interface BettedUserType {
-	auto?: boolean
-	type?: 'f'|'s'
+	auto: boolean
+	type: string
 	balance: number
 	betted: boolean
 	name: string
@@ -22,17 +22,17 @@ export interface BettedUserType {
 
 export interface UserType {
 	auto: boolean
-    betted: boolean
-    cashouted: boolean
-    name: string
-    socketId: string
-    bot: boolean
-    betAmount: number
-    cashAmount: number
-    target: number
-    balance: number
-    type: 'f'|'s'
-    img: string
+	betted: boolean
+	cashouted: boolean
+	name: string
+	socketId: string
+	bot: boolean
+	betAmount: number
+	cashAmount: number
+	target: number
+	balance: number
+	type: 'f' | 's'
+	img: string
 }
 
 interface GameStatusType {
@@ -40,6 +40,11 @@ interface GameStatusType {
 	currentSecondNum: number
 	GameState: string
 	time: number
+}
+
+interface GameBetLimit {
+	maxBet: number
+	minBet: number
 }
 
 declare interface GameHistory {
@@ -51,16 +56,16 @@ declare interface GameHistory {
 	date: number
 }
 
-interface ContextDataType {
-	history: number[]
-	bettedUsers: BettedUserType[]
-	gameState: GameStatusType
-	previousHand: UserType[]
-	myBets: GameHistory[]
-	balance: number
-	width: number
+interface UserStatusType {
 	fbetState: boolean
 	fbetted: boolean
+	sbetState: boolean
+	sbetted: boolean
+}
+
+interface ContextDataType {
+	myBets: GameHistory[]
+	width: number
 	fbetAmount: number
 	fcashOutAt: number
 	fautoCashoutState: boolean
@@ -73,8 +78,6 @@ interface ContextDataType {
 	fsingleAmount: number
 	fauto: boolean
 	fdefaultBetAmount: number
-	sbetState: boolean
-	sbetted: boolean
 	sbetAmount: number
 	scashOutAt: number
 	sautoCashoutState: boolean
@@ -90,13 +93,21 @@ interface ContextDataType {
 	myUnityContext: UnityContext
 }
 
-
-interface ContextType extends ContextDataType {
+interface ContextType extends ContextDataType, UserStatusType, GameBetLimit {
 	unityState: boolean
 	unityLoading: boolean
 	currentProgress: number
+	currentNum: number
+	currentSecondNum: number
+	GameState: string
+	time: number
+	bettedUsers: BettedUserType[]
+	previousHand: UserType[]
+	history: number[]
+	balance: number
 	update(attrs: Partial<ContextDataType>)
-	getMyBets()
+	getMyBets(),
+	updateUserBetState(attrs: Partial<BettedUserType>)
 }
 
 interface StorageValueType {
@@ -128,12 +139,7 @@ const unityContext = new UnityContext({
 });
 
 const init_state = {
-	history: [],
-	bettedUsers: [],
-	gameState: {currentNum: 0, currentSecondNum: 0, GameState: '', time: 0},
-	previousHand: [],
 	myBets: [],
-	balance: 5000,
 	width: 1500,
 	fbetState: false,
 	fbetted: false,
@@ -164,17 +170,18 @@ const init_state = {
 	sauto: false,
 	sdefaultBetAmount: 1,
 	myUnityContext: unityContext,
-	
+
 } as ContextDataType;
 
 const Context = React.createContext<ContextType>(null!);
+
 
 const getStorage = () => {
 	try {
 		const raw = localStorage.getItem(config.appKey)
 		if (raw) {
 			const json = JSON.parse(raw)
-			return {id: json.id || '', token: json.token || '', secondId: json.secondId || ''} as StorageValueType
+			return { id: json.id || '', token: json.token || '', secondId: json.secondId || '' } as StorageValueType
 		}
 	} catch (error) {
 		console.log('getStorage', error)
@@ -201,12 +208,12 @@ const initUser = () => {
 		id = uniqid();
 		secondId = uniqid();
 		myTokenId = uniqid();
-		setStorage({id, secondId, token: myTokenId})
+		setStorage({ id, secondId, token: myTokenId })
 	}
 }
 
-export const callCashOut = (at: number, index: 'f'|'s') => {
-	let data = {token: index==='f' ? id : secondId, at};
+export const callCashOut = (at: number, index: 'f' | 's') => {
+	let data = { token: index === 'f' ? id : secondId, at };
 	// if (index === "f") {
 	// 	data = {
 	// 		token: id,
@@ -230,36 +237,65 @@ initUser()
 
 
 export const Provider = ({ children }: any) => {
-	const [state, setState] = React.useState<ContextDataType>(init_state)
+	const [state, setState] = React.useState<ContextDataType>(init_state);
+
 	const [unity, setUnity] = React.useState({
 		unityState: false,
 		unityLoading: false,
 		currentProgress: 0
 	})
+	const [gameState, setGameState] = React.useState({
+		currentNum: 0,
+		currentSecondNum: 0,
+		GameState: '',
+		time: 0
+	})
+
+	const [bettedUsers, setBettedUsers] = React.useState<BettedUserType[]>([]);
 	const update = (attrs: Partial<ContextDataType>) => {
-		setState({...state, ...attrs})
+		setState({ ...state, ...attrs })
 	}
+	const [previousHand, setPreviousHand] = React.useState<UserType[]>([]);
+	const [history, setHistory] = React.useState<number[]>([]);
+	const [userBetState, setUserBetState] = React.useState<UserStatusType>({
+		fbetState: false,
+		fbetted: false,
+		sbetState: false,
+		sbetted: false
+	});
+
+	const updateUserBetState = (attrs: Partial<BettedUserType>) => {
+		setUserBetState({ ...userBetState, ...attrs });
+	}
+	const [balance, setBalance] = React.useState(5000);
+	const [betLimit, setBetLimit] = React.useState<GameBetLimit>({
+		maxBet: 1000,
+		minBet: 1
+	});
+
+	// React.useEffect(() => {
+	// 	console.log(userBetState);
+	// }, [userBetState])
 
 	React.useEffect(function () {
 		unityContext.on("GameController", function (message) {
 			if (message === "Ready") {
-				setUnity({currentProgress: 100, unityLoading: true, unityState: true})
+				setUnity({ currentProgress: 100, unityLoading: true, unityState: true })
 			}
 		});
 		unityContext.on("progress", (progression) => {
-			// console.log('progression', unity)
 			const currentProgress = progression * 100
 			if (progression === 1) {
-				setUnity({currentProgress, unityLoading: true, unityState: true})
+				setUnity({ currentProgress, unityLoading: true, unityState: true })
 			} else {
-				setUnity({currentProgress, unityLoading: false, unityState: false})
+				setUnity({ currentProgress, unityLoading: false, unityState: false })
 			}
 		})
 		return () => unityContext.removeAllEventListeners();
 	}, []);
 
 	React.useEffect(() => {
-		
+
 		const data = {
 			token: id,
 			name: id,
@@ -275,66 +311,48 @@ export const Provider = ({ children }: any) => {
 		socket.emit("enterRoom", data);
 		socket.emit("enterRoom", sData);
 
-		// socket.on('disconnect', onDisconnect);
-
 		socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
-			console.log("bettedUsers.length", bettedUsers.length)
-			if (!!bettedUsers.length)update({bettedUsers})
+			setBettedUsers(bettedUsers);
 		});
 
 		socket.on("myBetState", (user: UserType) => {
-			const attrs = {balance: user.balance} as Partial<ContextDataType>
+			const attrs = { ...userBetState };
 			if (!user.auto) {
-				if (user.type==='f') {
+				if (user.type === 'f') {
 					attrs.fbetState = false
 				} else {
 					attrs.sbetState = false
 				}
 			}
-			if (user.type==='f') {
+			if (user.type === 'f') {
 				attrs.fbetted = user.betted
 			} else {
 				attrs.sbetted = user.betted
 			}
-			update(attrs)
-
-			// dispatch({
-			// 	type: `${data.type}betted`,
-			// 	payload: data.betted
-			// });
-			// dispatch({
-			// 	type: "balance",
-			// 	payload: data.balance
-			// })
+			setUserBetState(attrs);
 		})
 
 		socket.on("myInfo", (user: UserType) => {
-			update({balance: user.balance})
-			// dispatch({
-			// 	type: "balance",
-			// 	payload: data.balance
-			// })
+			setBalance(user.balance);
 		})
 
-		socket.on("history", (history: number[]) => {
-			update({history})
-			// dispatch({
-			// 	type: "history",
-			// 	payload: data.history
-			// })
+		socket.on("history", (history: any) => {
+			setHistory(history);
 		});
 
 		socket.on("gameState", (gameState: GameStatusType) => {
-			const attrs = {gameState} as Partial<ContextDataType>
+			setGameState(gameState);
+			const attrs = { ...userBetState };
 			// dispatch({
 			// 	type: "gameState",
 			// 	payload: data
 			// });
 
-			if (state.fbetted) {
+			if (userBetState.fbetted) {
 				if (state.fautoCashoutState) {
 					if (state.fcashOutAt <= gameState.currentSecondNum) {
 						attrs.fbetted = false
+						setUserBetState(attrs);
 						// dispatch({
 						// 	type: "fbetted",
 						// 	payload: false
@@ -346,10 +364,11 @@ export const Provider = ({ children }: any) => {
 					}
 				}
 			}
-			if (state.sbetted) {
+			if (userBetState.sbetted) {
 				if (state.sautoCashoutState) {
 					if (state.scashOutAt <= gameState.currentSecondNum) {
 						attrs.sbetted = false
+						setUserBetState(attrs);
 						// dispatch({
 						// 	type: "sbetted",
 						// 	payload: false
@@ -361,26 +380,24 @@ export const Provider = ({ children }: any) => {
 					}
 				}
 			}
-			update(attrs)
 		});
 
 		socket.on("previousHand", (previousHand: UserType[]) => {
-			console.log(data, "previous hand");
-			update({previousHand})
+			setPreviousHand(previousHand);
 			// dispatch({
 			// 	type: "previousHand",
 			// 	payload: data
 			// })
-		})
+		});
 
 		socket.on("finishGame", (user: UserType) => {
-			const attrs = {} as Partial<ContextDataType>
+			const attrs = { ...userBetState };
 			let auto = false
 			let increase = 0
 			let decrease = 0
 			let betAmount = 0
 			let defaultBetAmount = 0
-			if (user.type==='f') {
+			if (user.type === 'f') {
 				attrs.fbetted = false
 				auto = state.fauto
 				increase = state.fincrease
@@ -399,7 +416,8 @@ export const Provider = ({ children }: any) => {
 			// 	type: `${data.type}betted`,
 			// 	payload: false
 			// })
-			attrs.balance = state.balance + user.cashAmount
+			setUserBetState(attrs);
+			setBalance(balance + user.cashAmount);
 			// dispatch({
 			// 	type: "balance",
 			// 	payload: state.balance + data.cashAmount
@@ -408,10 +426,10 @@ export const Provider = ({ children }: any) => {
 			if (auto) {
 				if (user.cashouted) {
 					if (user.cashAmount > increase) {
-						if (user.type==='f') {
-							update({fauto: false})
+						if (user.type === 'f') {
+							update({ fauto: false })
 						} else {
-							update({sauto: false})
+							update({ sauto: false })
 						}
 						// dispatch({
 						// 	type: `${user.type}auto`,
@@ -420,20 +438,20 @@ export const Provider = ({ children }: any) => {
 					}
 				} else {
 					if (betAmount > decrease) {
-						if (user.type==='f') {
-							update({fauto: false})
+						if (user.type === 'f') {
+							update({ fauto: false })
 						} else {
-							update({sauto: false})
+							update({ sauto: false })
 						}
 						// dispatch({
 						// 	type: `${user.type}auto`,
 						// 	payload: false
 						// })
 					} else {
-						if (user.type==='f') {
-							update({fbetAmount: defaultBetAmount})
+						if (user.type === 'f') {
+							update({ fbetAmount: defaultBetAmount })
 						} else {
-							update({sbetAmount: defaultBetAmount})
+							update({ sbetAmount: defaultBetAmount })
 						}
 						// dispatch({
 						// 	type: `${user.type}betAmount`,
@@ -443,6 +461,11 @@ export const Provider = ({ children }: any) => {
 				}
 			}
 		});
+
+		socket.on("getBetLimits", (betAmounts: { max: number, min: number }) => {
+			console.log("getBetLimits");
+			setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min })
+		})
 
 		socket.on("error", (data) => {
 			toast.error(data);
@@ -454,20 +477,108 @@ export const Provider = ({ children }: any) => {
 		return () => {
 			socket.off('connect');
 			socket.off('disconnect');
-			socket.off('success');
-			socket.off('error');
-			socket.off('finishGame');
-			socket.off('gameState');
-			socket.off('history');
 			socket.off('myBetState');
+			socket.off('myInfo');
+			socket.off('history');
+			socket.off('gameState');
+			socket.off('previousHand');
+			socket.off('finishGame');
+			socket.off('getBetLimits');
+			socket.off('error');
+			socket.off('success');
 		}
-	}, [socket])
+	}, [socket]);
+
+	React.useEffect(() => {
+		const attrs = {} as Partial<ContextDataType>;
+		const attrsUserBetStatus = { ...userBetState };
+		if (gameState.GameState === "BET") {
+			fautoBetFinished = false;
+			sautoBetFinished = false;
+			if (state.fauto) {
+				if (state.fautoCound > 0) {
+					if (userBetState.fbetState) {
+						var data = {
+							token: id,
+							betAmount: state.fbetAmount,
+							target: state.fcashOutAt,
+							auto: state.fauto
+						}
+						socket.emit("playBet", data);
+						attrs.fautoCound = attrs.fautoCound ? attrs.fautoCound - 1 : 0;
+						// dispatch({
+						// 	type: "fautoCound",
+						// 	payload: state.fautoCound - 1
+						// })
+					}
+				} else {
+					attrs.fauto = false;
+					// dispatch({
+					// 	type: "fauto",
+					// 	payload: false
+					// });
+					attrsUserBetStatus.fbetState = false;
+					// dispatch({
+					// 	type: "fbetState",
+					// 	payload: false
+					// })
+				}
+			} else if (userBetState.fbetState) {
+				var fbetdata = {
+					token: id,
+					betAmount: state.fbetAmount,
+					target: state.fcashOutAt,
+					auto: state.fauto
+				}
+				socket.emit("playBet", fbetdata);
+			}
+			if (state.sauto) {
+				if (state.sautoCound > 0) {
+					if (userBetState.sbetState) {
+						var betdata = {
+							token: secondId,
+							betAmount: state.sbetAmount,
+							auto: state.sauto
+						}
+						socket.emit("playBet", betdata);
+						attrs.sautoCound = attrs.sautoCound ? attrs.sautoCound - 1 : 0;
+						// dispatch({
+						// 	type: "sautoCound",
+						// 	payload: state.sautoCound - 1
+						// })
+					}
+				} else {
+					attrs.sauto = false;
+					// dispatch({
+					// 	type: "sauto",
+					// 	payload: false
+					// });
+					attrsUserBetStatus.sbetState = false;
+					// dispatch({
+					// 	type: "sbetState",
+					// 	payload: false
+					// })
+				}
+			} else if (userBetState.sbetState) {
+				var sbetdata = {
+					token: secondId,
+					betAmount: state.sbetAmount,
+					target: state.scashOutAt,
+					auto: state.sauto
+				}
+				socket.emit("playBet", sbetdata);
+			}
+
+			update(attrs);
+			setUserBetState(attrsUserBetStatus);
+		}
+	}, [gameState.GameState, userBetState.fbetState, userBetState.sbetState]);
 
 	const getMyBets = async () => {
 		try {
 			let response = await axios.post(`${config.api}/my-info`, { name: myTokenId });
 			if (response?.data?.status) {
-				update({myBets: response.data.data as GameHistory[]})
+				update({ myBets: response.data.data as GameHistory[] })
 				// dispatch({
 				// 	type: "myBets",
 				// 	payload: result.data.data
@@ -480,7 +591,20 @@ export const Provider = ({ children }: any) => {
 	}
 
 	return (
-		<Context.Provider value={{ ...state, ...unity, getMyBets, update}}>
+		<Context.Provider value={{
+			...state,
+			...unity,
+			...gameState,
+			...userBetState,
+			...betLimit,
+			balance,
+			bettedUsers: [...bettedUsers],
+			previousHand: [...previousHand],
+			history: [...history],
+			getMyBets,
+			update,
+			updateUserBetState,
+		}}>
 			{children}
 		</Context.Provider>
 	);
