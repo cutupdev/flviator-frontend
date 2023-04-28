@@ -5,7 +5,8 @@ import { io } from 'socket.io-client';
 import axios from "axios";
 import uniqid from 'uniqid';
 import { toast } from 'react-toastify';
-import config from './config.json'
+
+import config from './config.json';
 
 export interface BettedUserType {
 	auto: boolean
@@ -63,6 +64,8 @@ interface UserStatusType {
 	sbetted: boolean
 }
 
+let newStatus = {} as UserStatusType;
+
 interface ContextDataType {
 	myBets: GameHistory[]
 	width: number
@@ -107,7 +110,7 @@ interface ContextType extends ContextDataType, UserStatusType, GameBetLimit {
 	balance: number
 	update(attrs: Partial<ContextDataType>)
 	getMyBets(),
-	updateUserBetState(attrs: Partial<BettedUserType>)
+	updateUserBetState(attrs: Partial<UserStatusType>)
 }
 
 interface StorageValueType {
@@ -264,7 +267,8 @@ export const Provider = ({ children }: any) => {
 		sbetted: false
 	});
 
-	const updateUserBetState = (attrs: Partial<BettedUserType>) => {
+	newStatus = userBetState;
+	const updateUserBetState = (attrs: Partial<UserStatusType>) => {
 		setUserBetState({ ...userBetState, ...attrs });
 	}
 	const [balance, setBalance] = React.useState(5000);
@@ -316,7 +320,7 @@ export const Provider = ({ children }: any) => {
 		});
 
 		socket.on("myBetState", (user: UserType) => {
-			const attrs = { ...userBetState };
+			const attrs = newStatus;
 			if (!user.auto) {
 				if (user.type === 'f') {
 					attrs.fbetState = false
@@ -329,11 +333,11 @@ export const Provider = ({ children }: any) => {
 			} else {
 				attrs.sbetted = user.betted
 			}
-			setUserBetState(attrs);
+			updateUserBetState(attrs);
 		})
 
 		socket.on("myInfo", (user: UserType) => {
-			setBalance(user.balance);
+			setBalance(prev => user.balance);
 		})
 
 		socket.on("history", (history: any) => {
@@ -391,7 +395,7 @@ export const Provider = ({ children }: any) => {
 		});
 
 		socket.on("finishGame", (user: UserType) => {
-			const attrs = { ...userBetState };
+			const attrs = newStatus;
 			let auto = false
 			let increase = 0
 			let decrease = 0
@@ -417,7 +421,7 @@ export const Provider = ({ children }: any) => {
 			// 	payload: false
 			// })
 			setUserBetState(attrs);
-			setBalance(balance + user.cashAmount);
+			setBalance(prev => prev + user.cashAmount);
 			// dispatch({
 			// 	type: "balance",
 			// 	payload: state.balance + data.cashAmount
@@ -504,6 +508,7 @@ export const Provider = ({ children }: any) => {
 							target: state.fcashOutAt,
 							auto: state.fauto
 						}
+						setBalance(prev => prev - state.fbetAmount);
 						socket.emit("playBet", data);
 						attrs.fautoCound = attrs.fautoCound ? attrs.fautoCound - 1 : 0;
 						// dispatch({
@@ -530,6 +535,7 @@ export const Provider = ({ children }: any) => {
 					target: state.fcashOutAt,
 					auto: state.fauto
 				}
+				setBalance(prev => prev - state.fbetAmount);
 				socket.emit("playBet", fbetdata);
 			}
 			if (state.sauto) {
@@ -540,6 +546,7 @@ export const Provider = ({ children }: any) => {
 							betAmount: state.sbetAmount,
 							auto: state.sauto
 						}
+						setBalance(prev => prev - state.sbetAmount);
 						socket.emit("playBet", betdata);
 						attrs.sautoCound = attrs.sautoCound ? attrs.sautoCound - 1 : 0;
 						// dispatch({
@@ -566,6 +573,7 @@ export const Provider = ({ children }: any) => {
 					target: state.scashOutAt,
 					auto: state.sauto
 				}
+				setBalance(prev => prev - state.sbetAmount);
 				socket.emit("playBet", sbetdata);
 			}
 
