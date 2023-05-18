@@ -53,22 +53,24 @@ export default function BetsUsers() {
               <TopHistory />
           }
         </div>
-      </div>
-      <div className="bets-footer">
-        <div className="provably-fair-block">
-          <span>This game is </span>
-          <div className="provably-fair">
-            <div className="i-fair"></div>
-            <span className="text-provably-fair">Provably Fair</span>
+        <div className="bets-footer">
+          <div className="provably-fair-block">
+            <span>This game is </span>
+            <div className="provably-fair">
+              <div className="i-fair"></div>
+              <span className="text-provably-fair">Provably Fair</span>
+            </div>
+          </div>
+          <div className="logo-block">
+            <span>Powered by</span>
+            <a target="_blank" href="https://spribe.co" rel="noreferrer">
+              <div className="i-logo"></div>
+            </a>
           </div>
         </div>
-        <div className="logo-block">
-          <span>Powered by</span>
-          <a target="_blank" href="https://spribe.co" rel="noreferrer">
-            <div className="i-logo"></div>
-          </a>
-        </div>
       </div>
+
+
     </div>
   );
 }

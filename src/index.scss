@@ -387,7 +387,7 @@ code {
   padding-top: 10px;
   display: flex;
   flex-direction: column;
-
+  position: relative;
 
   @media (min-width: 992px) {
     min-width: 320px !important;

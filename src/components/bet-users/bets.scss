@@ -53,6 +53,7 @@
         flex-direction: column;
         overflow: hidden;
         position: relative !important;
+        overflow-y: auto;
 
         .bet-item {
             color: #9ea0a3;
@@ -65,10 +66,20 @@
                 position: relative;
                 align-items: center;
                 display: flex;
+                width: 100%;
+
+                .score {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    gap: 5px;
+
+                }
 
                 .icon {
-                    margin-left: 30px;
-                    position: absolute;
+                    margin: 20px;
 
                     .avatar {
                         width: 30px;
@@ -78,6 +89,7 @@
                     }
 
                     .username {
+                        margin-top: 3px;
                         font-size: 13px;
                     }
                 }
@@ -90,6 +102,13 @@
                 .amount {
                     font-size: 14px;
                     color: white;
+                }
+
+                .cashout {
+                    padding: 4px 8px;
+                    background: #00000080;
+                    border-radius: 20px;
+                    color: rgb(192, 23, 180);
                 }
 
                 .justify-center {
