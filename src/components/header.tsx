@@ -1,16 +1,30 @@
 import React from "react";
+import axios from 'axios';
+
 import logo from "../assets/images/logo.svg";
+import refound from "../assets/images/refund.png";
 import "../index.scss";
 // import { useCrashContext } from "./Main/context";
 import Context from "../context";
-
+import config from '../config.json';
+import { toast } from "react-toastify";
 export default function Header() {
-  const {balance} = React.useContext(Context)
+  const { balance, userType, userName,setBalance } = React.useContext(Context)
 
   // const [state] = useCrashContext();
-  const [howto, setHowto] = React.useState<'howto'|'short'|'more'|''>("howto");
+  const [howto, setHowto] = React.useState<'howto' | 'short' | 'more' | ''>("howto");
   const [, setFireSystem] = React.useState(false);
-  
+
+  const Refound = async () => {
+    let res = await axios.post(`${config.api}/refound`, { userId: userName });
+    if (res.data.status) {
+      toast.success(res.data.message);
+      setBalance(0);
+    } else {
+      toast.error(res.data.message);
+    }
+  }
+
   return (
     <div className="header flex-none items-center">
       <div className="header-container">
@@ -18,6 +32,11 @@ export default function Header() {
           <img src={logo} alt="logo" className="logo"></img>
         </div>
         <div className="second-block">
+          {userType &&
+            <button className="refound" onClick={Refound}>
+              <img width={23} src={refound} alt="refound"></img>
+            </button>
+          }
           <button className="howto" onClick={() => setHowto("short")}>
             <div className="help-logo"></div>
             <div className="help-msg">How to play ?</div>

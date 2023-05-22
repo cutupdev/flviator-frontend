@@ -143,8 +143,42 @@ code {
       width: 72px;
     }
   }
+
+  .refound {
+    margin-right: 10px;
+    border-radius: 50px;
+    border: none;
+    background-color: lawngreen;
+    cursor: pointer;
+  }
 }
 
+.recharge{
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  z-index: 1000;
+  margin-top: -38px;
+  .recharge-body{
+    width: 400px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #131313;
+    border-radius: 20px;
+    font-size: 14px;
+    .recharge-body-font{
+      font-size: 27px;
+      margin-bottom: 30px;
+    }
+  }
+}
 .text-uppercase {
   text-transform: uppercase;
 }
