@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import { useCrashContext } from "../context";
 import { toast } from 'react-toastify';
 import Context, { callCashOut } from "../../context";
@@ -27,7 +27,7 @@ const Bet = ({ index }: BetProps) => {
 		fcashOutAt, scashOutAt,
 		fsingle, ssingle,
 		fsingleAmount, ssingleAmount,
-		GameState, currentNum,
+		GameState, currentNum, currentSecondNum,
 		update, updateUserBetState } = state
 	// const [state, dispatch, callCashOut] = useCrashContext();
 
@@ -230,9 +230,17 @@ const Bet = ({ index }: BetProps) => {
 
 	const onStartBtnClick = () => {
 		if (autoCound > 0) {
-			if (deState || inState) {
-				onAutoBetClick(true);
-				setShowModal(false);
+			if (deState || inState || single) {
+				if (fsingleAmount > 0 || ssingleAmount > 0 || fdecrease > 0 || sdecrease > 0 || fincrease > 0 || fdecrease > 0) {
+					if (deState && inState || deState || single || single && inState) {
+						onAutoBetClick(true);
+						setShowModal(false);
+					} else {
+						toast.error("Please, specify decrease or exceed stop point");
+					}
+				} else {
+					toast.error("Can't see 0.00 as stop point");
+				}
 			} else {
 				toast.error("Please, specify decrease or exceed stop point");
 			}
@@ -240,6 +248,37 @@ const Bet = ({ index }: BetProps) => {
 			toast.error("Please, set number of rounds");
 		}
 	}
+
+	useEffect(() => {
+		console.log('fbetted', fbetted)
+		console.log('sbetted', sbetted)
+	}, [fbetted, sbetted])
+	let fautoBetFinished = false;
+	let sautoBetFinished = false;
+	useEffect(() => {
+		if (fbetted) {
+			if (fautoCashoutState) {
+				if (fcashOutAt <= currentSecondNum) {
+					if (!fautoBetFinished) {
+						callCashOut(fcashOutAt, "f");
+						fautoBetFinished = true;
+					}
+				}
+			}
+		}
+		if (sbetted) {
+			if (sautoCashoutState) {
+				if (scashOutAt <= currentSecondNum) {
+					// fbetted = false
+					// setUserBetState(attrs);
+					if (!sautoBetFinished) {
+						callCashOut(scashOutAt, "s");
+						sautoBetFinished = true;
+					}
+				}
+			}
+		}
+	}, [currentSecondNum])
 	return (
 		<div className="bet-control">
 			<div className="controls">
@@ -262,7 +301,7 @@ const Bet = ({ index }: BetProps) => {
 						<div className="bet-spinner">
 							<div className={`spinner ${betState || betted ? "disabled" : ""}`}>
 								<div className="buttons">
-									<button className="minus" onClick={() => minus("betAmount")}></button>
+									<button className="minus" onClick={() => betState || betted ? "" : minus("betAmount")}></button>
 								</div>
 								<div className="input">
 									{betState || betted ?
@@ -272,7 +311,7 @@ const Bet = ({ index }: BetProps) => {
 									}
 								</div>
 								<div className="buttons">
-									<button className="plus" onClick={() => plus("betAmount")}></button>
+									<button className="plus" onClick={() => betState || betted ? "" : plus("betAmount")}></button>
 								</div>
 							</div>
 						</div>
@@ -343,6 +382,7 @@ const Bet = ({ index }: BetProps) => {
 						}
 					</div>
 				</div>
+				{/* Auto */}
 				{
 					gameType === "auto" &&
 					<>
@@ -429,7 +469,7 @@ const Bet = ({ index }: BetProps) => {
 								<div className="content-part">
 									<div className={`input-switch ${deState ? "" : "off"}`}
 										onClick={() => {
-											update({ [`${index}deState`]: !deState })
+											update({ [`${index}deState`]: !deState, [`${index}decrease`]: 0 });
 										}}
 									>
 										<span className="oval"></span>
@@ -467,7 +507,7 @@ const Bet = ({ index }: BetProps) => {
 								<div className="content-part">
 									<div className={`input-switch ${inState ? "" : "off"}`}
 										onClick={() => {
-											update({ [`${index}inState`]: !inState })
+											update({ [`${index}inState`]: !inState, [`${index}increase`]: 0 });
 										}}
 									>
 										<span className="oval"></span>
@@ -503,7 +543,7 @@ const Bet = ({ index }: BetProps) => {
 								<div className="content-part">
 									<div className={`input-switch ${single ? "" : "off"}`}
 										onClick={() => {
-											update({ [`${index}single`]: !single })
+											update({ [`${index}single`]: !single, [`${index}singleAmount`]: 0 });
 										}}
 									>
 										<span className="oval"></span>
@@ -521,7 +561,7 @@ const Bet = ({ index }: BetProps) => {
 													/>
 												</div>
 												<div className="buttons">
-													<button onClick={() => plus("singleAmount")} className="plus"></button>
+													<button onClick={() => plus("singleAmount")} className="plus" ></button>
 												</div>
 											</div> :
 											<div className="m-spinner disabled">

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useState } from "react";
 import { UnityContext } from "react-unity-webgl";
 import { io } from 'socket.io-client';
 import axios from "axios";
@@ -80,6 +80,7 @@ interface ContextDataType {
 	fdecrease: number
 	fsingleAmount: number
 	fauto: boolean
+	fbetState: boolean
 	fdefaultBetAmount: number
 	sbetAmount: number
 	scashOutAt: number
@@ -91,6 +92,7 @@ interface ContextDataType {
 	sinState: boolean
 	sdeState: boolean
 	ssingle: boolean
+	sbetState: boolean
 	sauto: boolean
 	sdefaultBetAmount: number
 	myUnityContext: UnityContext
@@ -110,7 +112,7 @@ interface ContextType extends ContextDataType, UserStatusType, GameBetLimit {
 	balance: number
 	update(attrs: Partial<ContextDataType>)
 	getMyBets(),
-	updateUserBetState(attrs: Partial<UserStatusType>)
+	updateUserBetState(attrs: Partial<UserStatusType>),
 }
 
 interface StorageValueType {
@@ -233,14 +235,14 @@ export const callCashOut = (at: number, index: 'f' | 's') => {
 
 // let myTokenId = uniqid();
 // let totalData;
-let fautoBetFinished = false;
-let sautoBetFinished = false;
 initUser()
 
-
+let newState: any;
 
 export const Provider = ({ children }: any) => {
 	const [state, setState] = React.useState<ContextDataType>(init_state);
+
+	newState = state;
 
 	const [unity, setUnity] = React.useState({
 		unityState: false,
@@ -266,6 +268,17 @@ export const Provider = ({ children }: any) => {
 		sbetState: false,
 		sbetted: false
 	});
+
+	// auto bet option
+	let fdecrease = 0;
+	let fincrease = 0;
+
+	let sdecrease = 0;
+	let sincrease = 0;
+	let singleWin = 0;
+	let decreaseState = false;
+	let increaseState = false;
+	let singleWinState = false;
 
 	newStatus = userBetState;
 	const updateUserBetState = (attrs: Partial<UserStatusType>) => {
@@ -299,7 +312,7 @@ export const Provider = ({ children }: any) => {
 	}, []);
 
 	React.useEffect(() => {
-
+		const attrsUserBetStatus = { ...userBetState };
 		const data = {
 			token: id,
 			name: id,
@@ -347,43 +360,6 @@ export const Provider = ({ children }: any) => {
 		socket.on("gameState", (gameState: GameStatusType) => {
 			setGameState(gameState);
 			const attrs = { ...userBetState };
-			// dispatch({
-			// 	type: "gameState",
-			// 	payload: data
-			// });
-
-			if (userBetState.fbetted) {
-				if (state.fautoCashoutState) {
-					if (state.fcashOutAt <= gameState.currentSecondNum) {
-						attrs.fbetted = false
-						setUserBetState(attrs);
-						// dispatch({
-						// 	type: "fbetted",
-						// 	payload: false
-						// })
-						if (!fautoBetFinished) {
-							callCashOut(state.fcashOutAt, "f");
-							fautoBetFinished = true;
-						}
-					}
-				}
-			}
-			if (userBetState.sbetted) {
-				if (state.sautoCashoutState) {
-					if (state.scashOutAt <= gameState.currentSecondNum) {
-						attrs.sbetted = false
-						setUserBetState(attrs);
-						// dispatch({
-						// 	type: "sbetted",
-						// 	payload: false
-						// })
-						if (!sautoBetFinished) {
-							callCashOut(state.scashOutAt, "s");
-							sautoBetFinished = true;
-						}
-					}
-				}
-			}
 		});
 
 		socket.on("previousHand", (previousHand: UserType[]) => {
@@ -395,73 +371,85 @@ export const Provider = ({ children }: any) => {
 		});
 
 		socket.on("finishGame", (user: UserType) => {
+
 			const attrs = newStatus;
 			let auto = false
-			let increase = 0
-			let decrease = 0
-			let betAmount = 0
+
 			let defaultBetAmount = 0
 			if (user.type === 'f') {
 				attrs.fbetted = false
-				auto = state.fauto
-				increase = state.fincrease
-				decrease = state.fdecrease
-				betAmount = state.fbetAmount
-				defaultBetAmount = state.fdefaultBetAmount
+				auto = newState.fauto
+				singleWin = newState.fbetAmount;
+				defaultBetAmount = newState.fdefaultBetAmount
+				increaseState = newState.finState
+				decreaseState = newState.fdeState
+				singleWinState = newState.fsingle
+
 			} else {
 				attrs.sbetted = false
-				auto = state.sauto
-				increase = state.sincrease
-				decrease = state.sdecrease
-				betAmount = state.sbetAmount
-				defaultBetAmount = state.sdefaultBetAmount
+				auto = newState.sauto
+				singleWin = newState.sbetAmount
+				defaultBetAmount = newState.sdefaultBetAmount
+				increaseState = newState.sinState
+				decreaseState = newState.sdeState
+				singleWinState = newState.ssingle
 			}
-			// dispatch({
-			// 	type: `${data.type}betted`,
-			// 	payload: false
-			// })
+
 			setUserBetState(attrs);
 			setBalance(prev => prev + user.cashAmount);
-			// dispatch({
-			// 	type: "balance",
-			// 	payload: state.balance + data.cashAmount
-			// })
-
 			if (auto) {
+				const attrs = newStatus;
+				attrs.fbetState = false
+				attrs.sbetState = false
 				if (user.cashouted) {
-					if (user.cashAmount > increase) {
-						if (user.type === 'f') {
+					if (user.type === 'f') {
+						if (increaseState && newState.fincrease - fincrease <= 0) {
+							updateUserBetState(attrs);
 							update({ fauto: false })
-						} else {
+						}
+						console.log('newState.fsingleAmount : ', newState.fsingleAmount)
+						console.log('user.cashAmount : ', user.cashAmount)
+						if (singleWinState && newState.fsingleAmount <= user.cashAmount) {
+							update({ fauto: false })
+							updateUserBetState(attrs);
+						}
+						fincrease = fincrease + user.cashAmount;
+					} else {
+						if (increaseState && newState.sincrease - sdecrease <= 0) {
+							updateUserBetState(attrs);
 							update({ sauto: false })
 						}
-						// dispatch({
-						// 	type: `${user.type}auto`,
-						// 	payload: false
-						// })
+						if (singleWinState && newState.ssingleAmount <= user.cashAmount) {
+							updateUserBetState(attrs);
+							update({ sauto: false })
+						}
+						sincrease = sincrease + user.cashAmount;
 					}
 				} else {
-					if (betAmount > decrease) {
-						if (user.type === 'f') {
+					if (user.type === 'f') {
+						fdecrease = fdecrease + singleWin;
+						if (decreaseState && newState.fdecrease - fdecrease <= 0) {
+							updateUserBetState({ [`fbetState`]: false })
+							updateUserBetState(attrs);
 							update({ fauto: false })
-						} else {
-							update({ sauto: false })
+							fdecrease = 0
 						}
-						// dispatch({
-						// 	type: `${user.type}auto`,
-						// 	payload: false
-						// })
 					} else {
-						if (user.type === 'f') {
-							update({ fbetAmount: defaultBetAmount })
-						} else {
-							update({ sbetAmount: defaultBetAmount })
+						sdecrease = sdecrease + singleWin
+						if (decreaseState && newState.sdecrease - sdecrease <= 0) {
+							updateUserBetState({ [`sbetState`]: false })
+							updateUserBetState(attrs);
+							update({ sauto: false })
+							sdecrease = 0
 						}
-						// dispatch({
-						// 	type: `${user.type}betAmount`,
-						// 	payload: state[`${user.type}defaultBetAmount`]
-						// })
 					}
+					//  else {
+					// 	if (user.type === 'f') {
+					// 		update({ fbetAmount: defaultBetAmount })
+					// 	} else {
+					// 		update({ sbetAmount: defaultBetAmount })
+					// 	}
+					// }
 				}
 			}
 		});
@@ -497,8 +485,6 @@ export const Provider = ({ children }: any) => {
 		const attrs = {} as Partial<ContextDataType>;
 		const attrsUserBetStatus = { ...userBetState };
 		if (gameState.GameState === "BET") {
-			fautoBetFinished = false;
-			sautoBetFinished = false;
 			if (state.fauto) {
 				if (state.fautoCound > 0) {
 					if (userBetState.fbetState) {
@@ -510,7 +496,9 @@ export const Provider = ({ children }: any) => {
 						}
 						setBalance(prev => prev - state.fbetAmount);
 						socket.emit("playBet", data);
-						attrs.fautoCound = attrs.fautoCound ? attrs.fautoCound - 1 : 0;
+						attrs.fautoCound = state.fautoCound ? state.fautoCound - 1 : 0;
+
+
 						// dispatch({
 						// 	type: "fautoCound",
 						// 	payload: state.fautoCound - 1
@@ -548,7 +536,7 @@ export const Provider = ({ children }: any) => {
 						}
 						setBalance(prev => prev - state.sbetAmount);
 						socket.emit("playBet", betdata);
-						attrs.sautoCound = attrs.sautoCound ? attrs.sautoCound - 1 : 0;
+						attrs.sautoCound = state.sautoCound ? state.sautoCound - 1 : 0;
 						// dispatch({
 						// 	type: "sautoCound",
 						// 	payload: state.sautoCound - 1
