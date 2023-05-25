@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
+import React from "react";
 import { UnityContext } from "react-unity-webgl";
+import { useLocation } from "react-router";
 import { io } from 'socket.io-client';
 import axios from "axios";
 import uniqid from 'uniqid';
@@ -34,6 +35,7 @@ export interface UserType {
 	balance: number
 	type: 'f' | 's'
 	img: string
+	userType: boolean
 }
 
 interface GameStatusType {
@@ -110,6 +112,10 @@ interface ContextType extends ContextDataType, UserStatusType, GameBetLimit {
 	previousHand: UserType[]
 	history: number[]
 	balance: number
+	userType: boolean
+	userName: string
+	rechargeState: boolean
+	setBalance(number),
 	update(attrs: Partial<ContextDataType>)
 	getMyBets(),
 	updateUserBetState(attrs: Partial<UserStatusType>),
@@ -180,20 +186,6 @@ const init_state = {
 
 const Context = React.createContext<ContextType>(null!);
 
-
-const getStorage = () => {
-	try {
-		const raw = localStorage.getItem(config.appKey)
-		if (raw) {
-			const json = JSON.parse(raw)
-			return { id: json.id || '', token: json.token || '', secondId: json.secondId || '' } as StorageValueType
-		}
-	} catch (error) {
-		console.log('getStorage', error)
-	}
-	return null
-}
-
 const setStorage = (v: StorageValueType) => {
 	localStorage.setItem(config.appKey, JSON.stringify(v));
 }
@@ -204,17 +196,10 @@ let secondId = "";
 let myTokenId = "";
 
 const initUser = () => {
-	const v = getStorage()
-	if (!!v) {
-		id = v.id
-		secondId = v.secondId
-		myTokenId = v.token
-	} else {
-		id = uniqid();
-		secondId = uniqid();
-		myTokenId = uniqid();
-		setStorage({ id, secondId, token: myTokenId })
-	}
+	id = uniqid();
+	secondId = uniqid();
+	myTokenId = uniqid();
+	setStorage({ id, secondId, token: myTokenId })
 }
 
 export const callCashOut = (at: number, index: 'f' | 's') => {
@@ -240,6 +225,7 @@ initUser()
 let newState: any;
 
 export const Provider = ({ children }: any) => {
+	const token = new URLSearchParams(useLocation().search).get('cert');
 	const [state, setState] = React.useState<ContextDataType>(init_state);
 
 	newState = state;
@@ -285,6 +271,9 @@ export const Provider = ({ children }: any) => {
 		setUserBetState({ ...userBetState, ...attrs });
 	}
 	const [balance, setBalance] = React.useState(5000);
+	const [userType, setUserType] = React.useState(false);
+	const [userName, setUserName] = React.useState("");
+	const [rechargeState, setRechargeState] = React.useState(false);
 	const [betLimit, setBetLimit] = React.useState<GameBetLimit>({
 		maxBet: 1000,
 		minBet: 1
@@ -317,16 +306,16 @@ export const Provider = ({ children }: any) => {
 			token: id,
 			name: id,
 			type: "f",
-			myToken: myTokenId
+			myToken: myTokenId,
 		}
 		const sData = {
 			token: secondId,
 			name: secondId,
 			type: "s",
-			myToken: myTokenId
+			myToken: myTokenId,
 		}
-		socket.emit("enterRoom", data);
-		socket.emit("enterRoom", sData);
+		console.log(token, "TOken");
+		socket.emit("enterRoom", { data, sData, token });
 
 		socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
 			setBettedUsers(bettedUsers);
@@ -351,6 +340,8 @@ export const Provider = ({ children }: any) => {
 
 		socket.on("myInfo", (user: UserType) => {
 			setBalance(prev => user.balance);
+			setUserType(prev => user.userType);
+			setUserName(prev => user.name);
 		})
 
 		socket.on("history", (history: any) => {
@@ -459,6 +450,11 @@ export const Provider = ({ children }: any) => {
 			setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min })
 		})
 
+		socket.on('recharge', () => {
+			alert(111);
+			setRechargeState(true);
+		});
+
 		socket.on("error", (data) => {
 			toast.error(data);
 		})
@@ -476,6 +472,7 @@ export const Provider = ({ children }: any) => {
 			socket.off('previousHand');
 			socket.off('finishGame');
 			socket.off('getBetLimits');
+			socket.off('recharge');
 			socket.off('error');
 			socket.off('success');
 		}
@@ -594,9 +591,13 @@ export const Provider = ({ children }: any) => {
 			...userBetState,
 			...betLimit,
 			balance,
+			userType,
+			userName,
+			rechargeState,
 			bettedUsers: [...bettedUsers],
 			previousHand: [...previousHand],
 			history: [...history],
+			setBalance,
 			getMyBets,
 			update,
 			updateUserBetState,

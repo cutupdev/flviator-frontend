@@ -9,7 +9,7 @@ import Context from "./context";
 // import "./App.scss";
 
 function App() {
-  const { unityLoading, currentProgress } = React.useContext(Context)
+  const { unityLoading, currentProgress, rechargeState } = React.useContext(Context)
   // console.log('unityLoading, currentProgress', unityLoading, currentProgress)
   // const [state] = useCrashContext();
   return (
@@ -24,6 +24,14 @@ function App() {
               <div className="width-transition" style={{ width: `${currentProgress * 1.111 + 0.01}%` }}></div>
             </div>
             <p>{Number(currentProgress * 1.111 + 0.01).toFixed(2)}%</p>
+          </div>
+        </div>
+      }
+      {rechargeState &&
+        <div className="recharge">
+          <div className="recharge-body">
+            <div className="recharge-body-font">Insufficient balance amount</div>
+            <a href="http://annie.ihk.vipnps.vip/iGaming-web/#/pages/recharge/recharge">annie.ihk.vipnps.vip/iGaming-web/#/pages/recharge/recharge</a>
           </div>
         </div>
       }
