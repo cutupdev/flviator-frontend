@@ -430,8 +430,8 @@ export const Provider = ({ children }: any) => {
 				}
 				attrs.userInfo.balance -= state.userInfo.s.betAmount;
 				socket.emit('playBet', data);
-				betStatus.fbetState = false;
-				betStatus.fbetted = true;
+				betStatus.sbetState = false;
+				betStatus.sbetted = true;
 				// update(attrs);
 				setUserBetState(betStatus);
 			}
