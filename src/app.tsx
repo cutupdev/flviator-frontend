@@ -29,7 +29,7 @@ function App() {
         <div className="recharge">
           <div className="recharge-body">
             <div className="recharge-body-font">Insufficient balance amount</div>
-            <a href="http://annie.ihk.vipnps.vip/iGaming-web/#/pages/recharge/recharge">annie.ihk.vipnps.vip/iGaming-web/#/pages/recharge/recharge</a>
+            <a href="https://induswin.com/#/pages/recharge/recharge">Induswin.com</a>
           </div>
         </div>
       }
