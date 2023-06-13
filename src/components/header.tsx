@@ -12,7 +12,7 @@ export default function Header() {
 
   const Refound = async () => {
       setTimeout(() => {
-        window.open("http://annie.ihk.vipnps.vip/iGaming-web/", "_self");
+        window.open("https://induswin.com/#/", "_self");
       }, 1000)
   }
 
