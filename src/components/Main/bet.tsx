@@ -150,7 +150,7 @@ const Bet = ({ index }: BetProps) => {
 		if (autoCound > 0) {
 			if (deState || inState || single) {
 				if (singleAmount > 0 || decrease > 0 || increase > 0) {
-					if (deState && ((inState || deState || single || single) && inState)) {
+					if (inState || deState || single) {
 						onAutoBetClick(true);
 						setShowModal(false);
 					} else {
@@ -176,13 +176,6 @@ const Bet = ({ index }: BetProps) => {
 		}
 	}, [currentSecondNum, fbetted, sbetted, state.fautoCashoutState, state.sautoCashoutState, state.userInfo.f.target, state.userInfo.s.target])
 
-	useEffect(() => {
-		if (GameState === "BET") {
-			if (autoCashoutState) {
-				
-			}
-		}
-	}, [GameState])
 	return (
 		<div className="bet-control">
 			<div className="controls">
