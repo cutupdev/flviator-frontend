@@ -167,21 +167,22 @@ const Bet = ({ index }: BetProps) => {
 		}
 	}
 	useEffect(() => {
-		if (fbetted) {
-			if (state.fautoCashoutState) {
-				if (state.userInfo.f.target <= currentSecondNum) {
-						callCashOut(state.userInfo.f.target, "f");
-				}
-			}
-		}
-		if (sbetted) {
-			if (state.sautoCashoutState) {
-				if (state.userInfo.s.target <= currentSecondNum) {
-						callCashOut(state.userInfo.s.target, "s");
+		if (betted) {
+			if (autoCashoutState) {
+				if (cashOut < currentSecondNum) {
+					callCashOut(cashOut, index);
 				}
 			}
 		}
 	}, [currentSecondNum, fbetted, sbetted, state.fautoCashoutState, state.sautoCashoutState, state.userInfo.f.target, state.userInfo.s.target])
+
+	useEffect(() => {
+		if (GameState === "BET") {
+			if (autoCashoutState) {
+				
+			}
+		}
+	}, [GameState])
 	return (
 		<div className="bet-control">
 			<div className="controls">
