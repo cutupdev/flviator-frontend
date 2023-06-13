@@ -10,8 +10,6 @@ import Context from "./context";
 
 function App() {
   const { unityLoading, currentProgress, rechargeState } = React.useContext(Context)
-  // console.log('unityLoading, currentProgress', unityLoading, currentProgress)
-  // const [state] = useCrashContext();
   return (
     <div className="main-container">
       {!unityLoading &&
