@@ -11,39 +11,30 @@ type BetOptType = '20' | '50' | '100' | '1000'
 type GameType = 'manual' | 'auto'
 
 const Bet = ({ index }: BetProps) => {
-	const state = React.useContext(Context)
-	const {
-		balance,
-		fauto, sauto,
+	const context = React.useContext(Context)
+	const { state,
 		fbetted, sbetted,
-		fdeState, sdeState,
-		finState, sinState,
-		fbetState, sbetState,
-		fdecrease, sdecrease,
-		fincrease, sincrease,
-		fautoCound, sautoCound,
-		fbetAmount, sbetAmount,
-		fautoCashoutState, sautoCashoutState,
-		fcashOutAt, scashOutAt,
-		fsingle, ssingle,
-		fsingleAmount, ssingleAmount,
-		GameState, currentNum, currentSecondNum,
-		update, updateUserBetState } = state
-	// const [state, dispatch, callCashOut] = useCrashContext();
+		fbetState,sbetState,
+		GameState,
+		currentNum,
+		currentSecondNum,
+		update,
+		updateUserBetState
+	} = context;
+	const [cashOut, setCashOut] = React.useState(2);
 
-	const auto = index === 'f' ? fauto : sauto
+	const auto = index === 'f' ? state.userInfo.f.auto : state.userInfo.s.auto
 	const betted = index === 'f' ? fbetted : sbetted
-	const deState = index === 'f' ? fdeState : sdeState
-	const inState = index === 'f' ? finState : sinState
+	const deState = index === 'f' ? state.fdeState : state.sdeState
+	const inState = index === 'f' ? state.finState : state.sinState
 	const betState = index === 'f' ? fbetState : sbetState
-	const decrease = index === 'f' ? fdecrease : sdecrease
-	const increase = index === 'f' ? fincrease : sincrease
-	const autoCound = index === 'f' ? fautoCound : sautoCound
-	const betAmount = index === 'f' ? fbetAmount : sbetAmount
-	const autoCashoutState = index === 'f' ? fautoCashoutState : sautoCashoutState
-	const cashOutAt = index === 'f' ? fcashOutAt : scashOutAt
-	const single = index === 'f' ? fsingle : ssingle
-	const singleAmount = index === 'f' ? fsingleAmount : ssingleAmount
+	const decrease = index === 'f' ? state.fdecrease : state.sdecrease
+	const increase = index === 'f' ? state.fincrease : state.sincrease
+	const autoCound = index === 'f' ? state.fautoCound : state.sautoCound
+	const betAmount = index === 'f' ? state.userInfo.f.betAmount : state.userInfo.s.betAmount
+	const autoCashoutState = index === 'f' ? state.fautoCashoutState : state.sautoCashoutState
+	const single = index === 'f' ? state.fsingle : state.ssingle
+	const singleAmount = index === 'f' ? state.fsingleAmount : state.ssingleAmount
 
 	const [gameType, setGameType] = React.useState<GameType>("manual");
 	const [betOpt, setBetOpt] = React.useState<BetOptType>("20");
@@ -51,152 +42,87 @@ const Bet = ({ index }: BetProps) => {
 	// const { index } = props;
 
 	const minus = (type: FieldNameType) => {
-		// 'betAmount'|'decrease'|'increase'|'singleAmount'
-		let value = 0
-
-		if (state[`${index + type}`] - 0.1 < 0.1) {
-			value = 0.1
-			// update({[`${index + type}`]: 0.1})
-			// dispatch({
-			// 	type: `${index + type}`,
-			// 	payload: 0.1
-			// })
+		let value = state;
+		if (type === "betAmount") {
+			if (betAmount - 0.1 < 0.1) {
+				value.userInfo[index][type] = 0.1
+			} else {
+				value.userInfo[index][type] = Number((Number(betAmount) - 0.1).toFixed(2))
+			}
 		} else {
-			value = Number((Number(state[`${index + type}`]) - 0.1).toFixed(2))
-			// update({[`${index + type}`]: value})
-			// dispatch({
-			// 	type: `${index + type}`,
-			// 	payload: 
-			// })
+			if (betAmount - 0.1 < 0.1) {
+				value[`${index+type}`] = 0.1
+			} else {
+				value[`${index + type}`] = Number((Number(value[`${index + type}`]) - 0.1).toFixed(2))
+			}
 		}
-		update({ [`${index + type}`]: value })
+		update(value);
 	}
 
 	const plus = (type: FieldNameType) => {
-		let value = 0
-		if (state[`${index + type}`] + 0.1 > state.balance) {
-			value = Math.round(balance * 100) / 100
-			// /update({[`${index + type}`]: value})
-			// dispatch({
-			// 	type: `${index + type}`,
-			// 	payload: Number(state.balance).toFixed(2)
-			// })
+		let value = state;
+		if (type === "betAmount") {
+			if (value.userInfo[index][type] + 0.1 > state.userInfo.balance) {
+				value.userInfo[index][type] = Math.round(state.userInfo.balance * 100) / 100
+			} else {
+				value.userInfo[index][type] = Number((Number(betAmount) + 0.1).toFixed(2))
+			}
 		} else {
-			value = Number((Number(state[`${index + type}`]) + 0.1).toFixed(2))
-			// dispatch({
-			// 	type: `${index + type}`,
-			// 	payload: (Number(state[`${index + type}`]) + 0.1).toFixed(2)
-			// })
+			if (value[`${index + type}`] + 0.1 > state.userInfo.balance) {
+				value[`${index + type}`] = Math.round(state.userInfo.balance * 100) / 100
+			} else {
+				value[`${index + type}`] = Number((Number(value[`${index + type}`]) + 0.1).toFixed(2))
+			}
 		}
-		update({ [`${index + type}`]: value })
+		update(value);
 	}
 
 	const manualPlus = (amount: number, btnNum: BetOptType) => {
-		let value = 0
+		let value = state
 		if (betOpt === btnNum) {
-			value = Number((betAmount + amount).toFixed(2))
-			// dispatch({
-			// 	type: `${index}betAmount`,
-			// 	payload: (Number(betAmount) + amount).toFixed(2)
-			// })
+			value.userInfo[index].betAmount = Number((betAmount + amount).toFixed(2))
 		} else {
-			value = Number(Number(amount).toFixed(2))
-			// dispatch({
-			// 	type: `${index}betAmount`,
-			// 	payload: Number(amount).toFixed(2)
-			// })
+			value.userInfo[index].betAmount = Number(Number(amount).toFixed(2))
 			setBetOpt(btnNum);
 		}
-		update({ [`${index}betAmount`]: value })
+		update(value);
 	}
 
 	const changeBetType = (e: GameType) => {
 		updateUserBetState({ [`${index}betState`]: false });
-		// dispatch({
-		// 	type: "betState",
-		// 	payload: false
-		// });
 		setGameType(e);
 	}
 
 	const onChangeBlur = (e: number, type: 'cashOutAt' | 'decrease' | 'increase' | 'singleAmount') => {
-		let value = 0
+		let value = state;
 		if (type === "cashOutAt") {
 			if (e < 1.01) {
-				value = 1.01
-				// dispatch({
-				// 	type: index + type,
-				// 	payload: 1.01
-				// })
+				value.userInfo[index]['target'] = 1.01;
+				setCashOut(1.01);
 			} else {
-				value = Math.round(e * 100) / 100
-				// dispatch({
-				// 	type: index + type,
-				// 	payload: Number(e).toFixed(2)
-				// })
+				value.userInfo[index]['target'] = Math.round(e * 100) / 100
+				setCashOut(Math.round(e * 100) / 100);
 			}
 		} else {
 			if (e < 0.1) {
-				value = 0.1
-				// dispatch({
-				// 	type: index + type,
-				// 	payload: 0.1
-				// })
+				value[`${index + type}`] = 0.1;
 			} else {
-				value = Math.round(e * 100) / 100
-				// dispatch({
-				// 	type: index + type,
-				// 	payload: e
-				// })
+				value[`${index + type}`] = Math.round(e * 100) / 100;
 			}
 		}
-		update({ [`${index + type}`]: value })
+		update(value);
 	}
 
-	const onBetClick = () => {
-		updateUserBetState({ [`${index}betState`]: !betState })
-		// dispatch({
-		// 	type: `${index}betState`,
-		// 	payload: !betState
-		// });
+	const onBetClick = (s:boolean) => {
+		updateUserBetState({ [`${index}betState`]: s })
 	}
 	const setCount = (amount: number) => {
-		update({ [`${index}autoCound`]: amount })
-		// dispatch({
-		// 	type: `${index}autoCound`,
-		// 	payload: amount
-		// })
+		let attrs = state;
+		attrs[`${index}autoCound`] = amount;
+		update(attrs);
 	}
 
 	const reset = () => {
-		// dispatch({
-		// 	type: `${index}autoCound`,
-		// 	payload: 0
-		// });
-		// dispatch({
-		// 	type: `${index}decrease`,
-		// 	payload: 0
-		// });
-		// dispatch({
-		// 	type: `${index}deState`,
-		// 	payload: false
-		// });
-		// dispatch({
-		// 	type: `${index}increase`,
-		// 	payload: 0
-		// });
-		// dispatch({
-		// 	type: `${index}inState`,
-		// 	payload: false
-		// });
-		// dispatch({
-		// 	type: `${index}singleAmount`,
-		// 	payload: 0
-		// });
-		// dispatch({
-		// 	type: `${index}single`,
-		// 	payload: false
-		// });
 		update({
 			[`${index}autoCound`]: 0,
 			[`${index}decrease`]: 0,
@@ -209,19 +135,11 @@ const Bet = ({ index }: BetProps) => {
 	}
 
 	const onAutoBetClick = (_betState: boolean) => {
-		update({
-			[`${index}auto`]: !auto
-		})
+		let attrs = state;
+		attrs.userInfo[index].auto = _betState;
+		update(attrs);
 
 		updateUserBetState({ [`${index}betState`]: _betState });
-		// dispatch({
-		// 	type: `${index}betState`,
-		// 	payload: state
-		// });
-		// dispatch({
-		// 	type: `${index}auto`,
-		// 	payload: !auto
-		// })
 
 		if (!state) {
 			setCount(0);
@@ -231,8 +149,8 @@ const Bet = ({ index }: BetProps) => {
 	const onStartBtnClick = () => {
 		if (autoCound > 0) {
 			if (deState || inState || single) {
-				if (fsingleAmount > 0 || ssingleAmount > 0 || fdecrease > 0 || sdecrease > 0 || fincrease > 0 || fdecrease > 0) {
-					if (deState && inState || deState || single || single && inState) {
+				if (singleAmount > 0 || decrease > 0 || increase > 0) {
+					if (deState && ((inState || deState || single || single) && inState)) {
 						onAutoBetClick(true);
 						setShowModal(false);
 					} else {
@@ -248,37 +166,22 @@ const Bet = ({ index }: BetProps) => {
 			toast.error("Please, set number of rounds");
 		}
 	}
-
-	useEffect(() => {
-		console.log('fbetted', fbetted)
-		console.log('sbetted', sbetted)
-	}, [fbetted, sbetted])
-	let fautoBetFinished = false;
-	let sautoBetFinished = false;
 	useEffect(() => {
 		if (fbetted) {
-			if (fautoCashoutState) {
-				if (fcashOutAt <= currentSecondNum) {
-					if (!fautoBetFinished) {
-						callCashOut(fcashOutAt, "f");
-						fautoBetFinished = true;
-					}
+			if (state.fautoCashoutState) {
+				if (state.userInfo.f.target <= currentSecondNum) {
+						callCashOut(state.userInfo.f.target, "f");
 				}
 			}
 		}
 		if (sbetted) {
-			if (sautoCashoutState) {
-				if (scashOutAt <= currentSecondNum) {
-					// fbetted = false
-					// setUserBetState(attrs);
-					if (!sautoBetFinished) {
-						callCashOut(scashOutAt, "s");
-						sautoBetFinished = true;
-					}
+			if (state.sautoCashoutState) {
+				if (state.userInfo.s.target <= currentSecondNum) {
+						callCashOut(state.userInfo.s.target, "s");
 				}
 			}
 		}
-	}, [currentSecondNum])
+	}, [currentSecondNum, fbetted, sbetted, state.fautoCashoutState, state.sautoCashoutState, state.userInfo.f.target, state.userInfo.s.target])
 	return (
 		<div className="bet-control">
 			<div className="controls">
@@ -305,9 +208,9 @@ const Bet = ({ index }: BetProps) => {
 								</div>
 								<div className="input">
 									{betState || betted ?
-										<input type="number" value={betAmount} readOnly ></input>
+										<input type="number" value={Number(betAmount * 10 / 10)} readOnly ></input>
 										:
-										<input type="number" value={betAmount} onChange={e => update({ [`${index}betAmount`]: Number(e.target.value) })}></input>
+										<input type="number" value={Number(betAmount*10/10)} onChange={e => update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: Number(e.target.value) }}})}></input>
 									}
 								</div>
 								<div className="buttons">
@@ -362,15 +265,11 @@ const Bet = ({ index }: BetProps) => {
 							<>
 								<div className="btn-tooltip">Waiting for next round</div>
 								<button className="btn-danger h-[70%]" onClick={() => {
-									onBetClick();
-									update({ [`${index}auto`]: false })
-									// dispatch({
-									// 	type: `${index}auto`,
-									// 	payload: false
-									// })
+									onBetClick(false);
+									update({...state,[`${index}autoCound`]:0,userInfo:{...state.userInfo,[index]:{...state.userInfo[index],auto:false}}})
 								}}><label>CANCEL</label></button>
 							</> :
-							<button onClick={onBetClick} className="btn-success">
+							<button onClick={()=>onBetClick(true)} className="btn-success">
 								<span>
 									<label>BET</label>
 									<label className="amount">
@@ -416,12 +315,12 @@ const Bet = ({ index }: BetProps) => {
 											<div className="input">
 												{autoCashoutState && !betState ? (
 													<input type="number"
-														onChange={(e) => update({ [`${index}cashOutAt`]: Number(e.target.value) })}
-														value={cashOutAt}
+														onChange={(e) => { update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { ...state.userInfo[index], target: Number(e.target.value) } } }); setCashOut(Number(e.target.value))}}
+														value={cashOut}
 														onBlur={(e) => onChangeBlur(Number(e.target.value) || 0, "cashOutAt")}
 													/>
 												) : (
-													<input type="number" value={cashOutAt.toFixed(2)} readOnly />
+													<input type="number" value={cashOut.toFixed(2)} readOnly />
 												)}
 											</div>
 											<span className="text">x</span>

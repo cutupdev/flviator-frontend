@@ -14,12 +14,6 @@ const TopHistory = () => {
             setLoadingEffect(true);
             let response = await axios.get(`${config.api}/get-${date}-history`);
             if (response?.data?.status) {
-                // update({ myBets: response.data.data as GameHistory[] })
-                // dispatch({
-                // 	type: "myBets",
-                // 	payload: result.data.data
-                // })
-                console.log(response.data.data);
                 setHistory(response.data.data);
                 setTimeout(() => {
                     setLoadingEffect(false);

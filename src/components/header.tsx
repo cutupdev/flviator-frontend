@@ -1,31 +1,19 @@
 import React from "react";
-import axios from 'axios';
 
 import logo from "../assets/images/logo.svg";
 import refound from "../assets/images/refund.png";
 import "../index.scss";
-// import { useCrashContext } from "./Main/context";
 import Context from "../context";
-import config from '../config.json';
-import { toast } from "react-toastify";
 export default function Header() {
-  const { balance, userType, userName, setBalance } = React.useContext(Context)
+  const { state } = React.useContext(Context)
 
-  // const [state] = useCrashContext();
   const [howto, setHowto] = React.useState<'howto' | 'short' | 'more' | ''>("howto");
   const [, setFireSystem] = React.useState(false);
 
   const Refound = async () => {
-    let res = await axios.post(`${config.api}/refound`, { userId: userName });
-    if (res.data.status) {
-      toast.success(res.data.message);
-      setBalance(0);
       setTimeout(() => {
         window.open("http://annie.ihk.vipnps.vip/iGaming-web/", "_self");
       }, 1000)
-    } else {
-      toast.error(res.data.message);
-    }
   }
 
   return (
@@ -35,7 +23,7 @@ export default function Header() {
           <img src={logo} alt="logo" className="logo"></img>
         </div>
         <div className="second-block">
-          {userType &&
+          {state.userInfo.userType &&
             <button className="refound" onClick={Refound}>
               <img width={23} src={refound} alt="refound"></img>
             </button>
@@ -46,7 +34,7 @@ export default function Header() {
           </button>
           <div className="d-flex">
             <div className="balance">
-              <span className="amount">{Number(balance).toFixed(2)} </span>
+              <span className="amount">{Number(state.userInfo.balance).toFixed(2)} </span>
               <span className="currency">&nbsp;INR</span>
             </div>
           </div>

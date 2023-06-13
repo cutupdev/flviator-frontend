@@ -19,7 +19,7 @@ const MyBets = () => {
             </div>
             <div className="cdk-virtual-scroll-viewport">
                 <div className="cdk-virtual-scroll-content-wrapper">
-                    {state && state.myBets.map((user, key) => (
+                    {state && state.state.myBets.map((user, key) => (
                         <div className={`bet-item pr-2 ${user.cashouted ? "celebrated" : ""}`} key={key}>
                             <div className="user">
                                 <div className="username">{new Date(user.date).getHours() + ":" + new Date(user.date).getMinutes()}</div>
