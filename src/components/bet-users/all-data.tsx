@@ -39,7 +39,7 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                         <div className={`bet-item ${user.cashouted ? "celebrated" : ""}`} key={key}>
                             <div className="user">
                                 {user.img ?
-                                    <img className="avatar" src={`./avatars/${user.img}`} alt="avatar" /> :
+                                    <img className="avatar" src={user.img} alt="avatar" /> :
                                     <img className="avatar" src="./avatars/av-5.png" alt="avatar" />
                                 }
                                 <div className="username">{user.name?.slice(0, 1) + "***" + user.name?.slice(-1)}</div>
