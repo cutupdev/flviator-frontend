@@ -405,6 +405,12 @@ export const Provider = ({ children }: any) => {
 					type: 'f',
 					auto: state.userInfo.f.auto
 				}
+				if (attrs.userInfo.balance - state.userInfo.f.betAmount < 0) {
+					toast.error("Your balance is not enough");
+					betStatus.fbetState = false;
+					betStatus.fbetted = false;
+					return;
+				}
 				attrs.userInfo.balance -= state.userInfo.f.betAmount;
 				socket.emit('playBet', data);
 				betStatus.fbetState = false;
@@ -427,6 +433,12 @@ export const Provider = ({ children }: any) => {
 					target: state.userInfo.s.target,
 					type: 's',
 					auto: state.userInfo.s.auto
+				}
+				if (attrs.userInfo.balance - state.userInfo.s.betAmount < 0) {
+					toast.error("Your balance is not enough");
+					betStatus.sbetState = false;
+					betStatus.sbetted = false;
+					return;
 				}
 				attrs.userInfo.balance -= state.userInfo.s.betAmount;
 				socket.emit('playBet', data);

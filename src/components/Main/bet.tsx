@@ -87,7 +87,11 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 	const manualPlus = (amount: number, btnNum: BetOptType) => {
 		let value = state
 		if (betOpt === btnNum) {
-			value.userInfo[index].betAmount = Number((betAmount + amount).toFixed(2))
+			if (Number((betAmount + amount)) > maxBet) {
+				value.userInfo[index].betAmount = maxBet
+			} else {
+				value.userInfo[index].betAmount = Number((betAmount + amount).toFixed(2))
+			}
 		} else {
 			value.userInfo[index].betAmount = Number(Number(amount).toFixed(2))
 			setBetOpt(btnNum);
