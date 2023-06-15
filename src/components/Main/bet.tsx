@@ -5,16 +5,18 @@ import Context, { callCashOut } from "../../context";
 
 interface BetProps {
 	index: 'f' | 's'
+	add: boolean
+	setAdd: any
 }
 type FieldNameType = 'betAmount' | 'decrease' | 'increase' | 'singleAmount'
 type BetOptType = '20' | '50' | '100' | '1000'
 type GameType = 'manual' | 'auto'
 
-const Bet = ({ index }: BetProps) => {
+const Bet = ({ index, add, setAdd }: BetProps) => {
 	const context = React.useContext(Context)
 	const { state,
 		fbetted, sbetted,
-		fbetState,sbetState,
+		fbetState, sbetState,
 		GameState,
 		currentNum,
 		currentSecondNum,
@@ -51,7 +53,7 @@ const Bet = ({ index }: BetProps) => {
 			}
 		} else {
 			if (betAmount - 0.1 < 0.1) {
-				value[`${index+type}`] = 0.1
+				value[`${index + type}`] = 0.1
 			} else {
 				value[`${index + type}`] = Number((Number(value[`${index + type}`]) - 0.1).toFixed(2))
 			}
@@ -113,7 +115,7 @@ const Bet = ({ index }: BetProps) => {
 		update(value);
 	}
 
-	const onBetClick = (s:boolean) => {
+	const onBetClick = (s: boolean) => {
 		updateUserBetState({ [`${index}betState`]: s })
 	}
 	const setCount = (amount: number) => {
@@ -179,6 +181,11 @@ const Bet = ({ index }: BetProps) => {
 	return (
 		<div className="bet-control">
 			<div className="controls">
+				{index === 'f' ? !add && (
+					<div className="sec-hand-btn add" onClick={()=>setAdd(true)}></div>
+				) : add &&
+				<div className="sec-hand-btn minus" onClick={()=>setAdd(false)}></div>
+				}
 				<div className="navigation">
 					<div className="navigation-switcher">
 						{(betted || betState) ?
@@ -204,7 +211,7 @@ const Bet = ({ index }: BetProps) => {
 									{betState || betted ?
 										<input type="number" value={Number(betAmount * 10 / 10)} readOnly ></input>
 										:
-										<input type="number" value={Number(betAmount*10/10)} onChange={e => update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: Number(e.target.value) }}})}></input>
+										<input type="number" value={Number(betAmount * 10 / 10)} onChange={e => update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: Number(e.target.value) } } })}></input>
 									}
 								</div>
 								<div className="buttons">
@@ -260,10 +267,10 @@ const Bet = ({ index }: BetProps) => {
 								<div className="btn-tooltip">Waiting for next round</div>
 								<button className="btn-danger h-[70%]" onClick={() => {
 									onBetClick(false);
-									update({...state,[`${index}autoCound`]:0,userInfo:{...state.userInfo,[index]:{...state.userInfo[index],auto:false}}})
+									update({ ...state, [`${index}autoCound`]: 0, userInfo: { ...state.userInfo, [index]: { ...state.userInfo[index], auto: false } } })
 								}}><label>CANCEL</label></button>
 							</> :
-							<button onClick={()=>onBetClick(true)} className="btn-success">
+							<button onClick={() => onBetClick(true)} className="btn-success">
 								<span>
 									<label>BET</label>
 									<label className="amount">
@@ -309,7 +316,7 @@ const Bet = ({ index }: BetProps) => {
 											<div className="input">
 												{autoCashoutState && !betState ? (
 													<input type="number"
-														onChange={(e) => { update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { ...state.userInfo[index], target: Number(e.target.value) } } }); setCashOut(Number(e.target.value))}}
+														onChange={(e) => { update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { ...state.userInfo[index], target: Number(e.target.value) } } }); setCashOut(Number(e.target.value)) }}
 														value={cashOut}
 														onBlur={(e) => onChangeBlur(Number(e.target.value) || 0, "cashOutAt")}
 													/>

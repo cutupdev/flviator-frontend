@@ -33,7 +33,7 @@
     "web3": "^1.9.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "set PORT=3006 && react-app-rewired start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
     "start1": "set PORT=4002 && react-scripts start",
     "build1": "react-scripts build",

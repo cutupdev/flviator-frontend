@@ -38,12 +38,6 @@ export default function Header() {
               <span className="currency">&nbsp;INR</span>
             </div>
           </div>
-          {/* <div className="dropdown">
-            <div className="dropdown-toggle">
-              <div className="burger"></div>
-            </div>
-            <div></div>
-          </div> */}
         </div>
       </div>
       {howto === "short" && <div className="modal">
