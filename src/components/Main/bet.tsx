@@ -181,6 +181,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 		if (betted) {
 			if (autoCashoutState) {
 				if (cashOut < currentSecondNum) {
+					updateUserBetState({ [`${index}betted`]: false });
 					callCashOut(cashOut, index);
 				}
 			}

@@ -363,7 +363,11 @@ export const Provider = ({ children }: any) => {
 		});
 
 		socket.on("error", (data) => {
-			toast.error(data);
+			setUserBetState({
+				...userBetState,
+				[`${data.index}betted`]:false
+			})
+			toast.error(data.message);
 		})
 
 		socket.on("success", (data) => {
