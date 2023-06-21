@@ -245,11 +245,19 @@ export const Provider = ({ children }: any) => {
 	}, []);
 
 	React.useEffect(() => {
-		socket.emit("enterRoom", { token });
+
+		socket.on('connect', () => {
+			socket.emit("enterRoom", { token });
+		})
+
 
 		socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
 			setBettedUsers(bettedUsers);
 		});
+
+		socket.on('connect', () => {
+			console.log(socket.connected);
+		})
 
 		socket.on("myBetState", (user: UserType) => {
 			const attrs = userBetState;
