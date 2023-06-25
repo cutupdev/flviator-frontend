@@ -18,7 +18,7 @@ export default function BetsUsers() {
   const header = [
     { type: "all", value: "All Bets" },
     { type: "my", value: "My Bets", onClick: "myBet" },
-    { type: "top", value: "Top" }
+    // { type: "top", value: "Top" }
   ]
 
   const getData = (e) => {
