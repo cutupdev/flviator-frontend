@@ -62,6 +62,16 @@ h6 {
   font-size: 1rem;
 }
 
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  color: red;
+  font-weight: bold;
+}
+
 input[type=number] {
   -moz-appearance: textfield;
   /* Firefox */

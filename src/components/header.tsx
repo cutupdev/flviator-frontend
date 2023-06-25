@@ -23,10 +23,13 @@ export default function Header() {
           <img src={logo} alt="logo" className="logo"></img>
         </div>
         <div className="second-block">
-          {state.userInfo.userType &&
-            <button className="refound" onClick={Refound}>
+          {!state.userInfo.userType &&
+            <div className="center" onClick={Refound}>
+            REBACK&nbsp;
+            <button className="refound">
               <img width={23} src={refound} alt="refound"></img>
             </button>
+          </div>
           }
           <button className="howto" onClick={() => setHowto("short")}>
             <div className="help-logo"></div>
