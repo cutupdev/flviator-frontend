@@ -11,12 +11,12 @@ export default function BetsUsers() {
   const { previousHand, bettedUsers, getMyBets } = React.useContext(Context)
   // const [state, , , getMyBets] = useCrashContext();
 
-  const [headerType, setHeaderType] = React.useState("all");
+  const [headerType, setHeaderType] = React.useState("my");
   const [allData, setAllData] = React.useState<UserType[] | BettedUserType[]>([]);
   const [pre, setPre] = React.useState(false);
 
   const header = [
-    { type: "all", value: "All Bets" },
+    // { type: "all", value: "All Bets" },
     { type: "my", value: "My Bets", onClick: "myBet" },
     // { type: "top", value: "Top" }
   ]
