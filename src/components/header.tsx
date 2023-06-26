@@ -23,7 +23,7 @@ export default function Header() {
           <img src={logo} alt="logo" className="logo"></img>
         </div>
         <div className="second-block">
-          {!state.userInfo.userType &&
+          {state.userInfo.userType &&
             <div className="center" onClick={Refound}>
             REBACK&nbsp;
             <button className="refound">
