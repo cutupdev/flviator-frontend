@@ -12,7 +12,7 @@ let currentFlag = 0;
 export default function WebGLStarter() {
 	const { GameState, currentNum, time, unityState, myUnityContext } = React.useContext(Context)
 	// const [state] = useCrashContext();
-	const [, setTarget] = React.useState(1);
+	const [target, setTarget] = React.useState(1);
 	const [waiting, setWaiting] = React.useState(0);
 	const [flag, setFlag] = React.useState(1);
 
@@ -78,7 +78,7 @@ export default function WebGLStarter() {
 					<div className={`crashtext ${GameState === "GAMEEND" && "red"}`}>
 						{GameState === "GAMEEND" && <div className="flew-away">FLEW AWAY!</div>}
 						<div>
-							{currentNum - 0.01 >= 1 ? Number(currentNum - 0.01).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
+							{target - 0.01 >= 1 ? Number(target - 0.01).toFixed(2) : "1.00"} <span className="font-[900]">x</span>
 						</div>
 					</div>
 				)}
