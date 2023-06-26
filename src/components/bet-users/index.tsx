@@ -22,8 +22,8 @@ export default function BetsUsers() {
   ]
 
   const getData = (e) => {
-    if (e === "myBet")
-      getMyBets();
+    // if (e === "myBet")
+      // getMyBets();
   }
 
   React.useEffect(() => {

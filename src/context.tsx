@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useEffect } from "react";
 import { UnityContext } from "react-unity-webgl";
 import { useLocation } from "react-router";
 import { io } from 'socket.io-client';
@@ -472,6 +472,11 @@ export const Provider = ({ children }: any) => {
 			console.log('getMyBets', error)
 		}
 	}
+
+	useEffect(() => {
+		if (gameState.GameState === "BET")
+			getMyBets();
+	}, [gameState.GameState])
 
 	return (
 		<Context.Provider value={{
