@@ -7,11 +7,9 @@ import propeller from "../../assets/images/propeller.png"
 import Context from "../../context";
 
 let currentFlag = 0;
-// let maxAmount = 1 + 0.98 / (Math.random() + 0.00001);
 
 export default function WebGLStarter() {
 	const { GameState, currentNum, time, unityState, myUnityContext } = React.useContext(Context)
-	// const [state] = useCrashContext();
 	const [target, setTarget] = React.useState(1);
 	const [waiting, setWaiting] = React.useState(0);
 	const [flag, setFlag] = React.useState(1);
