@@ -9,7 +9,7 @@ import Context from "../../context";
 let currentFlag = 0;
 
 export default function WebGLStarter() {
-	const { GameState, currentNum, time, unityState, myUnityContext } = React.useContext(Context)
+	const { GameState, currentNum, time, unityState, myUnityContext,setCurrentTarget } = React.useContext(Context)
 	const [target, setTarget] = React.useState(1);
 	const [waiting, setWaiting] = React.useState(0);
 	const [flag, setFlag] = React.useState(1);
@@ -30,17 +30,20 @@ export default function WebGLStarter() {
 					setFlag(4);
 				}
 				setTarget(currentNum);
+				setCurrentTarget(currentNum);
 			}
 			myInterval = setInterval(() => {
 				getCurrentTime(currentFlag);
 			}, 20);
 		} else if (GameState === "GAMEEND") {
 			setFlag(5);
+			setCurrentTarget(currentNum);
 			setTarget(currentNum);
 		} else if (GameState === "BET") {
 			setFlag(1);
 			let startWaiting = Date.now() - time;
 			setTarget(1);
+			setCurrentTarget(1);
 
 			myInterval = setInterval(() => {
 				setWaiting(Date.now() - startWaiting);

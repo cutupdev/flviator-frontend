@@ -20,7 +20,8 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 		GameState,
 		currentNum,
 		currentSecondNum,
-		minBet,maxBet,
+		minBet, maxBet,
+		currentTarget,
 		update,
 		updateUserBetState
 	} = context;
@@ -265,11 +266,11 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 					</div>
 					<div className="buttons-block">
 						{betted ? GameState === "PLAYING" ?
-							<button className="btn-waiting" onClick={() => { callCashOut(currentNum, index) }}>
+							<button className="btn-waiting" onClick={() => { callCashOut(currentTarget, index) }}>
 								<span>
 									<label>CASHOUT</label>
 									<label className="amount">
-										<span>{Number(betAmount * currentNum).toFixed(2)}</span>
+										<span>{Number(betAmount * currentTarget).toFixed(2)}</span>
 										<span className="currency">INR</span>
 									</label>
 								</span>
