@@ -43,6 +43,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 	const [gameType, setGameType] = React.useState<GameType>("manual");
 	const [betOpt, setBetOpt] = React.useState<BetOptType>("20");
 	const [showModal, setShowModal] = React.useState(false);
+	const [myBetAmount, setMyBetAmount] = React.useState(20);
 	// const { index } = props;
 
 	const minus = (type: FieldNameType) => {
@@ -189,13 +190,17 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 		}
 	}, [currentSecondNum, fbetted, sbetted, state.fautoCashoutState, state.sautoCashoutState, state.userInfo.f.target, state.userInfo.s.target])
 
+	useEffect(() => {
+		setMyBetAmount(betAmount);
+	},[betAmount])
+
 	return (
 		<div className="bet-control">
 			<div className="controls">
 				{index === 'f' ? !add && (
-					<div className="sec-hand-btn add" onClick={()=>setAdd(true)}></div>
+					<div className="sec-hand-btn add" onClick={() => setAdd(true)}></div>
 				) : add &&
-				<div className="sec-hand-btn minus" onClick={()=>setAdd(false)}></div>
+				<div className="sec-hand-btn minus" onClick={() => setAdd(false)}></div>
 				}
 				<div className="navigation">
 					<div className="navigation-switcher">
@@ -220,11 +225,13 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 								</div>
 								<div className="input">
 									{betState || betted ?
-										<input type="number" value={Number(betAmount * 10 / 10)} readOnly ></input>
+										<input type="number" value={Number(myBetAmount)} readOnly ></input>
 										:
-										<input type="number" value={Number(betAmount * 10 / 10)}
-											onChange={e => Number(e.target.value) > maxBet ? update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: maxBet } } }) : Number(e.target.value) < 0 ? update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: 0 } } }):
-											update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: Number(e.target.value)*10/10 } } })}></input>
+										<input type="number" value={Number(myBetAmount)}
+											onChange={e => {
+												Number(e.target.value) > maxBet ? update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: maxBet } } }) : Number(e.target.value) < 0 ? update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: 0 } } }) :
+													update({ ...state, userInfo: { ...state.userInfo, [`${index}`]: { betAmount: Number(e.target.value) } } });
+											}}></input>
 									}
 								</div>
 								<div className="buttons">
