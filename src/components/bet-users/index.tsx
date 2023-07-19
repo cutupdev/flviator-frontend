@@ -53,7 +53,7 @@ export default function BetsUsers() {
               <TopHistory />
           }
         </div>
-        <div className="bets-footer">
+        {/* <div className="bets-footer">
           <div className="provably-fair-block">
             <span>This game is </span>
             <div className="provably-fair">
@@ -67,7 +67,7 @@ export default function BetsUsers() {
               <div className="i-logo"></div>
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
 
 
