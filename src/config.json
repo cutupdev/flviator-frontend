@@ -1,0 +1,7 @@
+{
+    "development": false,
+    "debug": true,
+    "appKey": "crash-0.1.0",
+    "api": "http://192.168.115.178:5001/api",
+    "wss": "http://192.168.115.178:5001"
+}
