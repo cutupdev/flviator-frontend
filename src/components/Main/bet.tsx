@@ -278,7 +278,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 									<label>CASHOUT</label>
 									<label className="amount">
 										<span>{Number(betAmount * currentTarget).toFixed(2)}</span>
-										<span className="currency">INR</span>
+										<span className="currency">USD</span>
 									</label>
 								</span>
 							</button>
@@ -295,7 +295,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 									<label>BET</label>
 									<label className="amount">
 										<span>{Number(betAmount).toFixed(2)}</span>
-										<span className="currency">INR</span>
+										<span className="currency">USD</span>
 									</label>
 								</span>
 							</button>
@@ -422,7 +422,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 												</div>
 											</div>}
 									</div>
-									<span >INR</span>
+									<span >USD</span>
 								</div>
 								<div className="content-part">
 									<div className={`input-switch ${inState ? "" : "off"}`}
@@ -458,7 +458,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 											</div>
 										</div>}
 									</div>
-									<span >INR</span>
+									<span >USD</span>
 								</div>
 								<div className="content-part">
 									<div className={`input-switch ${single ? "" : "off"}`}
@@ -498,7 +498,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 											</div>
 										}
 									</div>
-									<span >INR</span>
+									<span >USD</span>
 								</div>
 							</div>
 							<div className="modal-footer">

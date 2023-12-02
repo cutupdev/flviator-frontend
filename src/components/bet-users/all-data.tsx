@@ -28,9 +28,9 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                 <div className="spacer"></div>
                 <div className="legend">
                     <span className="user">User</span>
-                    <span className="bet">Bet, INR</span>
+                    <span className="bet">Bet, USD</span>
                     <span>X</span>
-                    <span className="cash-out">Cash out, INR</span>
+                    <span className="cash-out">Cash out, USD</span>
                 </div>
             </div>
             <div className="cdk-virtual-scroll-viewport">
