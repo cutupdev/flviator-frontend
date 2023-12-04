@@ -27,10 +27,10 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                         <div className="uppercase">ALL BETS</div>
                         <div>{state.bettedUsers?.length}</div>
                     </div>
-                    <div className={`previous-hand items-center flex justify-between ${pre ? "click" : ""}`}>
+                    {/* <div className={`previous-hand items-center flex justify-between ${pre ? "click" : ""}`}>
                         <div className="history-i"></div>
                         <span className="ml-1 " onClick={() => { setPre(!pre) }}>Previous hand</span>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="spacer"></div>
                 <div className="legend">
