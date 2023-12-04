@@ -2,6 +2,6 @@
     "development": false,
     "debug": true,
     "appKey": "crash-0.1.0",
-    "api": "http://localhost:5001/api",
-    "wss": "http://localhost:5001"
+    "api": "http://45.8.22.45:5001/api",
+    "wss": "http://45.8.22.45:5001"
 }
