@@ -2,14 +2,12 @@ import React from "react";
 import Header from "./components/header";
 import BetsUsers from "./components/bet-users";
 import Main from "./components/Main";
-// import { useCrashContext } from "./components/Main/context";
 import propeller from "./assets/images/propeller.png"
 
 import Context from "./context";
-// import "./App.scss";
 
 function App() {
-  const { unityLoading, currentProgress, rechargeState } = React.useContext(Context)
+  const { unityLoading, currentProgress } = React.useContext(Context)
   return (
     <div className="main-container">
       {!unityLoading &&
@@ -22,14 +20,6 @@ function App() {
               <div style={{ width: `${currentProgress * 1.111 + 0.01}%` }}></div>
             </div>
             <p>{Number(currentProgress * 1.111 + 0.01).toFixed(2)}%</p>
-          </div>
-        </div>
-      }
-      {rechargeState &&
-        <div className="recharge">
-          <div className="recharge-body">
-            <div className="recharge-body-font">Insufficient balance amount</div>
-            <a href="https://induswin.com/#/pages/recharge/recharge">Induswin.com</a>
           </div>
         </div>
       }

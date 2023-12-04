@@ -110,7 +110,6 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
 	bettedUsers: BettedUserType[]
 	previousHand: UserType[]
 	history: number[]
-	rechargeState: boolean
 	myUnityContext: UnityContext
 	currentTarget: number
 	setCurrentTarget(attrs:Partial<number>),
@@ -220,7 +219,6 @@ export const Provider = ({ children }: any) => {
 		sbetted: false
 	});
 	newBetState = userBetState;
-	const [rechargeState, setRechargeState] = React.useState(false);
 	const [currentTarget, setCurrentTarget] = React.useState(0);
 	const updateUserBetState = (attrs: Partial<UserStatusType>) => {
 		setUserBetState({ ...userBetState, ...attrs });
@@ -369,10 +367,6 @@ export const Provider = ({ children }: any) => {
 			setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min })
 		})
 
-		socket.on('recharge', () => {
-			setRechargeState(true);
-		});
-
 		socket.on("error", (data) => {
 			setUserBetState({
 				...userBetState,
@@ -489,7 +483,6 @@ export const Provider = ({ children }: any) => {
 			...unity,
 			...gameState,
 			currentTarget,
-			rechargeState,
 			myUnityContext: unityContext,
 			bettedUsers: [...bettedUsers],
 			previousHand: [...previousHand],
