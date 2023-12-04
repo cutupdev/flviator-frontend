@@ -197,11 +197,11 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 	return (
 		<div className="bet-control">
 			<div className="controls">
-				{index === 'f' ? !add && (
+				{/* {index === 'f' ? !add && (
 					<div className="sec-hand-btn add" onClick={() => setAdd(true)}></div>
 				) : add &&
 				<div className="sec-hand-btn minus" onClick={() => setAdd(false)}></div>
-				}
+				} */}
 				<div className="navigation">
 					<div className="navigation-switcher">
 						{(betted || betState) ?
