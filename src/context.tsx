@@ -190,6 +190,7 @@ let newBetState;
 
 export const Provider = ({ children }: any) => {
   const token = new URLSearchParams(useLocation().search).get("cert");
+
   const [state, setState] = React.useState<ContextDataType>(init_state);
 
   newState = state;
@@ -467,6 +468,7 @@ export const Provider = ({ children }: any) => {
 
   const getMyBets = async () => {
     try {
+      console.log("state.userInfo", state.userInfo);
       let response = await axios.post(`${config.api}/my-info`, {
         name: state.userInfo.userName,
       });
