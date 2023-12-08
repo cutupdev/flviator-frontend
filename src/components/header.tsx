@@ -14,7 +14,7 @@ export default function Header() {
               <span className="amount">
                 {Number(state.userInfo.balance).toFixed(2)}{" "}
               </span>
-              <span className="currency">&nbsp;USD</span>
+              <span className="currency">&nbsp;INR</span>
             </div>
           </div>
         </div>

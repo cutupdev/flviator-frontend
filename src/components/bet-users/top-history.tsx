@@ -72,7 +72,7 @@ const TopHistory = () => {
                                         <div className="score">
                                             <div className="flex">
                                                 <div className="">
-                                                    <span>Bet, USD:&nbsp;</span>
+                                                    <span>Bet, INR:&nbsp;</span>
                                                     <span></span>
                                                 </div>
                                                 <span className="amount">{item.betAmount.toFixed(2)}</span>
@@ -85,7 +85,7 @@ const TopHistory = () => {
                                             </div>
                                             <div className="flex">
                                                 <div className="">
-                                                    <span>Win, USD: &nbsp;</span>
+                                                    <span>Win, INR: &nbsp;</span>
                                                 </div>
                                                 <span className="amount">{(item.cashoutAt * item.betAmount).toFixed(2)}</span>
                                             </div>
