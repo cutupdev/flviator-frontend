@@ -12,7 +12,7 @@ const TopHistory = () => {
     const callDate = async (date: string) => {
         try {
             setLoadingEffect(true);
-            let response = await axios.get(`${config.api}/get-${date}-history`);
+            let response = await axios.get(`${process.env.REACT_APP_DEVELOPMENT === "true" ? config.development_api : config.production_api}/get-${date}-history`);
             if (response?.data?.status) {
                 setHistory(response.data.data);
                 setTimeout(() => {

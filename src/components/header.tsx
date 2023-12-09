@@ -1,7 +1,7 @@
 import React from "react";
 
 import logo from "../assets/images/logo.svg";
-import refound from "../assets/images/refund.png";
+// import refound from "../assets/images/refund.png";
 import "../index.scss";
 import Context from "../context";
 export default function Header() {
@@ -10,11 +10,8 @@ export default function Header() {
   const [howto, setHowto] = React.useState<'howto' | 'short' | 'more' | ''>("howto");
   const [, setFireSystem] = React.useState(false);
 
-  const Refound = async () => {
-      setTimeout(() => {
-        window.open("https://induswin.com/#/", "_self");
-      }, 1000)
-  }
+  // const Refound = async () => {
+  // }
 
   return (
     <div className="header flex-none items-center">
@@ -23,14 +20,14 @@ export default function Header() {
           <img src={logo} alt="logo" className="logo"></img>
         </div>
         <div className="second-block">
-          {state.userInfo.userType &&
+          {/* {state.userInfo.userType &&
             <div className="center" onClick={Refound}>
             REBACK&nbsp;
             <button className="refound">
               <img width={23} src={refound} alt="refound"></img>
             </button>
           </div>
-          }
+          } */}
           <button className="howto" onClick={() => setHowto("short")}>
             <div className="help-logo"></div>
             <div className="help-msg">How to play ?</div>

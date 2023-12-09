@@ -172,8 +172,7 @@ const init_state = {
 } as ContextDataType;
 
 const Context = React.createContext<ContextType>(null!);
-
-const socket = io(config.wss);
+const socket = io(process.env.REACT_APP_DEVELOPMENT === "true" ? config.development_wss : config.production_wss);
 
 export const callCashOut = (at: number, index: "f" | "s") => {
   let data = { type: index, endTarget: at };
@@ -469,7 +468,7 @@ export const Provider = ({ children }: any) => {
   const getMyBets = async () => {
     try {
       console.log("state.userInfo", state.userInfo);
-      let response = await axios.post(`${config.api}/my-info`, {
+      let response = await axios.post(`${process.env.REACT_APP_DEVELOPMENT === "true" ? config.development_api : config.production_api}/my-info`, {
         name: state.userInfo.userName,
       });
       if (response?.data?.status) {
