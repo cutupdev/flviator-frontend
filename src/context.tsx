@@ -272,6 +272,7 @@ export const Provider = ({ children }: any) => {
     });
 
     socket.on("myInfo", (user: UserType) => {
+      console.log(user)
       let attrs = state;
       attrs.userInfo.balance = user.balance;
       attrs.userInfo.userType = user.userType;
