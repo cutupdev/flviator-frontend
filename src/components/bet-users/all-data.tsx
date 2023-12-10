@@ -11,13 +11,6 @@ interface AllDataProps {
 const AllData = ({ pre, setPre, allData }: AllDataProps) => {
     const state = React.useContext(Context)
     // const [state] = useCrashContext();
-    const imgRUL: String[] = [
-        "./avatars/av-1.png",
-        "./avatars/av-2.png",
-        "./avatars/av-2.png",
-        "./avatars/av-2.png",
-        "./avatars/av-2.png",
-    ]
 
     return (
         <>
@@ -27,10 +20,10 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                         <div className="uppercase">ALL BETS</div>
                         <div>{state.bettedUsers?.length}</div>
                     </div>
-                    {/* <div className={`previous-hand items-center flex justify-between ${pre ? "click" : ""}`}>
+                    <div className={`previous-hand items-center flex justify-between ${pre ? "click" : ""}`}>
                         <div className="history-i"></div>
                         <span className="ml-1 " onClick={() => { setPre(!pre) }}>Previous hand</span>
-                    </div> */}
+                    </div>
                 </div>
                 <div className="spacer"></div>
                 <div className="legend">
@@ -47,7 +40,7 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                             <div className="user">
                                 {user.img ?
                                     <img className="avatar" src={user.img} alt="avatar" /> :
-                                    <img className="avatar" src={`./avatars/av-5.png`} alt="avatar" />
+                                    <img className="avatar" src="./avatars/av-5.png" alt="avatar" />
                                 }
                                 <div className="username">{user.name?.slice(0, 1) + "***" + user.name?.slice(-1)}</div>
                             </div>

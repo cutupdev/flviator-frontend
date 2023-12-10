@@ -110,6 +110,7 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   bettedUsers: BettedUserType[];
   previousHand: UserType[];
   history: number[];
+  rechargeState: boolean;
   myUnityContext: UnityContext;
   currentTarget: number;
   setCurrentTarget(attrs: Partial<number>);
@@ -172,7 +173,12 @@ const init_state = {
 } as ContextDataType;
 
 const Context = React.createContext<ContextType>(null!);
-const socket = io(process.env.REACT_APP_DEVELOPMENT === "true" ? config.development_wss : config.production_wss);
+
+const socket = io(
+  process.env.REACT_APP_DEVELOPMENT === "true"
+    ? config.development_wss
+    : config.production_wss
+);
 
 export const callCashOut = (at: number, index: "f" | "s") => {
   let data = { type: index, endTarget: at };
@@ -189,7 +195,6 @@ let newBetState;
 
 export const Provider = ({ children }: any) => {
   const token = new URLSearchParams(useLocation().search).get("cert");
-
   const [state, setState] = React.useState<ContextDataType>(init_state);
 
   newState = state;
@@ -218,6 +223,7 @@ export const Provider = ({ children }: any) => {
     sbetted: false,
   });
   newBetState = userBetState;
+  const [rechargeState, setRechargeState] = React.useState(false);
   const [currentTarget, setCurrentTarget] = React.useState(0);
   const updateUserBetState = (attrs: Partial<UserStatusType>) => {
     setUserBetState({ ...userBetState, ...attrs });
@@ -262,7 +268,6 @@ export const Provider = ({ children }: any) => {
     });
 
     socket.on("myBetState", (user: UserType) => {
-      console.log(user);
       const attrs = userBetState;
       attrs.fbetState = false;
       attrs.fbetted = user.f.betted;
@@ -272,7 +277,6 @@ export const Provider = ({ children }: any) => {
     });
 
     socket.on("myInfo", (user: UserType) => {
-      console.log(user)
       let attrs = state;
       attrs.userInfo.balance = user.balance;
       attrs.userInfo.userType = user.userType;
@@ -376,6 +380,10 @@ export const Provider = ({ children }: any) => {
       setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min });
     });
 
+    socket.on("recharge", () => {
+      setRechargeState(true);
+    });
+
     socket.on("error", (data) => {
       setUserBetState({
         ...userBetState,
@@ -468,10 +476,16 @@ export const Provider = ({ children }: any) => {
 
   const getMyBets = async () => {
     try {
-      console.log("state.userInfo", state.userInfo);
-      let response = await axios.post(`${process.env.REACT_APP_DEVELOPMENT === "true" ? config.development_api : config.production_api}/my-info`, {
-        name: state.userInfo.userName,
-      });
+      let response = await axios.post(
+        `${
+          process.env.REACT_APP_DEVELOPMENT === "true"
+            ? config.development_api
+            : config.production_api
+        }/my-info`,
+        {
+          name: state.userInfo.userName,
+        }
+      );
       if (response?.data?.status) {
         update({ myBets: response.data.data as GameHistory[] });
       }
@@ -493,6 +507,7 @@ export const Provider = ({ children }: any) => {
         ...unity,
         ...gameState,
         currentTarget,
+        rechargeState,
         myUnityContext: unityContext,
         bettedUsers: [...bettedUsers],
         previousHand: [...previousHand],

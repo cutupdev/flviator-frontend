@@ -1,26 +1,20 @@
-$back-color: linear-gradient(
-  0deg,
-  rgba(21, 13, 46, 1) 100%,
-  rgba(51, 43, 71, 1) 100%,
-  rgba(40, 7, 68, 1) 100%,
-  rgba(27, 0, 55, 1) 100%
-);
-$howto-color: linear-gradient(
-  163deg,
-  rgba(44, 71, 38, 1) 0%,
-  rgba(75, 60, 120, 1) 25%,
-  rgba(161, 25, 236, 1) 50%,
-  rgba(16, 28, 96, 1) 86%,
-  rgba(40, 22, 80, 1) 100%
-);
-$howto-hover-color: linear-gradient(
-  180deg,
-  rgba(51, 38, 71, 1) 0%,
-  rgba(85, 40, 134, 1) 25%,
-  rgba(143, 0, 255, 1) 50%,
-  rgba(38, 26, 97, 1) 71%,
-  rgba(41, 16, 96, 1) 100%
-);
+$back-color: linear-gradient(0deg,
+    rgba(21, 13, 46, 1) 100%,
+    rgba(51, 43, 71, 1) 100%,
+    rgba(40, 7, 68, 1) 100%,
+    rgba(27, 0, 55, 1) 100%);
+$howto-color: linear-gradient(163deg,
+    rgba(44, 71, 38, 1) 0%,
+    rgba(75, 60, 120, 1) 25%,
+    rgba(161, 25, 236, 1) 50%,
+    rgba(16, 28, 96, 1) 86%,
+    rgba(40, 22, 80, 1) 100%);
+$howto-hover-color: linear-gradient(180deg,
+    rgba(51, 38, 71, 1) 0%,
+    rgba(85, 40, 134, 1) 25%,
+    rgba(143, 0, 255, 1) 50%,
+    rgba(38, 26, 97, 1) 71%,
+    rgba(41, 16, 96, 1) 100%);
 $box-color: rgb(25, 25, 52);
 
 .scroll-restyle ::-webkit-scrollbar {
@@ -44,11 +38,11 @@ $box-color: rgb(25, 25, 52);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(87, 96, 102, 0.5) !important;
+  background: rgba(87, 96, 102, .5) !important;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(87, 96, 102, 0.5) !important;
+  background: rgba(87, 96, 102, .5) !important;
 }
 
 input::-webkit-outer-spin-button,
@@ -68,7 +62,7 @@ h6 {
   font-size: 1rem;
 }
 
-.center {
+.center{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,7 +72,7 @@ h6 {
   font-weight: bold;
 }
 
-input[type="number"] {
+input[type=number] {
   -moz-appearance: textfield;
   /* Firefox */
 }
@@ -118,7 +112,7 @@ body {
   width: 100% !important;
   height: 100%;
   padding-top: 38px;
-  background: #0e0e0e;
+  background: #0E0E0E;
 }
 
 code {
@@ -155,7 +149,7 @@ code {
     justify-content: center;
     align-items: center;
 
-    @media (max-width: 900px) {
+    @media (max-width:900px) {
       width: 72px;
     }
   }
@@ -169,7 +163,7 @@ code {
   }
 }
 
-.recharge {
+.recharge{
   position: absolute;
   width: 100%;
   height: 100vh;
@@ -179,7 +173,7 @@ code {
   background-color: transparent;
   z-index: 1000;
   margin-top: -38px;
-  .recharge-body {
+  .recharge-body{
     width: 400px;
     height: 250px;
     display: flex;
@@ -189,7 +183,7 @@ code {
     background-color: #131313;
     border-radius: 20px;
     font-size: 14px;
-    .recharge-body-font {
+    .recharge-body-font{
       font-size: 27px;
       margin-bottom: 30px;
     }
@@ -246,7 +240,7 @@ code {
     border-radius: 20px;
     margin: 0.25rem auto;
     padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
+    font-size: .875rem;
     background-color: transparent;
     border: none;
     line-height: 1.5;
@@ -290,7 +284,7 @@ code {
       padding-left: 5px;
       vertical-align: middle;
 
-      @media (max-width: 900px) {
+      @media (max-width:900px) {
         display: none;
       }
     }
@@ -309,7 +303,7 @@ code {
       .amount {
         font-size: 16px;
         color: #28a909;
-        font-weight: 700;
+        font-weight: 700
       }
 
       .currency {
@@ -378,7 +372,7 @@ code {
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #0e0e0e;
+  background-color: #0E0E0E;
   width: 100%;
   height: 100%;
   z-index: 100000;
@@ -459,7 +453,7 @@ code {
     flex-direction: column;
     height: 100%;
     width: 100%;
-    background: #1b1c1d;
+    background: #1B1C1D;
     border-radius: 10px 10px 0 0;
   }
 
@@ -529,14 +523,12 @@ code {
           color: #fff;
           width: 17px;
           height: 16px;
-          background: url(assets/images/history-i.svg) no-repeat center
-            center/contain;
+          background: url(assets/images/history-i.svg) no-repeat center center/contain;
         }
 
         &:hover {
           .history-i {
-            background: url(assets/images/history-i-hover.svg) no-repeat center
-              center/contain;
+            background: url(assets/images/history-i-hover.svg) no-repeat center center/contain;
           }
 
           span {
@@ -546,8 +538,7 @@ code {
 
         &.click {
           .history-i {
-            background: url(assets/images/history-i-hover.svg) no-repeat center
-              center/contain;
+            background: url(assets/images/history-i-hover.svg) no-repeat center center/contain;
           }
 
           span {
@@ -707,16 +698,14 @@ code {
           display: flex;
 
           .fairness-i {
-            background: url(./assets/images/provabyfire.svg) no-repeat center
-              center/contain;
+            background: url(./assets/images/provabyfire.svg) no-repeat center center/contain;
             width: 14px;
             height: 16px;
             cursor: pointer;
           }
 
           .share-i {
-            background: url(./assets/images/share.svg) no-repeat center
-              center/contain;
+            background: url(./assets/images/share.svg) no-repeat center center/contain;
             width: 16px;
             height: 14px;
             cursor: pointer;
@@ -777,11 +766,13 @@ code {
     &:hover {
       background-color: rgb(70, 70, 70);
       color: rgb(148, 138, 197);
+
     }
 
     &.click {
       background-color: rgb(119, 101, 209);
       color: rgb(255, 255, 255);
+
     }
   }
 }
@@ -807,6 +798,7 @@ code {
   color: rgb(114, 114, 114);
   margin: 2px 0;
 }
+
 
 .userbetstate {
   display: flex;
@@ -983,8 +975,7 @@ code {
       align-items: center;
 
       .i-fair {
-        background: url("./assets/images/provabyfire.svg") no-repeat center
-          center/contain;
+        background: url("./assets/images/provabyfire.svg") no-repeat center center/contain;
         width: 14px;
         height: 16px;
         margin: 0 4px 0 6px;
@@ -1003,8 +994,7 @@ code {
     height: 14px;
 
     .i-logo {
-      background: url(./assets/images/i-logo.svg) no-repeat center
-        center/contain;
+      background: url(./assets/images/i-logo.svg) no-repeat center center/contain;
       width: 34px;
       height: 14px;
       margin-left: 4px;
