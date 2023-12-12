@@ -18,7 +18,6 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 		fbetted, sbetted,
 		fbetState, sbetState,
 		GameState,
-		currentNum,
 		currentSecondNum,
 		minBet, maxBet,
 		currentTarget,
@@ -188,6 +187,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
 				}
 			}
 		}
+	// eslint-disable-next-line
 	}, [currentSecondNum, fbetted, sbetted, state.fautoCashoutState, state.sautoCashoutState, state.userInfo.f.target, state.userInfo.s.target])
 
 	useEffect(() => {

@@ -15,7 +15,6 @@ function App() {
     errorBackend,
     unityLoading,
     currentProgress,
-    rechargeState,
   } = React.useContext(Context);
   const return_url = new URLSearchParams(useLocation().search).get(
     "return_url"
