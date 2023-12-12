@@ -197,11 +197,9 @@ let newBetState;
 
 export const Provider = ({ children }: any) => {
   const token = new URLSearchParams(useLocation().search).get("token");
-  const userID = new URLSearchParams(useLocation().search).get("userID");
+  const UserID = new URLSearchParams(useLocation().search).get("UserID");
   const currency = new URLSearchParams(useLocation().search).get("currency");
-  const return_url = new URLSearchParams(useLocation().search).get(
-    "return_url"
-  );
+  const returnurl = new URLSearchParams(useLocation().search).get("returnurl");
 
   const [secure, setSecure] = React.useState<boolean>(false);
   const [errorBackend, setErrorBackend] = React.useState<boolean>(false);
@@ -277,12 +275,12 @@ export const Provider = ({ children }: any) => {
   );
 
   React.useEffect(() => {
-    socket.on("connect", () => console.log("socket connected"));
-    if (token && userID && currency && return_url) {
-      socket.emit("sessionCheck", { token, userID, currency, return_url });
+    socket.on("connect", () => console.log(socket.connected));
+    if (token && UserID && currency && returnurl) {
+      socket.emit("sessionCheck", { token, UserID, currency, returnurl });
       socket.on("sessionSecure", (data) => {
         if (data.sessionStatus === true) {
-          socket.emit("enterRoom", { token });
+          socket.emit("enterRoom", { token, UserID, currency });
         } else {
           toast.error(data.message);
           setErrorBackend(true);
@@ -307,9 +305,9 @@ export const Provider = ({ children }: any) => {
         setBettedUsers(bettedUsers);
       });
 
-      socket.on("connect", () => {
-        console.log(socket.connected);
-      });
+      // socket.on("connect", () => {
+      //   console.log(socket.connected);
+      // });
 
       socket.on("myBetState", (user: UserType) => {
         const attrs = userBetState;
@@ -446,7 +444,7 @@ export const Provider = ({ children }: any) => {
         socket.off("success");
       };
     }
-  }, [socket, secure, token, userID, currency, return_url]);
+  }, [socket, secure, token, UserID, currency, returnurl]);
 
   React.useEffect(() => {
     let attrs = state;
