@@ -516,7 +516,6 @@ export const Provider = ({ children }: any) => {
 
   const getMyBets = async () => {
     try {
-      console.log("state.userInfo.userId", state.userInfo.userId);
       let response = await axios.post(
         `${
           process.env.REACT_APP_DEVELOPMENT === "true"
