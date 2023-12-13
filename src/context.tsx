@@ -314,13 +314,12 @@ export const Provider = ({ children }: any) => {
 
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
         var { user, type } = userInfo;
-        console.clear();
-        console.log("user, type", user, type);
         const attrs = userBetState;
         if (type === "f") {
           attrs.fbetState = false;
           attrs.fbetted = user.f.betted;
-        } else {
+        }
+        if (type === "s") {
           attrs.sbetState = false;
           attrs.sbetted = user.s.betted;
         }
