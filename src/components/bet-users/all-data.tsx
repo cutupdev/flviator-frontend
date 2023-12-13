@@ -62,7 +62,7 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                   />
                 )}
                 <div className="username">
-                  {user.name === "Hidden"
+                  {user.name.length <= 6
                     ? user.name
                     : user.name?.slice(0, 1) + "***" + user.name?.slice(-1)}
                 </div>
