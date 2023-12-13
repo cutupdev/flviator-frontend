@@ -21,6 +21,7 @@ export interface UserType {
   balance: number;
   userType: boolean;
   img: string;
+  userId: string;
   userName: string;
   f: {
     auto: boolean;
@@ -134,6 +135,7 @@ const init_state = {
   userInfo: {
     balance: 0,
     userType: false,
+    userId: "",
     img: "",
     userName: "",
     f: {
@@ -291,6 +293,7 @@ export const Provider = ({ children }: any) => {
         let attrs = state;
         attrs.userInfo.balance = user.balance;
         attrs.userInfo.userType = user.userType;
+        attrs.userInfo.userId = user.userId;
         attrs.userInfo.userName = user.userName;
         update(attrs);
         setSecure(true);
@@ -520,7 +523,7 @@ export const Provider = ({ children }: any) => {
             : config.production_api
         }/my-info`,
         {
-          name: state.userInfo.userName,
+          userId: state.userInfo.userId,
         }
       );
       if (response?.data?.status) {
