@@ -469,6 +469,7 @@ export const Provider = ({ children }: any) => {
           target: state.userInfo.f.target,
           type: "f",
           auto: state.userInfo.f.auto,
+          balance: state.userInfo.balance,
         };
         if (attrs.userInfo.balance - state.userInfo.f.betAmount < 0) {
           toast.error("Your balance is not enough");
@@ -497,6 +498,7 @@ export const Provider = ({ children }: any) => {
           target: state.userInfo.s.target,
           type: "s",
           auto: state.userInfo.s.auto,
+          balance: state.userInfo.balance,
         };
         if (attrs.userInfo.balance - state.userInfo.s.betAmount < 0) {
           toast.error("Your balance is not enough");
