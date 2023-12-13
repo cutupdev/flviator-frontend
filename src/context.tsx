@@ -313,9 +313,7 @@ export const Provider = ({ children }: any) => {
       // });
 
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
-        var { user, type } = userInfo;
-        console.log("user", user);
-        console.log("type", type);
+        var { user } = userInfo;
         const attrs = userBetState;
         attrs.fbetState = false;
         attrs.fbetted = user.f.betted;
@@ -518,6 +516,7 @@ export const Provider = ({ children }: any) => {
 
   const getMyBets = async () => {
     try {
+      console.log("state.userInfo.userId", state.userInfo.userId);
       let response = await axios.post(
         `${
           process.env.REACT_APP_DEVELOPMENT === "true"
