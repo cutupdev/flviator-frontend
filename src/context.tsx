@@ -314,6 +314,8 @@ export const Provider = ({ children }: any) => {
 
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
         var { user, type } = userInfo;
+        console.clear();
+        console.log("user, type", user, type);
         const attrs = userBetState;
         if (type === "f") {
           attrs.fbetState = false;
@@ -452,7 +454,8 @@ export const Provider = ({ children }: any) => {
         socket.off("success");
       };
     }
-  }, [socket, secure, token, UserID, currency, returnurl]);
+    // eslint-disable-next-line
+  }, [socket, secure, token]);
 
   React.useEffect(() => {
     let attrs = state;
