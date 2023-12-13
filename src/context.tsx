@@ -310,6 +310,7 @@ export const Provider = ({ children }: any) => {
       // });
 
       socket.on("myBetState", (user: UserType) => {
+        console.log(user)
         const attrs = userBetState;
         attrs.fbetState = false;
         attrs.fbetted = user.f.betted;
@@ -331,6 +332,7 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("finishGame", (user: UserType) => {
+        console.log('user', user)
         let attrs = newState;
         let fauto = attrs.userInfo.f.auto;
         let sauto = attrs.userInfo.s.auto;
