@@ -71,7 +71,8 @@ export default function BetsUsers() {
           <div className="logo-block">
             <span>Powered by</span>
             <a target="_blank" href="https://crashgame.co" rel="noreferrer">
-              <div className="i-logo"></div>
+              {/* <div className="i-logo"></div> */}
+              Crash Game
             </a>
           </div>
         </div>
