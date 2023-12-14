@@ -77,25 +77,25 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   const plus = (type: FieldNameType) => {
     let value = state;
     if (type === "betAmount") {
-      if (value.userInfo[index][type] + 0.1 > state.userInfo.balance) {
+      if (value.userInfo[index][type] + 1 > state.userInfo.balance) {
         value.userInfo[index][type] =
           Math.round(state.userInfo.balance * 100) / 100;
       } else {
-        if (value.userInfo[index][type] + 0.1 > maxBet) {
+        if (value.userInfo[index][type] + 1 > maxBet) {
           value.userInfo[index][type] = maxBet;
         } else {
           value.userInfo[index][type] = Number(
-            (Number(betAmount) + 0.1).toFixed(2)
+            (Number(betAmount) + 1).toFixed(2)
           );
         }
       }
     } else {
-      if (value[`${index + type}`] + 0.1 > state.userInfo.balance) {
+      if (value[`${index + type}`] + 1 > state.userInfo.balance) {
         value[`${index + type}`] =
           Math.round(state.userInfo.balance * 100) / 100;
       } else {
         value[`${index + type}`] = Number(
-          (Number(value[`${index + type}`]) + 0.1).toFixed(2)
+          (Number(value[`${index + type}`]) + 1).toFixed(2)
         );
       }
     }
@@ -426,7 +426,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   <label>BET</label>
                   <label className="amount">
                     <span>{Number(betAmount).toFixed(2)}</span>
-                    <span className="currency">{`${
+                    <span className="currency">{` ${
                       state?.userInfo?.currency
                         ? state?.userInfo?.currency
                         : "INR"
