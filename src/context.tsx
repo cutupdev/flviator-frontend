@@ -8,6 +8,10 @@ import { toast } from "react-toastify";
 
 import config from "./config.json";
 
+import MainAudio from "./assets/audio/main.wav";
+import FlewAwayAudio from "./assets/audio/flew_away.mp3";
+import TakeOffAudio from "./assets/audio/take_off.mp3";
+
 export interface BettedUserType {
   name: string;
   betAmount: number;
@@ -79,12 +83,6 @@ interface UserStatusType {
   sbetted: boolean;
 }
 
-interface AudioStatusType {
-  mainAudio: boolean;
-  flewAway: boolean;
-  TakeOff: boolean;
-}
-
 interface ContextDataType {
   myBets: GameHistory[];
   width: number;
@@ -115,9 +113,6 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   platformLoading: boolean;
   errorBackend: boolean;
   unityState: boolean;
-  mainAudio: boolean;
-  flewAway: boolean;
-  TakeOff: boolean;
   unityLoading: boolean;
   currentProgress: number;
   bettedUsers: BettedUserType[];
@@ -225,11 +220,6 @@ export const Provider = ({ children }: any) => {
     unityLoading: false,
     currentProgress: 0,
   });
-  const [audioStatus, setAudioStatus] = React.useState({
-    mainAudio: true,
-    flewAway: false,
-    TakeOff: false,
-  });
   const [gameState, setGameState] = React.useState({
     currentNum: 0,
     currentSecondNum: 0,
@@ -267,6 +257,8 @@ export const Provider = ({ children }: any) => {
         setPlatformLoading(false);
         unityContext.on("GameController", function (message) {
           if (message === "Ready") {
+            let mainElement: any = document.getElementById("main")!;
+            mainElement.play();
             setUnity({
               currentProgress: 100,
               unityLoading: true,
@@ -344,22 +336,10 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("gameState", (gameState: GameStatusType) => {
-        if (gameState.GameState === "READY") {
-          setAudioStatus({
-            ...audioStatus,
-            flewAway: false,
-            TakeOff: false,
-          });
-        } else if (gameState.GameState === "PLAYING") {
-          setAudioStatus({
-            ...audioStatus,
-            flewAway: true,
-          });
+        if (gameState.GameState === "PLAYING") {
+          audioCallingFunc("#take_off");
         } else if (gameState.GameState === "GAMEEND") {
-          setAudioStatus({
-            ...audioStatus,
-            TakeOff: true,
-          });
+          audioCallingFunc("#flew_away");
         }
         setGameState(gameState);
       });
@@ -573,6 +553,16 @@ export const Provider = ({ children }: any) => {
     if (gameState.GameState === "BET") getMyBets();
   }, [gameState.GameState]);
 
+  const audioCallingFunc = (docuID: string) => {
+    let AudioPlayer: HTMLVideoElement = window.document?.querySelector(
+      `${docuID}`
+    )!;
+    AudioPlayer.play();
+    // AudioPlayer.onended = function () {
+    //   alert("The audio has ended");
+    // };
+  };
+
   return (
     <Context.Provider
       value={{
@@ -581,7 +571,6 @@ export const Provider = ({ children }: any) => {
         ...userBetState,
         ...unity,
         ...gameState,
-        ...audioStatus,
         platformLoading,
         errorBackend,
         currentTarget,
@@ -597,6 +586,18 @@ export const Provider = ({ children }: any) => {
       }}
     >
       {children}
+      <audio id="main" controls autoPlay loop>
+        <source src={MainAudio} type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+      <audio id="flew_away" controls autoPlay>
+        <source src={FlewAwayAudio} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
+      <audio id="take_off" controls autoPlay>
+        <source src={TakeOffAudio} type="audio/mp3" />
+        Your browser does not support the audio element.
+      </audio>
     </Context.Provider>
   );
 };
