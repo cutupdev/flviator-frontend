@@ -33,6 +33,9 @@ function App() {
       `${docuID}`
     )!;
     AudioPlayer.play();
+    // AudioPlayer.onended = function () {
+    //   alert("The audio has ended");
+    // };
   };
 
   useEffect(() => {

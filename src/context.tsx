@@ -79,6 +79,12 @@ interface UserStatusType {
   sbetted: boolean;
 }
 
+interface AudioStatusType {
+  mainAudio: boolean;
+  flewAway: boolean;
+  TakeOff: boolean;
+}
+
 interface ContextDataType {
   myBets: GameHistory[];
   width: number;
@@ -338,7 +344,23 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("gameState", (gameState: GameStatusType) => {
-        console.log("gameState", gameState);
+        if (gameState.GameState === "READY") {
+          setAudioStatus({
+            ...audioStatus,
+            flewAway: false,
+            TakeOff: false,
+          });
+        } else if (gameState.GameState === "PLAYING") {
+          setAudioStatus({
+            ...audioStatus,
+            flewAway: true,
+          });
+        } else if (gameState.GameState === "GAMEEND") {
+          setAudioStatus({
+            ...audioStatus,
+            TakeOff: true,
+          });
+        }
         setGameState(gameState);
       });
 
