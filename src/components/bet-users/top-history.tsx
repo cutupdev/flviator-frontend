@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
-import "./bets.scss";
-import config from "../../config.json";
 import axios from "axios";
 import { Oval } from "react-loader-spinner";
+import "./bets.scss";
+import config from "../../config.json";
+import Context from "../../context";
 
 const TopHistory = () => {
+  const { state } = React.useContext(Context);
   const [type, setType] = React.useState(0);
   const [history, setHistory] = React.useState([]);
   const [loadingEffect, setLoadingEffect] = React.useState(false);
@@ -103,7 +105,15 @@ const TopHistory = () => {
                     <div className="score">
                       <div className="flex">
                         <div className="">
-                          <span>Bet, INR:&nbsp;</span>
+                          <span>
+                            Bet,{" "}
+                            {`${
+                              state?.userInfo?.currency
+                                ? state?.userInfo?.currency
+                                : "INR"
+                            }`}
+                            :&nbsp;
+                          </span>
                           <span></span>
                         </div>
                         <span className="amount">
@@ -120,7 +130,15 @@ const TopHistory = () => {
                       </div>
                       <div className="flex">
                         <div className="">
-                          <span>Win, INR: &nbsp;</span>
+                          <span>
+                            Win,{" "}
+                            {`${
+                              state?.userInfo?.currency
+                                ? state?.userInfo?.currency
+                                : "INR"
+                            }`}
+                            : &nbsp;
+                          </span>
                         </div>
                         <span className="amount">
                           {(item.cashoutAt * item.betAmount).toFixed(2)}

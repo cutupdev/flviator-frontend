@@ -8,7 +8,7 @@ interface AllDataProps {
 }
 
 const AllData = ({ pre, setPre, allData }: AllDataProps) => {
-  const state = React.useContext(Context);
+  const { state, bettedUsers } = React.useContext(Context);
 
   return (
     <>
@@ -16,9 +16,9 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
         <div className="all-bets-block">
           <div>
             <div className="uppercase">ALL BETS</div>
-            <div>{state.bettedUsers?.length}</div>
+            <div>{bettedUsers?.length}</div>
           </div>
-          <div
+          {/* <div
             className={`previous-hand items-center flex justify-between ${
               pre ? "click" : ""
             }`}
@@ -32,14 +32,20 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
             >
               Previous hand
             </span>
-          </div>
+          </div> */}
         </div>
         <div className="spacer"></div>
         <div className="legend">
           <span className="user">User</span>
-          <span className="bet">Bet, INR</span>
+          <span className="bet">
+            Bet,{" "}
+            {`${state?.userInfo?.currency ? state?.userInfo?.currency : "INR"}`}
+          </span>
           <span>X</span>
-          <span className="cash-out">Cash out, INR</span>
+          <span className="cash-out">
+            Cash out,{" "}
+            {`${state?.userInfo?.currency ? state?.userInfo?.currency : "INR"}`}
+          </span>
         </div>
       </div>
       <div className="cdk-virtual-scroll-viewport">

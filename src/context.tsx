@@ -22,6 +22,7 @@ export interface UserType {
   userType: boolean;
   img: string;
   userId: string;
+  currency: string;
   userName: string;
   f: {
     auto: boolean;
@@ -138,6 +139,7 @@ const init_state = {
     userId: "",
     img: "",
     userName: "",
+    currency: "INR",
     f: {
       auto: false,
       betted: false,
@@ -295,6 +297,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.userType = user.userType;
         attrs.userInfo.userId = user.userId;
         attrs.userInfo.userName = user.userName;
+        attrs.userInfo.currency = user.currency;
         update(attrs);
         setSecure(true);
       });
