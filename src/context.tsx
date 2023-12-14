@@ -283,10 +283,14 @@ export const Provider = ({ children }: any) => {
     if (token && UserID && currency && returnurl) {
       socket.emit("sessionCheck", { token, UserID, currency, returnurl });
       socket.on("sessionSecure", (data) => {
-        if (data.sessionStatus === true) {
+        var { sessionStatus, userHistory } = data;
+        if (sessionStatus === true) {
+          if (userHistory?.data?.status) {
+            update({ myBets: userHistory.data.data as GameHistory[] });
+          }
           socket.emit("enterRoom", { token, UserID, currency });
         } else {
-          toast.error(data.message);
+          toast.error("Internal Server Error");
           setErrorBackend(true);
         }
       });
