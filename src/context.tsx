@@ -586,15 +586,15 @@ export const Provider = ({ children }: any) => {
       }}
     >
       {children}
-      <audio id="main" controls autoPlay loop>
+      <audio style={{ display: "hidden" }} id="main" controls autoPlay loop>
         <source src={MainAudio} type="audio/wav" />
         Your browser does not support the audio element.
       </audio>
-      <audio id="flew_away" controls autoPlay>
+      <audio style={{ display: "hidden" }} id="flew_away" controls autoPlay>
         <source src={FlewAwayAudio} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
-      <audio id="take_off" controls autoPlay>
+      <audio style={{ display: "hidden" }} id="take_off" controls autoPlay>
         <source src={TakeOffAudio} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
