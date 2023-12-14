@@ -109,6 +109,9 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   platformLoading: boolean;
   errorBackend: boolean;
   unityState: boolean;
+  mainAudio: boolean;
+  flewAway: boolean;
+  TakeOff: boolean;
   unityLoading: boolean;
   currentProgress: number;
   bettedUsers: BettedUserType[];
@@ -215,6 +218,11 @@ export const Provider = ({ children }: any) => {
     unityState: false,
     unityLoading: false,
     currentProgress: 0,
+  });
+  const [audioStatus, setAudioStatus] = React.useState({
+    mainAudio: true,
+    flewAway: false,
+    TakeOff: false,
   });
   const [gameState, setGameState] = React.useState({
     currentNum: 0,
@@ -330,6 +338,7 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("gameState", (gameState: GameStatusType) => {
+        console.log("gameState", gameState);
         setGameState(gameState);
       });
 
@@ -550,6 +559,7 @@ export const Provider = ({ children }: any) => {
         ...userBetState,
         ...unity,
         ...gameState,
+        ...audioStatus,
         platformLoading,
         errorBackend,
         currentTarget,
