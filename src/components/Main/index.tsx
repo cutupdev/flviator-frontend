@@ -16,9 +16,6 @@ export default function Main() {
           <div className="stage-canvas">
             <Crash />
           </div>
-          <div className="dom-container">
-            <div className="fun-mode">FUN MODE</div>
-          </div>
         </div>
       </div>
       <div className="bet-controls">

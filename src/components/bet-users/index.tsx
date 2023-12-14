@@ -65,12 +65,6 @@ export default function BetsUsers() {
               <span className="text-provably-fair">Provably Fair</span>
             </div>
           </div>
-          <div className="logo-block">
-            <span>Powered by</span>
-            <a target="_blank" href="https://spribe.co" rel="noreferrer">
-              <div className="i-logo"></div>
-            </a>
-          </div>
         </div>
       </div>
     </div>
