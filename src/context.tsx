@@ -257,8 +257,6 @@ export const Provider = ({ children }: any) => {
         setPlatformLoading(false);
         unityContext.on("GameController", function (message) {
           if (message === "Ready") {
-            let mainElement: any = document.getElementById("main")!;
-            mainElement.play();
             setUnity({
               currentProgress: 100,
               unityLoading: true,
@@ -282,6 +280,48 @@ export const Provider = ({ children }: any) => {
       }
     },
     [secure]
+  );
+
+  React.useEffect(
+    function () {
+      if (unity.unityState === true && document.getElementById("main")) {
+        try {
+          let mainElement: any = document.getElementById("main");
+          if (mainElement) {
+            mainElement.play();
+          }
+        } catch (error) {}
+      }
+    },
+    [document.getElementById("main"), unity]
+  );
+
+  React.useEffect(
+    function () {
+      if (gameState.GameState === "PLAYING" && unity.unityState === true && document.getElementById("take_off")) {
+        try {
+          let TakeOffElement: any = document.getElementById("take_off");
+          if (TakeOffElement) {
+            TakeOffElement.play();
+          }
+        } catch (error) {}
+      }
+    },
+    [document.getElementById("take_off"), unity, gameState]
+  );
+
+  React.useEffect(
+    function () {
+      if (gameState.GameState === "GAMEEND" && unity.unityState === true && document.getElementById("flew_away")) {
+        try {
+          let FlewAwayElement: any = document.getElementById("flew_away");
+          if (FlewAwayElement) {
+            FlewAwayElement.play();
+          }
+        } catch (error) {}
+      }
+    },
+    [document.getElementById("flew_away"), unity, gameState]
   );
 
   React.useEffect(() => {
@@ -336,11 +376,6 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("gameState", (gameState: GameStatusType) => {
-        if (gameState.GameState === "PLAYING") {
-          audioCallingFunc("#take_off");
-        } else if (gameState.GameState === "GAMEEND") {
-          audioCallingFunc("#flew_away");
-        }
         setGameState(gameState);
       });
 
@@ -553,16 +588,6 @@ export const Provider = ({ children }: any) => {
     if (gameState.GameState === "BET") getMyBets();
   }, [gameState.GameState]);
 
-  const audioCallingFunc = (docuID: string) => {
-    let AudioPlayer: HTMLVideoElement = window.document?.querySelector(
-      `${docuID}`
-    )!;
-    AudioPlayer.play();
-    // AudioPlayer.onended = function () {
-    //   alert("The audio has ended");
-    // };
-  };
-
   return (
     <Context.Provider
       value={{
@@ -586,15 +611,15 @@ export const Provider = ({ children }: any) => {
       }}
     >
       {children}
-      <audio style={{ display: "hidden" }} id="main" controls autoPlay loop>
+      <audio style={{ display: "none" }} id="main" controls autoPlay loop>
         <source src={MainAudio} type="audio/wav" />
         Your browser does not support the audio element.
       </audio>
-      <audio style={{ display: "hidden" }} id="flew_away" controls autoPlay>
+      <audio style={{ display: "none" }} id="flew_away" controls autoPlay>
         <source src={FlewAwayAudio} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
-      <audio style={{ display: "hidden" }} id="take_off" controls autoPlay>
+      <audio style={{ display: "none" }} id="take_off" controls autoPlay>
         <source src={TakeOffAudio} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
