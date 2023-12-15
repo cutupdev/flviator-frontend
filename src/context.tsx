@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { UnityContext } from "react-unity-webgl";
 import { useLocation } from "react-router";
 import { io } from "socket.io-client";
@@ -209,6 +209,14 @@ export const Provider = ({ children }: any) => {
   const currency = new URLSearchParams(useLocation().search).get("currency");
   const returnurl = new URLSearchParams(useLocation().search).get("returnurl");
 
+  const mainBtnRef = useRef<HTMLButtonElement>(null);
+  const takeOffBtnRef = useRef<HTMLButtonElement>(null);
+  const flewAwayBtnRef = useRef<HTMLButtonElement>(null);
+
+  const mainAudioRef = useRef<HTMLAudioElement>(null);
+  const takeOffAudioRef = useRef<HTMLAudioElement>(null);
+  const flewAwayAudioRef = useRef<HTMLAudioElement>(null);
+
   const [secure, setSecure] = React.useState<boolean>(false);
   const [errorBackend, setErrorBackend] = React.useState<boolean>(false);
   const [platformLoading, setPlatformLoading] = React.useState<boolean>(true);
@@ -282,46 +290,56 @@ export const Provider = ({ children }: any) => {
     [secure]
   );
 
+  const playAudio = async (type: string) => {
+    var audioRef: any;
+    if (type === "main") audioRef = mainAudioRef;
+    if (type === "take_off") audioRef = takeOffAudioRef;
+    if (type === "flew_away") audioRef = flewAwayAudioRef;
+    if (audioRef.current) {
+      const audioPromise = audioRef.current.play();
+      if (audioPromise !== undefined) {
+        audioPromise
+          .then((_) => {})
+          .catch((error) => {
+            console.error("Failed to play audio:", error);
+          });
+      }
+    }
+  };
+
   React.useEffect(
     function () {
-      if (unity.unityState === true && document.getElementById("main")) {
-        try {
-          let mainElement: any = document.getElementById("main");
-          if (mainElement) {
-            mainElement.play();
-          }
-        } catch (error) {}
+      if (unity.unityState === true && mainAudioRef.current) {
+        if (mainBtnRef.current) mainBtnRef.current.click();
       }
     },
-    [document.getElementById("main"), unity]
+    [mainAudioRef.current, unity]
   );
 
   React.useEffect(
     function () {
-      if (gameState.GameState === "PLAYING" && unity.unityState === true && document.getElementById("take_off")) {
-        try {
-          let TakeOffElement: any = document.getElementById("take_off");
-          if (TakeOffElement) {
-            TakeOffElement.play();
-          }
-        } catch (error) {}
+      if (
+        gameState.GameState === "PLAYING" &&
+        unity.unityState === true &&
+        takeOffAudioRef.current
+      ) {
+        if (takeOffBtnRef.current) takeOffBtnRef.current.click();
       }
     },
-    [document.getElementById("take_off"), unity, gameState]
+    [takeOffAudioRef, unity, gameState]
   );
 
   React.useEffect(
     function () {
-      if (gameState.GameState === "GAMEEND" && unity.unityState === true && document.getElementById("flew_away")) {
-        try {
-          let FlewAwayElement: any = document.getElementById("flew_away");
-          if (FlewAwayElement) {
-            FlewAwayElement.play();
-          }
-        } catch (error) {}
+      if (
+        gameState.GameState === "GAMEEND" &&
+        unity.unityState === true &&
+        flewAwayAudioRef.current
+      ) {
+        if (flewAwayBtnRef.current) flewAwayBtnRef.current.click();
       }
     },
-    [document.getElementById("flew_away"), unity, gameState]
+    [flewAwayAudioRef.current, unity, gameState]
   );
 
   React.useEffect(() => {
@@ -611,16 +629,59 @@ export const Provider = ({ children }: any) => {
       }}
     >
       {children}
-      <audio style={{ display: "none" }} id="main" controls autoPlay loop>
+
+      {/* Main Audio Section */}
+      <button
+        ref={mainBtnRef}
+        style={{ display: "none" }}
+        onClick={() => playAudio("main")}
+      >
+        play main
+      </button>
+      <audio
+        ref={mainAudioRef}
+        style={{ display: "none" }}
+        controls
+        autoPlay
+        loop
+      >
         <source src={MainAudio} type="audio/wav" />
         Your browser does not support the audio element.
       </audio>
-      <audio style={{ display: "none" }} id="flew_away" controls autoPlay>
-        <source src={FlewAwayAudio} type="audio/mp3" />
+
+      {/* Take Off Audio Section */}
+      <button
+        ref={flewAwayBtnRef}
+        style={{ display: "none" }}
+        onClick={() => playAudio("take_off")}
+      >
+        play take off
+      </button>
+      <audio
+        ref={flewAwayAudioRef}
+        style={{ display: "none" }}
+        controls
+        autoPlay
+      >
+        <source src={TakeOffAudio} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
-      <audio style={{ display: "none" }} id="take_off" controls autoPlay>
-        <source src={TakeOffAudio} type="audio/mp3" />
+
+      {/* Flew Away Audio Section */}
+      <button
+        ref={takeOffBtnRef}
+        style={{ display: "none" }}
+        onClick={() => playAudio("flew_away")}
+      >
+        play flew away
+      </button>
+      <audio
+        ref={takeOffAudioRef}
+        style={{ display: "none" }}
+        controls
+        autoPlay
+      >
+        <source src={FlewAwayAudio} type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
     </Context.Provider>
