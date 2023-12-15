@@ -27,8 +27,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "cross-env REACT_APP_DEVELOPMENT=true HTTPS=true react-app-rewired start",
-    "start": "cross-env REACT_APP_DEVELOPMENT=false HTTPS=true react-app-rewired start",
+    "dev": "cross-env REACT_APP_DEVELOPMENT=true react-app-rewired start",
+    "start": "cross-env REACT_APP_DEVELOPMENT=false react-app-rewired start",
     "build": "set \"GENERATE_SOURCEMAP=false\" && react-app-rewired build",
     "start1": "set PORT=3006 && react-scripts start",
     "build1": "react-scripts build",
