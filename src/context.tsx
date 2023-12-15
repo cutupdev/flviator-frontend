@@ -295,14 +295,12 @@ export const Provider = ({ children }: any) => {
     if (type === "main") audioRef = mainAudioRef;
     if (type === "take_off") audioRef = takeOffAudioRef;
     if (type === "flew_away") audioRef = flewAwayAudioRef;
+
     if (audioRef.current) {
-      const audioPromise = audioRef.current.play();
-      if (audioPromise !== undefined) {
-        audioPromise
-          .then((_) => {})
-          .catch((error) => {
-            console.error("Failed to play audio:", error);
-          });
+      try {
+        await audioRef.current.play();
+      } catch (error) {
+        console.log("error", error);
       }
     }
   };
@@ -629,61 +627,34 @@ export const Provider = ({ children }: any) => {
       }}
     >
       {children}
+      <div style={{ display: "none" }}>
+        {/* Main Audio Section */}
+        <button ref={mainBtnRef} onClick={() => playAudio("main")}>
+          play main
+        </button>
+        <audio ref={mainAudioRef} controls autoPlay loop>
+          <source src={MainAudio} type="audio/wav" />
+          Your browser does not support the audio element.
+        </audio>
 
-      {/* Main Audio Section */}
-      <button
-        ref={mainBtnRef}
-        style={{ display: "none" }}
-        onClick={() => playAudio("main")}
-      >
-        play main
-      </button>
-      <audio
-        ref={mainAudioRef}
-        style={{ display: "none" }}
-        controls
-        autoPlay
-        loop
-      >
-        <source src={MainAudio} type="audio/wav" />
-        Your browser does not support the audio element.
-      </audio>
+        {/* Take Off Audio Section */}
+        <button ref={takeOffBtnRef} onClick={() => playAudio("take_off")}>
+          play take off
+        </button>
+        <audio ref={takeOffAudioRef} controls autoPlay>
+          <source src={TakeOffAudio} type="audio/mp3" />
+          Your browser does not support the audio element.
+        </audio>
 
-      {/* Take Off Audio Section */}
-      <button
-        ref={flewAwayBtnRef}
-        style={{ display: "none" }}
-        onClick={() => playAudio("take_off")}
-      >
-        play take off
-      </button>
-      <audio
-        ref={flewAwayAudioRef}
-        style={{ display: "none" }}
-        controls
-        autoPlay
-      >
-        <source src={TakeOffAudio} type="audio/mp3" />
-        Your browser does not support the audio element.
-      </audio>
-
-      {/* Flew Away Audio Section */}
-      <button
-        ref={takeOffBtnRef}
-        style={{ display: "none" }}
-        onClick={() => playAudio("flew_away")}
-      >
-        play flew away
-      </button>
-      <audio
-        ref={takeOffAudioRef}
-        style={{ display: "none" }}
-        controls
-        autoPlay
-      >
-        <source src={FlewAwayAudio} type="audio/mp3" />
-        Your browser does not support the audio element.
-      </audio>
+        {/* Flew Away Audio Section */}
+        <button ref={flewAwayBtnRef} onClick={() => playAudio("flew_away")}>
+          play flew away
+        </button>
+        <audio ref={flewAwayAudioRef} controls autoPlay>
+          <source src={FlewAwayAudio} type="audio/mp3" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
     </Context.Provider>
   );
 };
