@@ -2,8 +2,8 @@
     "development": true,
     "debug": true,
     "appKey": "crash-0.1.0",
-    "production_api": "https://45.8.22.45:5001/api",
-    "production_wss": "https://45.8.22.45:5001",
-    "development_api": "https://localhost:5001/api",
-    "development_wss": "https://localhost:5001"
+    "production_api": "http://45.8.22.45:5001/api",
+    "production_wss": "http://45.8.22.45:5001",
+    "development_api": "http://localhost:5001/api",
+    "development_wss": "http://localhost:5001"
 }
