@@ -2,8 +2,8 @@
     "development": true,
     "debug": true,
     "appKey": "crash-0.1.0",
-    "production_api": "http://crashgameapi.vkingplays.com/api",
-    "production_wss": "http://crashgameapi.vkingplays.com",
+    "production_api": "https://crashgameapi.vkingplays.com/api",
+    "production_wss": "https://crashgameapi.vkingplays.com",
     "development_api": "http://localhost:5001/api",
     "development_wss": "http://localhost:5001"
 }
