@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { HiSpeakerWave, HiOutlineMusicalNote } from "react-icons/hi2";
-import { BsShieldFillCheck } from "react-icons/bs";
-import { MdArticle, MdHistory } from "react-icons/md";
+import {
+  HiSpeakerWave,
+  HiOutlineMusicalNote,
+  HiOutlineShieldCheck,
+  HiDocumentText,
+} from "react-icons/hi2";
+import { MdHistory } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
 
 const DropDown = ({
@@ -110,13 +114,13 @@ const DropDown = ({
 
       <div className="setting-dropdown-item">
         <div className="icon-section">
-          <BsShieldFillCheck color="#fff" size={20} />
+          <HiOutlineShieldCheck color="#fff" size={20} />
           <span className="setting-title-text">Provably Fair Settings</span>
         </div>
       </div>
       <div className="setting-dropdown-item">
         <div className="icon-section">
-          <MdArticle color="#fff" size={20} />
+          <HiDocumentText color="#fff" size={20} />
           <span className="setting-title-text">Game Rules</span>
         </div>
       </div>
