@@ -62,6 +62,7 @@ function App() {
     ) {
       if (takeOffBtnRef.current) takeOffBtnRef.current.click();
     }
+    // eslint-disable-next-line
   }, [takeOffAudioRef, GameState]);
 
   useEffect(() => {
@@ -73,6 +74,7 @@ function App() {
     ) {
       if (flewAwayBtnRef.current) flewAwayBtnRef.current.click();
     }
+    // eslint-disable-next-line
   }, [flewAwayAudioRef.current, GameState]);
 
   return (

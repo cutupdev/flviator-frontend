@@ -11,20 +11,8 @@ import { CiMoneyBill } from "react-icons/ci";
 const DropDown = ({
   audioStatus,
   setAudioStatus,
-  cities,
-  citySelection,
 }): JSX.Element => {
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
-
-  /**
-   * Handle passing the city name
-   * back to the parent component
-   *
-   * @param city  The selected city
-   */
-  const onClickHandler = (city: string): void => {
-    citySelection(city);
-  };
 
   useEffect(() => {
     setShowDropDown(showDropDown);

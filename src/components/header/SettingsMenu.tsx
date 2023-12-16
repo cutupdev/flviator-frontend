@@ -5,10 +5,6 @@ import DropDown from "./DropDown";
 
 const Menu = ({ audioStatus, setAudioStatus }) => {
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
-  const [selectCity, setSelectCity] = useState<string>("");
-  const cities = () => {
-    return ["Hong Kong", "London", "New York City", "Paris"];
-  };
 
   /**
    * Toggle the drop down menu
@@ -29,37 +25,20 @@ const Menu = ({ audioStatus, setAudioStatus }) => {
     }
   };
 
-  /**
-   * Callback function to consume the
-   * city name from the child component
-   *
-   * @param city  The selected city
-   */
-  const citySelection = (city: string): void => {
-    setSelectCity(city);
-  };
-
   return (
     <>
       <button
         className={`setting-button ${showDropDown ? "active" : ""}`}
         onClick={(): void => toggleDropDown()}
-        // onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
-        //   dismissHandler(e)
-        // }
+        onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
+          dismissHandler(e)
+        }
       >
         <PiListBold color="#fff" size={20} />
       </button>
       <div className="aviator-dropdown-menu">
         {showDropDown && (
-          <DropDown
-            cities={cities()}
-            // showDropDown={false}
-            // toggleDropDown={(): void => toggleDropDown()}
-            citySelection={citySelection}
-            audioStatus={audioStatus}
-            setAudioStatus={setAudioStatus}
-          />
+          <DropDown audioStatus={audioStatus} setAudioStatus={setAudioStatus} />
         )}
       </div>
     </>
