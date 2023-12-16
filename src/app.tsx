@@ -26,6 +26,10 @@ function App() {
   const return_url = new URLSearchParams(useLocation().search).get(
     "return_url"
   );
+  const [audioStatus, setAudioStatus] = useState({
+    soundStatus: false,
+    musicStatus: false,
+  });
 
   const takeOffBtnRef = useRef<HTMLButtonElement>(null);
   const flewAwayBtnRef = useRef<HTMLButtonElement>(null);
@@ -53,7 +57,8 @@ function App() {
     if (
       GameState === "PLAYING" &&
       unityState === true &&
-      takeOffAudioRef.current
+      takeOffAudioRef.current &&
+      audioStatus.musicStatus === true
     ) {
       if (takeOffBtnRef.current) takeOffBtnRef.current.click();
     }
@@ -63,7 +68,8 @@ function App() {
     if (
       GameState === "GAMEEND" &&
       unityState === true &&
-      flewAwayAudioRef.current
+      flewAwayAudioRef.current &&
+      audioStatus.musicStatus === true
     ) {
       if (flewAwayBtnRef.current) flewAwayBtnRef.current.click();
     }
@@ -100,7 +106,7 @@ function App() {
           </div>
         </div>
       )}
-      <Header />
+      <Header audioStatus={audioStatus} setAudioStatus={setAudioStatus} />
       <div className="game-container">
         <BetsUsers />
         <Main />

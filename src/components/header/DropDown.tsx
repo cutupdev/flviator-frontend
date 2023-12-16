@@ -4,17 +4,12 @@ import { BsShieldFillCheck } from "react-icons/bs";
 import { MdArticle, MdHistory } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
 
-type DropDownProps = {
-  cities: string[];
-  showDropDown: boolean;
-  toggleDropDown: Function;
-  citySelection: Function;
-};
-
-const DropDown: React.FC<DropDownProps> = ({
+const DropDown = ({
+  audioStatus,
+  setAudioStatus,
   cities,
   citySelection,
-}: DropDownProps): JSX.Element => {
+}): JSX.Element => {
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
 
   /**
@@ -40,6 +35,10 @@ const DropDown: React.FC<DropDownProps> = ({
       mainEle.muted = true;
       mainEle.pause();
     }
+    setAudioStatus({
+      ...audioStatus,
+      soundStatus: e.target.checked,
+    });
   };
 
   const handleToggleMusicAudio = async (e) => {
@@ -66,6 +65,10 @@ const DropDown: React.FC<DropDownProps> = ({
       flewAwayAudioEle.muted = true;
       flewAwayAudioEle.pause();
     }
+    setAudioStatus({
+      ...audioStatus,
+      musicStatus: e.target.checked,
+    });
   };
 
   return (

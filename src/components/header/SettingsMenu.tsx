@@ -3,7 +3,7 @@ import { PiListBold } from "react-icons/pi";
 
 import DropDown from "./DropDown";
 
-const Menu: React.FC = (): JSX.Element => {
+const Menu = ({ audioStatus, setAudioStatus }) => {
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [selectCity, setSelectCity] = useState<string>("");
   const cities = () => {
@@ -54,9 +54,11 @@ const Menu: React.FC = (): JSX.Element => {
         {showDropDown && (
           <DropDown
             cities={cities()}
-            showDropDown={false}
-            toggleDropDown={(): void => toggleDropDown()}
+            // showDropDown={false}
+            // toggleDropDown={(): void => toggleDropDown()}
             citySelection={citySelection}
+            audioStatus={audioStatus}
+            setAudioStatus={setAudioStatus}
           />
         )}
       </div>
