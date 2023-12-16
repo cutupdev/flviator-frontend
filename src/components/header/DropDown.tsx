@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  HiSpeakerWave,
+  HiOutlineSpeakerWave,
   HiOutlineMusicalNote,
   HiOutlineShieldCheck,
-  HiDocumentText,
+  HiOutlineDocumentText,
 } from "react-icons/hi2";
 import { MdHistory } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
@@ -69,7 +69,7 @@ const DropDown = ({
     >
       <div className="setting-dropdown-item">
         <div className="icon-section">
-          <HiSpeakerWave color="#fff" size={20} />
+          <HiOutlineSpeakerWave color="#fff" size={20} />
           <span className="setting-title-text">Sound</span>
         </div>
         <div className="aviator-main-audio">
@@ -83,7 +83,7 @@ const DropDown = ({
           </label>
         </div>
       </div>
-      <div className="setting-dropdown-item pb-20">
+      <div className="setting-dropdown-item">
         <div className="icon-section">
           <HiOutlineMusicalNote color="#fff" size={20} />
           <span className="setting-title-text">Music</span>
@@ -99,6 +99,7 @@ const DropDown = ({
           </label>
         </div>
       </div>
+      <div className="devider"></div>
 
       <div className="setting-dropdown-item">
         <div className="icon-section">
@@ -108,7 +109,7 @@ const DropDown = ({
       </div>
       <div className="setting-dropdown-item">
         <div className="icon-section">
-          <HiDocumentText color="#fff" size={20} />
+          <HiOutlineDocumentText color="#fff" size={20} />
           <span className="setting-title-text">Game Rules</span>
         </div>
       </div>
