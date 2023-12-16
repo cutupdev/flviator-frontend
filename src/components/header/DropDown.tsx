@@ -44,9 +44,19 @@ const DropDown: React.FC<DropDownProps> = ({
     let flewAwayAudioEle: any = document.getElementById("flewAwayAudio");
     if (e.target.checked === true) {
       takeOffAudioEle.muted = false;
+      takeOffAudioEle.playbackRate = 10;
       takeOffAudioEle.play();
+      setTimeout(() => {
+        takeOffAudioEle.playbackRate = 1;
+        takeOffAudioEle.muted = false;
+      }, 200);
       flewAwayAudioEle.muted = false;
+      flewAwayAudioEle.playbackRate = 10;
       flewAwayAudioEle.play();
+      setTimeout(() => {
+        flewAwayAudioEle.playbackRate = 1;
+        flewAwayAudioEle.muted = false;
+      }, 200);
     } else {
       takeOffAudioEle.muted = true;
       takeOffAudioEle.pause();
