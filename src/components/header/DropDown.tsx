@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { HiSpeakerWave, HiOutlineMusicalNote } from "react-icons/hi2";
+import { BsShieldFillCheck } from "react-icons/bs";
+import { MdArticle, MdHistory } from "react-icons/md";
+import { CiMoneyBill } from "react-icons/ci";
 
 type DropDownProps = {
   cities: string[];
@@ -85,7 +88,7 @@ const DropDown: React.FC<DropDownProps> = ({
           </label>
         </div>
       </div>
-      <div className="setting-dropdown-item">
+      <div className="setting-dropdown-item pb-20">
         <div className="icon-section">
           <HiOutlineMusicalNote color="#fff" size={20} />
           <span className="setting-title-text">Music</span>
@@ -99,6 +102,31 @@ const DropDown: React.FC<DropDownProps> = ({
             />
             <span className="aviator-slider round"></span>
           </label>
+        </div>
+      </div>
+
+      <div className="setting-dropdown-item">
+        <div className="icon-section">
+          <BsShieldFillCheck color="#fff" size={20} />
+          <span className="setting-title-text">Provably Fair Settings</span>
+        </div>
+      </div>
+      <div className="setting-dropdown-item">
+        <div className="icon-section">
+          <MdArticle color="#fff" size={20} />
+          <span className="setting-title-text">Game Rules</span>
+        </div>
+      </div>
+      <div className="setting-dropdown-item">
+        <div className="icon-section">
+          <MdHistory color="#fff" size={20} />
+          <span className="setting-title-text">My Bet History</span>
+        </div>
+      </div>
+      <div className="setting-dropdown-item">
+        <div className="icon-section">
+          <CiMoneyBill color="#fff" size={20} />
+          <span className="setting-title-text">Game Limits</span>
         </div>
       </div>
     </div>
