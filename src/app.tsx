@@ -79,6 +79,32 @@ function App() {
 
   return (
     <div className="main-container">
+      <div style={{ display: "none" }}>
+        {/* Main Audio Section */}
+        <audio id="mainAudio" ref={mainAudioRef} autoPlay loop>
+          <source src={MainAudio} type="audio/wav" />
+          Your browser does not support the audio element.
+        </audio>
+
+        {/* Take Off Audio Section */}
+        <button ref={takeOffBtnRef} onClick={() => playAudio("take_off")}>
+          play take off
+        </button>
+        <audio id="takeOffAudio" ref={takeOffAudioRef} autoPlay>
+          <source src={TakeOffAudio} type="audio/mp3" />
+          Your browser does not support the audio element.
+        </audio>
+
+        {/* Flew Away Audio Section */}
+        <button ref={flewAwayBtnRef} onClick={() => playAudio("flew_away")}>
+          play flew away
+        </button>
+        <audio id="flewAwayAudio" ref={flewAwayAudioRef} autoPlay>
+          <source src={FlewAwayAudio} type="audio/mp3" />
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+
       {platformLoading && (
         <div className="platformmyloading">
           <div className="loading-container">
@@ -112,32 +138,6 @@ function App() {
       <div className="game-container">
         <BetsUsers />
         <Main />
-      </div>
-
-      <div style={{ display: "none" }}>
-        {/* Main Audio Section */}
-        <audio id="mainAudio" ref={mainAudioRef} controls autoPlay loop>
-          <source src={MainAudio} type="audio/wav" />
-          Your browser does not support the audio element.
-        </audio>
-
-        {/* Take Off Audio Section */}
-        <button ref={takeOffBtnRef} onClick={() => playAudio("take_off")}>
-          play take off
-        </button>
-        <audio id="takeOffAudio" ref={takeOffAudioRef} controls autoPlay>
-          <source src={TakeOffAudio} type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
-
-        {/* Flew Away Audio Section */}
-        <button ref={flewAwayBtnRef} onClick={() => playAudio("flew_away")}>
-          play flew away
-        </button>
-        <audio id="flewAwayAudio" ref={flewAwayAudioRef} controls autoPlay>
-          <source src={FlewAwayAudio} type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
       </div>
     </div>
   );

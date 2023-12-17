@@ -250,7 +250,12 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 >
                   Bet
                 </button>
-                {/* <button className={gameType === "auto" ? "active" : "" onClick={() => changeBetType("auto")}} >Auto</button> */}
+                <button
+                  className={gameType === "auto" ? "active" : ""}
+                  onClick={() => changeBetType("auto")}
+                >
+                  Auto
+                </button>
               </>
             ) : (
               <>
@@ -260,7 +265,12 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 >
                   Bet
                 </button>
-                {/* <button className={gameType === "auto" ? "active" : ""} onClick={() => changeBetType("auto")}>Auto</button> */}
+                <button
+                  className={gameType === "auto" ? "active" : ""}
+                  onClick={() => changeBetType("auto")}
+                >
+                  Auto
+                </button>
               </>
             )}
           </div>
