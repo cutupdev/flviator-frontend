@@ -452,7 +452,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
           <>
             <div className="border-line"></div>
             <div className="second-row">
-              <div className="auto-bet-wrapper">
+              {/* <div className="auto-bet-wrapper">
                 <div className="auto-bet">
                   {auto ? (
                     <button
@@ -472,7 +472,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                     </button>
                   )}
                 </div>
-              </div>
+              </div> */}
               <div className="cashout-block">
                 <div className="cashout-switcher">
                   <label className="label">Auto Cash Out</label>
