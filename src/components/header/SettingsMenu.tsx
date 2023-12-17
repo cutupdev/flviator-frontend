@@ -27,7 +27,12 @@ const Menu = ({ audioStatus, setAudioStatus }) => {
   };
 
   return (
-    <>
+    <div
+      tabIndex={0}
+      onBlur={() => {
+        if (mouseCursorStatus === false) setShowDropDown(false);
+      }}
+    >
       <button
         className={`setting-button ${showDropDown ? "active" : ""}`}
         onClick={(): void => toggleDropDown()}
@@ -46,7 +51,7 @@ const Menu = ({ audioStatus, setAudioStatus }) => {
           <DropDown audioStatus={audioStatus} setAudioStatus={setAudioStatus} />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
