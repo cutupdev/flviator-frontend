@@ -2,8 +2,9 @@ import React from "react";
 import Context from "../../context";
 
 import "../../index.scss";
+import "./header.scss";
 import logo from "../../assets/images/logo.svg";
-import Menu from "./SettingsMenu";
+import SettingsMenu from "./SettingsMenu";
 
 export default function Header({ audioStatus, setAudioStatus }) {
   const { state } = React.useContext(Context);
@@ -16,14 +17,17 @@ export default function Header({ audioStatus, setAudioStatus }) {
   return (
     <div className="header flex-none items-center">
       <div className="header-container">
-        <div className="logo-container">
-          <img src={logo} alt="logo" className="logo"></img>
-        </div>
-        <div className="second-block">
+        <div className="header-first">
+          <div className="logo-container">
+            <img src={logo} alt="logo" className="logo"></img>
+          </div>
+
           <button className="howto" onClick={() => setHowto("short")}>
             <div className="help-logo"></div>
             <div className="help-msg">How to play ?</div>
           </button>
+        </div>
+        <div className="second-block">
           <div className="d-flex">
             <div className="balance">
               <span className="amount">
@@ -37,7 +41,11 @@ export default function Header({ audioStatus, setAudioStatus }) {
               </span>
             </div>
             <div>
-              <Menu audioStatus={audioStatus} setAudioStatus={setAudioStatus} />
+              <SettingsMenu
+                audioStatus={audioStatus}
+                setAudioStatus={setAudioStatus}
+                setHowto={setHowto}
+              />
             </div>
           </div>
         </div>

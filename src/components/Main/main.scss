@@ -1195,7 +1195,8 @@ $btn-color: linear-gradient (90deg, rgb(43, 35, 87) 0%, rgb(43, 35, 87) 100%);
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        justify-content: flex-end;
+        // justify-content: flex-end;
+        justify-content: center;
 
         .btns-wrapper {
           display: flex;

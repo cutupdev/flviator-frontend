@@ -261,40 +261,40 @@ code {
   width: 100%;
 }
 
+.howto {
+  text-shadow: none;
+  color: #5f3816;
+  background-color: #e69308;
+  border: solid 1px #ffbd71;
+  cursor: pointer;
+  border-radius: 20px;
+  padding: 0 5px;
+  font-size: 0.875rem;
+  display: inline-block;
+  font-weight: 400;
+
+  .help-logo {
+    width: 16px;
+    height: 16px;
+    background: url("assets/images/help.svg");
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .help-msg {
+    display: inline-block;
+    padding-left: 5px;
+    vertical-align: middle;
+
+    @media (max-width: 900px) {
+      display: none;
+    }
+  }
+}
+
 .second-block {
   display: flex;
   height: 26px;
-
-  .howto {
-    text-shadow: none;
-    color: #5f3816;
-    background-color: #e69308;
-    border: solid 1px #ffbd71;
-    cursor: pointer;
-    border-radius: 20px;
-    padding: 0 5px;
-    font-size: 0.875rem;
-    display: inline-block;
-    font-weight: 400;
-
-    .help-logo {
-      width: 16px;
-      height: 16px;
-      background: url("assets/images/help.svg");
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    .help-msg {
-      display: inline-block;
-      padding-left: 5px;
-      vertical-align: middle;
-
-      @media (max-width: 900px) {
-        display: none;
-      }
-    }
-  }
 
   .d-flex {
     display: flex;
@@ -1078,7 +1078,7 @@ audio {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.51);
     -webkit-transition: 0.4s;
     transition: 0.4s;
   }
@@ -1088,8 +1088,8 @@ audio {
     content: "";
     height: 14px;
     width: 14px;
-    left: 4px;
-    bottom: 2px;
+    left: 3px;
+    bottom: 1px;
     background-color: white;
     -webkit-transition: 0.4s;
     transition: 0.4s;
@@ -1210,6 +1210,27 @@ audio {
 }
 
 .devider {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.modal-title {
+  text-transform: uppercase !important;
+}
+
+.main-desc {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.px-2 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.badge.badge-success {
+  border-radius: 11px;
+  background-color: #123405;
+  border: 1px solid #427f00;
+  font-size: 14px;
 }

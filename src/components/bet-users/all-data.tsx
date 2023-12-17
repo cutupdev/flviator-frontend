@@ -66,9 +66,10 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
                   />
                 )}
                 <div className="username">
-                  {user.name.lenth <= 7
+                  {/* {user.name.lenth <= 7
                     ? user.name
-                    : user.name?.slice(0, 1) + "***" + user.name?.slice(-1)}
+                    : user.name?.slice(0, 1) + "***" + user.name?.slice(-1)} */}
+                  {user.name?.slice(0, 1) + "***" + user.name?.slice(-1)}
                 </div>
               </div>
               <div className="bet">{Number(user.betAmount).toFixed(2)}</div>
