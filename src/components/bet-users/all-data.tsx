@@ -56,8 +56,8 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
               key={key}
             >
               <div className="user">
-                {user.img ? (
-                  <img className="avatar" src={user.img} alt="avatar" />
+                {user.avatar ? (
+                  <img className="avatar" src={user.avatar} alt="avatar" />
                 ) : (
                   <img
                     className="avatar"
