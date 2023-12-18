@@ -46,7 +46,15 @@ const MyBets = () => {
                 <div className="bet">{Number(user.betAmount).toFixed(2)}</div>
                 {user.cashouted && (
                   <div className="multiplier-block">
-                    <div className="bubble">
+                    <div
+                      className={`bubble opacity-${100 - 2 * key} ${
+                        Number(user.cashoutAt) < 2
+                          ? "blue"
+                          : Number(user.cashoutAt) < 10
+                          ? "purple"
+                          : "big"
+                      }`}
+                    >
                       {Number(user.cashoutAt).toFixed(2)}
                     </div>
                   </div>

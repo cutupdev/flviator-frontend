@@ -75,7 +75,17 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
               <div className="bet">{Number(user.betAmount).toFixed(2)}</div>
               {user.cashouted && (
                 <div className="multiplier-block">
-                  <div className="bubble">{Number(user.target).toFixed(2)}</div>
+                  <div
+                    className={`bubble opacity-${100 - 2 * key} ${
+                      Number(user.target) < 2
+                        ? "blue"
+                        : Number(user.target) < 10
+                        ? "purple"
+                        : "big"
+                    }`}
+                  >
+                    {Number(user.target).toFixed(2)}
+                  </div>
                 </div>
               )}
               <div className="cash-out">

@@ -718,8 +718,20 @@ code {
         .bubble {
           padding: 2px 11px;
           border-radius: 11px;
-          color: rgb(52, 180, 255);
+          // color: rgb(52, 180, 255);
           background-color: #00000080;
+        }
+
+        .blue {
+          color: rgb(52, 180, 255);
+        }
+
+        .purple {
+          color: rgb(145, 62, 248);
+        }
+
+        .big {
+          color: rgb(192, 23, 180);
         }
 
         .cash-out {

@@ -249,8 +249,8 @@ export const Provider = ({ children }: any) => {
   };
 
   const [betLimit, setBetLimit] = React.useState<GameBetLimit>({
-    maxBet: 1000,
-    minBet: 1,
+    minBet: 10,
+    maxBet: 100000,
   });
 
   const handleGetSeed = () => {
@@ -317,7 +317,7 @@ export const Provider = ({ children }: any) => {
       socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
         setBettedUsers(bettedUsers);
       });
-
+  
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
         var { user } = userInfo;
         var attrs = { ...userBetState };
@@ -327,23 +327,23 @@ export const Provider = ({ children }: any) => {
         attrs.sbetted = user.s.betted;
         setUserBetState(attrs);
       });
-
+  
       socket.on("history", (history: any) => {
         setHistory(history);
       });
-
+  
       socket.on("gameState", (gameState: GameStatusType) => {
         setGameState(gameState);
       });
-
+  
       socket.on("serverSeed", (seed: string) => {
         handleServerSeed(seed);
       });
-
+  
       socket.on("previousHand", (previousHand: UserType[]) => {
         setPreviousHand(previousHand);
       });
-
+  
       socket.on("finishGame", (user: UserType) => {
         console.log("user", user);
         let attrs = newState;
@@ -424,15 +424,15 @@ export const Provider = ({ children }: any) => {
         update(attrs);
         setUserBetState(betStatus);
       });
-
+  
       socket.on("getBetLimits", (betAmounts: { max: number; min: number }) => {
         setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min });
       });
-
+  
       socket.on("recharge", () => {
         setRechargeState(true);
       });
-
+  
       socket.on("error", (data) => {
         setUserBetState({
           ...userBetState,
@@ -440,7 +440,7 @@ export const Provider = ({ children }: any) => {
         });
         toast.error(data.message);
       });
-
+  
       socket.on("success", (data) => {
         toast.success(data);
       });
