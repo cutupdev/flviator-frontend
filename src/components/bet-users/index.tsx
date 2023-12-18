@@ -38,7 +38,7 @@ export default function BetsUsers() {
               {header.map((item, index) => (
                 <button
                   key={index}
-                  className={`tab ${headerType === item.type ? "click" : ""}`}
+                  className={`tab ${headerType === item.type ? "click active" : "inactive"}`}
                   onClick={() => {
                     setHeaderType(item.type);
                     item.onClick && getData(item.onClick);
