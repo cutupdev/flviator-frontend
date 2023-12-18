@@ -55,7 +55,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   const minus = (type: FieldNameType) => {
     let value = state;
     if (type === "betAmount") {
-      if (betAmount - 0.1 < minBet) {
+      if (betAmount - 1 < minBet) {
         value.userInfo[index][type] = minBet;
       } else {
         value.userInfo[index][type] = Number(
@@ -63,11 +63,11 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
         );
       }
     } else {
-      if (value[`${index + type}`] - 0.1 < 0.1) {
-        value[`${index + type}`] = 0.1;
+      if (value[`${index + type}`] - 1 < 1) {
+        value[`${index + type}`] = 1;
       } else {
         value[`${index + type}`] = Number(
-          (Number(value[`${index + type}`]) - 0.1).toFixed(2)
+          (Number(value[`${index + type}`]) - 1).toFixed(2)
         );
       }
     }
@@ -99,6 +99,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
         );
       }
     }
+    console.log('value', value)
     update(value);
   };
 
@@ -241,13 +242,13 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
             {betted || betState ? (
               <>
                 <button
-                  className={gameType === "manual" ? "active" : ""}
+                  className={gameType === "manual" ? "active" : "inactive"}
                   onClick={() => changeBetType("manual")}
                 >
                   Bet
                 </button>
                 <button
-                  className={gameType === "auto" ? "active" : ""}
+                  className={gameType === "auto" ? "active" : "inactive"}
                   onClick={() => changeBetType("auto")}
                 >
                   Auto
@@ -256,13 +257,13 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
             ) : (
               <>
                 <button
-                  className={gameType === "manual" ? "active" : ""}
+                  className={gameType === "manual" ? "active" : "inactive"}
                   onClick={() => changeBetType("manual")}
                 >
                   Bet
                 </button>
                 <button
-                  className={gameType === "auto" ? "active" : ""}
+                  className={gameType === "auto" ? "active" : "inactive"}
                   onClick={() => changeBetType("auto")}
                 >
                   Auto
@@ -289,13 +290,13 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   {betState || betted ? (
                     <input
                       type="number"
-                      value={Number(myBetAmount)}
+                      value={parseFloat(Number(myBetAmount).toFixed(2))}
                       readOnly
                     ></input>
                   ) : (
                     <input
                       type="number"
-                      value={Number(myBetAmount)}
+                      value={parseFloat(Number(myBetAmount).toFixed(2))}
                       onChange={(e) => {
                         Number(e.target.value) > maxBet
                           ? update({
@@ -431,8 +432,8 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 <span>
                   <label>BET</label>
                   <label className="amount">
-                    <span>{Number(betAmount).toFixed(2)}</span>
-                    <span className="currency">{` ${
+                    <span>{Number(betAmount).toFixed(2)}&nbsp;</span>
+                    <span className="currency">{`${
                       state?.userInfo?.currency
                         ? state?.userInfo?.currency
                         : "INR"
