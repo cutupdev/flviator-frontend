@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 // import { useCrashContext } from "../context";
 import { toast } from "react-toastify";
+import { ImCross } from "react-icons/im";
 import Context, { callCashOut } from "../../context";
 
 interface BetProps {
@@ -535,7 +536,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                           />
                         )}
                       </div>
-                      <span className="text">x</span>
+                      <span className="text">×</span>
                     </div>
                   </div>
                 </div>
@@ -552,7 +553,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
               <div className="modal-header">
                 <span>Auto play options</span>
                 <button className="close" onClick={() => setShowModal(false)}>
-                  <span>x</span>
+                  <span>×</span>
                 </button>
               </div>
               <div className="modal-body">
