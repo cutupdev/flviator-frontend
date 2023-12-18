@@ -200,22 +200,18 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
       toast.error("Please, set number of rounds");
     }
   };
+
   useEffect(() => {
-    if (betted) {
-      if (autoCashoutState) {
-        if (cashOut < currentSecondNum) {
-          updateUserBetState({ [`${index}betted`]: false });
-          callCashOut(cashOut, index);
-        }
-      }
+    if (betted && autoCashoutState && cashOut < currentSecondNum) {
+      updateUserBetState({ [`${index}betted`]: false });
+      callCashOut(cashOut, index);
     }
     // eslint-disable-next-line
   }, [
     currentSecondNum,
     fbetted,
     sbetted,
-    state.fautoCashoutState,
-    state.sautoCashoutState,
+    autoCashoutState,
     state.userInfo.f.target,
     state.userInfo.s.target,
   ]);
@@ -250,12 +246,12 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 >
                   Bet
                 </button>
-                {/* <button
+                <button
                   className={gameType === "auto" ? "active" : ""}
                   onClick={() => changeBetType("auto")}
                 >
                   Auto
-                </button> */}
+                </button>
               </>
             ) : (
               <>
@@ -265,12 +261,12 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 >
                   Bet
                 </button>
-                {/* <button
+                <button
                   className={gameType === "auto" ? "active" : ""}
                   onClick={() => changeBetType("auto")}
                 >
                   Auto
-                </button> */}
+                </button>
               </>
             )}
           </div>
