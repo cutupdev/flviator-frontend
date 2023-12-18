@@ -9,7 +9,7 @@ interface BetProps {
   setAdd: any;
 }
 type FieldNameType = "betAmount" | "decrease" | "increase" | "singleAmount";
-type BetOptType = "20" | "50" | "100" | "1000";
+type BetOptType = "20.00" | "50.00" | "100.00" | "1000.00";
 type GameType = "manual" | "auto";
 
 const Bet = ({ index, add, setAdd }: BetProps) => {
@@ -30,7 +30,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   } = context;
   const [cashOut, setCashOut] = React.useState(2);
 
-  const auto = index === "f" ? state.userInfo.f.auto : state.userInfo.s.auto;
+  // const auto = index === "f" ? state.userInfo.f.auto : state.userInfo.s.auto;
   const betted = index === "f" ? fbetted : sbetted;
   const deState = index === "f" ? state.fdeState : state.sdeState;
   const inState = index === "f" ? state.finState : state.sinState;
@@ -47,7 +47,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
     index === "f" ? state.fsingleAmount : state.ssingleAmount;
 
   const [gameType, setGameType] = React.useState<GameType>("manual");
-  const [betOpt, setBetOpt] = React.useState<BetOptType>("20");
+  const [betOpt, setBetOpt] = React.useState<BetOptType>("20.00");
   const [showModal, setShowModal] = React.useState(false);
   const [myBetAmount, setMyBetAmount] = React.useState(20);
   // const { index } = props;
@@ -289,13 +289,13 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   {betState || betted ? (
                     <input
                       type="number"
-                      value={Number(myBetAmount)}
+                      value={Number(myBetAmount).toFixed(2)}
                       readOnly
                     ></input>
                   ) : (
                     <input
                       type="number"
-                      value={Number(myBetAmount)}
+                      value={Number(myBetAmount).toFixed(2)}
                       onChange={(e) => {
                         Number(e.target.value) > maxBet
                           ? update({
@@ -354,25 +354,25 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
             ) : (
               <div className="bet-opt-list">
                 <button
-                  onClick={() => manualPlus(20, "20")}
+                  onClick={() => manualPlus(20, "20.00")}
                   className="bet-opt"
                 >
                   <span>20</span>
                 </button>
                 <button
-                  onClick={() => manualPlus(50, "50")}
+                  onClick={() => manualPlus(50, "50.00")}
                   className="bet-opt"
                 >
                   <span>50</span>
                 </button>
                 <button
-                  onClick={() => manualPlus(100, "100")}
+                  onClick={() => manualPlus(100, "100.00")}
                   className="bet-opt"
                 >
                   <span>100</span>
                 </button>
                 <button
-                  onClick={() => manualPlus(1000, "1000")}
+                  onClick={() => manualPlus(1000, "1000.00")}
                   className="bet-opt"
                 >
                   <span>1000</span>
