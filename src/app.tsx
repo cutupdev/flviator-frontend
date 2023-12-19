@@ -48,15 +48,20 @@ function App() {
       state.userInfo.soundStatus === true
     ) {
       if (takeOffAudioRef.current) takeOffAudioRef.current.play();
+    }
+    // eslint-disable-next-line
+  }, [takeOffAudioRef, GameState, state.userInfo.soundStatus]);
+
+  useEffect(() => {
+    if (
+      GameState === "GAMEEND" &&
+      unityState === true &&
+      state.userInfo.soundStatus === true
+    ) {
       if (flewAwayAudioRef.current) flewAwayAudioRef.current.play();
     }
     // eslint-disable-next-line
-  }, [
-    takeOffAudioRef,
-    flewAwayAudioRef,
-    GameState,
-    state.userInfo.soundStatus,
-  ]);
+  }, [flewAwayAudioRef.current, GameState, state.userInfo.soundStatus]);
 
   return (
     <div className="main-container">
