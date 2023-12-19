@@ -94,6 +94,7 @@ const Menu = ({ setHowto }) => {
   const handleToggleMainAudio = useCallback(
     async (checked) => {
       let mainEle: any = document.getElementById("mainAudio");
+      mainEle.volume = 0.5;
       if (checked === true) {
         mainEle.muted = false;
         mainEle.play();
@@ -109,13 +110,13 @@ const Menu = ({ setHowto }) => {
         }/update-info`,
         {
           userId: state.userInfo.userId,
-          updateData: { soundStatus: checked },
+          updateData: { musicStatus: checked },
         }
       );
       update({
         userInfo: {
           ...state.userInfo,
-          soundStatus: checked,
+          musicStatus: checked,
         },
       });
     },
@@ -155,13 +156,13 @@ const Menu = ({ setHowto }) => {
         }/update-info`,
         {
           userId: state.userInfo.userId,
-          updateData: { musicStatus: checked },
+          updateData: { soundStatus: checked },
         }
       );
       update({
         userInfo: {
           ...state.userInfo,
-          musicStatus: checked,
+          soundStatus: checked,
         },
       });
     },
