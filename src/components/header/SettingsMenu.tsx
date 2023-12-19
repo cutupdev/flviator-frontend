@@ -91,7 +91,7 @@ const Menu = ({ setHowto }) => {
     }
   };
 
-  const handleToggleMainAudio = useCallback(
+  const handleToggleMusic = useCallback(
     async (checked) => {
       let mainEle: any = document.getElementById("mainAudio");
       mainEle.volume = 0.5;
@@ -123,7 +123,7 @@ const Menu = ({ setHowto }) => {
     [state]
   );
 
-  const handleToggleMusicAudio = useCallback(
+  const handleToggleSound = useCallback(
     async (checked) => {
       let takeOffAudioEle: any = document.getElementById("takeOffAudio");
       let flewAwayAudioEle: any = document.getElementById("flewAwayAudio");
@@ -191,8 +191,8 @@ const Menu = ({ setHowto }) => {
           localStorage.setItem("aviator-audio", "true");
         }
       } catch (error) {
-        handleToggleMainAudio(true);
-        handleToggleMusicAudio(true);
+        handleToggleMusic(true);
+        handleToggleSound(true);
       }
     });
   }, []);
@@ -265,7 +265,7 @@ const Menu = ({ setHowto }) => {
                         type="checkbox"
                         checked={state.userInfo.soundStatus || false}
                         onChange={(e) =>
-                          handleToggleMainAudio(e.target.checked)
+                          handleToggleSound(e.target.checked)
                         }
                       />
                       <span className="aviator-slider round"></span>
@@ -284,7 +284,7 @@ const Menu = ({ setHowto }) => {
                         type="checkbox"
                         checked={state.userInfo.musicStatus || false}
                         onChange={(e) =>
-                          handleToggleMusicAudio(e.target.checked)
+                          handleToggleMusic(e.target.checked)
                         }
                       />
                       <span className="aviator-slider round"></span>
