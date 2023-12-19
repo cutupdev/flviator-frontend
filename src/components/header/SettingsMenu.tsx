@@ -95,25 +95,8 @@ const Menu = ({ setHowto }) => {
     async (checked) => {
       let takeOffAudioEle: any = document.getElementById("takeOffAudio");
       let flewAwayAudioEle: any = document.getElementById("flewAwayAudio");
-      if (checked === true) {
-        takeOffAudioEle.muted = true;
-        takeOffAudioEle.playbackRate = 10;
-        takeOffAudioEle.play();
-        setTimeout(() => {
-          takeOffAudioEle.playbackRate = 1;
-          takeOffAudioEle.muted = false;
-        }, 200);
-        flewAwayAudioEle.muted = true;
-        flewAwayAudioEle.playbackRate = 10;
-        flewAwayAudioEle.play();
-        setTimeout(() => {
-          flewAwayAudioEle.playbackRate = 1;
-          flewAwayAudioEle.muted = false;
-        }, 200);
-      } else {
-        takeOffAudioEle.muted = true;
+      if (checked === false) {
         takeOffAudioEle.pause();
-        flewAwayAudioEle.muted = true;
         flewAwayAudioEle.pause();
       }
       await axios.post(
@@ -141,12 +124,9 @@ const Menu = ({ setHowto }) => {
     async (checked) => {
       let mainEle: any = document.getElementById("mainAudio");
       mainEle.volume = 0.2;
-      console.log("Main music Sound");
       if (checked === true) {
-        mainEle.muted = false;
         mainEle.play();
       } else {
-        mainEle.muted = true;
         mainEle.pause();
       }
       await axios.post(
