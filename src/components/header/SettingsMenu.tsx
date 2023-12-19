@@ -93,8 +93,9 @@ const Menu = ({ setHowto }) => {
 
   const handleToggleMainAudio = useCallback(
     async (e) => {
+      let checked = e.target.checked;
       let mainEle: any = document.getElementById("mainAudio");
-      if (e.target.checked === true) {
+      if (checked === true) {
         mainEle.muted = false;
         mainEle.play();
       } else {
@@ -110,7 +111,7 @@ const Menu = ({ setHowto }) => {
         }/update-info`,
         {
           userId: state.userInfo.userId,
-          updateData: { soundStatus: e.target.checked },
+          updateData: { soundStatus: checked },
         }
       );
       console.log("response?.data", response?.data);
@@ -119,21 +120,18 @@ const Menu = ({ setHowto }) => {
       update({
         userInfo: {
           ...state.userInfo,
-          soundStatus: e.target.checked,
+          soundStatus: checked,
         },
       });
     },
     [state]
   );
 
-  useEffect(() => {
-    console.log('state', state)
-  }, [state])
-
   const handleToggleMusicAudio = async (e) => {
+    let checked = e.target.checked;
     let takeOffAudioEle: any = document.getElementById("takeOffAudio");
     let flewAwayAudioEle: any = document.getElementById("flewAwayAudio");
-    if (e.target.checked === true) {
+    if (checked === true) {
       takeOffAudioEle.muted = true;
       takeOffAudioEle.playbackRate = 10;
       takeOffAudioEle.play();
@@ -163,7 +161,7 @@ const Menu = ({ setHowto }) => {
       }/update-info`,
       {
         userId: state.userInfo.userId,
-        updateData: { musicStatus: e.target.checked },
+        updateData: { musicStatus: checked },
       }
     );
     console.log("response?.data", response?.data);
@@ -172,7 +170,7 @@ const Menu = ({ setHowto }) => {
     update({
       userInfo: {
         ...state.userInfo,
-        musicStatus: e.target.checked,
+        musicStatus: checked,
       },
     });
   };
