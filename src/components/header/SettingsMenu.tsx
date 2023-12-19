@@ -91,39 +91,6 @@ const Menu = ({ setHowto }) => {
     }
   };
 
-  const handleToggleMusic = useCallback(
-    async (checked) => {
-      let mainEle: any = document.getElementById("mainAudio");
-      mainEle.volume = 0.2;
-      console.log('Main music Sound')
-      if (checked === true) {
-        mainEle.muted = false;
-        mainEle.play();
-      } else {
-        mainEle.muted = true;
-        mainEle.pause();
-      }
-      await axios.post(
-        `${
-          process.env.REACT_APP_DEVELOPMENT === "true"
-            ? config.development_api
-            : config.production_api
-        }/update-info`,
-        {
-          userId: state.userInfo.userId,
-          updateData: { musicStatus: checked },
-        }
-      );
-      update({
-        userInfo: {
-          ...state.userInfo,
-          musicStatus: checked,
-        },
-      });
-    },
-    [state]
-  );
-
   const handleToggleSound = useCallback(
     async (checked) => {
       let takeOffAudioEle: any = document.getElementById("takeOffAudio");
@@ -170,6 +137,39 @@ const Menu = ({ setHowto }) => {
     [state]
   );
 
+  const handleToggleMusic = useCallback(
+    async (checked) => {
+      let mainEle: any = document.getElementById("mainAudio");
+      mainEle.volume = 0.2;
+      console.log("Main music Sound");
+      if (checked === true) {
+        mainEle.muted = false;
+        mainEle.play();
+      } else {
+        mainEle.muted = true;
+        mainEle.pause();
+      }
+      await axios.post(
+        `${
+          process.env.REACT_APP_DEVELOPMENT === "true"
+            ? config.development_api
+            : config.production_api
+        }/update-info`,
+        {
+          userId: state.userInfo.userId,
+          updateData: { musicStatus: checked },
+        }
+      );
+      update({
+        userInfo: {
+          ...state.userInfo,
+          musicStatus: checked,
+        },
+      });
+    },
+    [state]
+  );
+
   const handleOpenSettings = (type: string) => {
     if (type === "fair") {
       handleGetSeed();
@@ -186,14 +186,18 @@ const Menu = ({ setHowto }) => {
   useEffect(() => {
     window?.addEventListener("click", () => {
       try {
-        if (localStorage.getItem("aviator-audio") !== "true") {
+        if (
+          localStorage.getItem("aviator-audio") !== "true" &&
+          state.userInfo.musicStatus === true
+        ) {
           let mainEle: any = document.getElementById("mainAudio");
+          mainEle.volume = 0.2;
           mainEle.play();
           localStorage.setItem("aviator-audio", "true");
         }
       } catch (error) {
-        handleToggleMusic(true);
         handleToggleSound(true);
+        handleToggleMusic(true);
       }
     });
   }, []);
@@ -265,9 +269,7 @@ const Menu = ({ setHowto }) => {
                         className="aviator-input"
                         type="checkbox"
                         checked={state.userInfo.soundStatus || false}
-                        onChange={(e) =>
-                          handleToggleSound(e.target.checked)
-                        }
+                        onChange={(e) => handleToggleSound(e.target.checked)}
                       />
                       <span className="aviator-slider round"></span>
                     </label>
@@ -284,9 +286,7 @@ const Menu = ({ setHowto }) => {
                         className="aviator-input"
                         type="checkbox"
                         checked={state.userInfo.musicStatus || false}
-                        onChange={(e) =>
-                          handleToggleMusic(e.target.checked)
-                        }
+                        onChange={(e) => handleToggleMusic(e.target.checked)}
                       />
                       <span className="aviator-slider round"></span>
                     </label>

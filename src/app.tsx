@@ -45,23 +45,18 @@ function App() {
     if (
       GameState === "PLAYING" &&
       unityState === true &&
-      audioStatus.soundStatus === true
+      state.userInfo.soundStatus === true
     ) {
       if (takeOffAudioRef.current) takeOffAudioRef.current.play();
+      if (flewAwayAudioRef.current) flewAwayAudioRef.current.play();
     }
     // eslint-disable-next-line
-  }, [takeOffAudioRef, GameState]);
-
-  useEffect(() => {
-    if (
-      GameState === "GAMEEND" &&
-      unityState === true &&
-      audioStatus.soundStatus === true
-    ) {
-      if (flewAwayAudioRef.current) flewAwayAudioRef.current.click();
-    }
-    // eslint-disable-next-line
-  }, [flewAwayAudioRef.current, GameState]);
+  }, [
+    takeOffAudioRef,
+    flewAwayAudioRef,
+    GameState,
+    state.userInfo.soundStatus,
+  ]);
 
   return (
     <div className="main-container">
