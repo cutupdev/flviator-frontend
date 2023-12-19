@@ -94,7 +94,8 @@ const Menu = ({ setHowto }) => {
   const handleToggleMusic = useCallback(
     async (checked) => {
       let mainEle: any = document.getElementById("mainAudio");
-      mainEle.volume = 0.5;
+      mainEle.volume = 0.2;
+      console.log('Main music Sound')
       if (checked === true) {
         mainEle.muted = false;
         mainEle.play();
