@@ -6,7 +6,7 @@ import "./header.scss";
 import logo from "../../assets/images/logo.svg";
 import SettingsMenu from "./SettingsMenu";
 
-export default function Header({ audioStatus, setAudioStatus }) {
+export default function Header() {
   const { state } = React.useContext(Context);
 
   const [howto, setHowto] = React.useState<"howto" | "short" | "more" | "">(
@@ -41,11 +41,7 @@ export default function Header({ audioStatus, setAudioStatus }) {
               </span>
             </div>
             <div>
-              <SettingsMenu
-                audioStatus={audioStatus}
-                setAudioStatus={setAudioStatus}
-                setHowto={setHowto}
-              />
+              <SettingsMenu setHowto={setHowto} />
             </div>
           </div>
         </div>

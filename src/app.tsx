@@ -17,6 +17,7 @@ import CustomToastContainer from "./components/Toast";
 
 function App() {
   const {
+    state,
     platformLoading,
     errorBackend,
     unityLoading,
@@ -28,31 +29,17 @@ function App() {
     "return_url"
   );
   const [audioStatus, setAudioStatus] = useState({
-    soundStatus: false,
-    musicStatus: false,
+    soundStatus: state.userInfo.soundStatus || false,
+    musicStatus: state.userInfo.musicStatus || false,
   });
 
-  const takeOffBtnRef = useRef<HTMLButtonElement>(null);
-  const flewAwayBtnRef = useRef<HTMLButtonElement>(null);
-
-  const mainAudioRef = useRef<HTMLAudioElement>(null);
-  const takeOffAudioRef = useRef<HTMLAudioElement>(null);
-  const flewAwayAudioRef = useRef<HTMLAudioElement>(null);
-
-  const playAudio = async (type: string) => {
-    var audioRef: any;
-    if (type === "main") audioRef = mainAudioRef;
-    if (type === "take_off") audioRef = takeOffAudioRef;
-    if (type === "flew_away") audioRef = flewAwayAudioRef;
-
-    if (audioRef.current) {
-      try {
-        await audioRef.current.play();
-      } catch (error) {
-        console.log("error", error);
-      }
-    }
-  };
+  const mainAudioRef = useRef<HTMLAudioElement>(new Audio(MainAudio) || null);
+  const takeOffAudioRef = useRef<HTMLAudioElement>(
+    new Audio(FlewAwayAudio) || null
+  );
+  const flewAwayAudioRef = useRef<HTMLAudioElement>(
+    new Audio(TakeOffAudio) || null
+  );
 
   useEffect(() => {
     if (
@@ -61,7 +48,7 @@ function App() {
       takeOffAudioRef.current &&
       audioStatus.musicStatus === true
     ) {
-      if (takeOffBtnRef.current) takeOffBtnRef.current.click();
+      if (takeOffAudioRef.current) takeOffAudioRef.current.play();
     }
     // eslint-disable-next-line
   }, [takeOffAudioRef, GameState]);
@@ -73,34 +60,41 @@ function App() {
       flewAwayAudioRef.current &&
       audioStatus.musicStatus === true
     ) {
-      if (flewAwayBtnRef.current) flewAwayBtnRef.current.click();
+      if (flewAwayAudioRef.current) flewAwayAudioRef.current.click();
     }
     // eslint-disable-next-line
   }, [flewAwayAudioRef.current, GameState]);
+
+  // useEffect(() => {
+  //   console.log('state.userInfo', state.userInfo)
+  //   if (
+  //     state.userInfo.soundStatus !== audioStatus.soundStatus ||
+  //     state.userInfo.musicStatus !== audioStatus.musicStatus
+  //   ) {
+  //     setAudioStatus({
+  //       soundStatus: state.userInfo.soundStatus || false,
+  //       musicStatus: state.userInfo.musicStatus || false,
+  //     });
+  //   }
+  // }, [state.userInfo]);
 
   return (
     <div className="main-container">
       <div style={{ display: "none" }}>
         {/* Main Audio Section */}
-        <audio id="mainAudio" ref={mainAudioRef} autoPlay loop>
+        <audio id="mainAudio" ref={mainAudioRef} loop>
           <source src={MainAudio} type="audio/wav" />
           Your browser does not support the audio element.
         </audio>
 
         {/* Take Off Audio Section */}
-        <button ref={takeOffBtnRef} onClick={() => playAudio("take_off")}>
-          play take off
-        </button>
-        <audio id="takeOffAudio" ref={takeOffAudioRef} autoPlay>
+        <audio id="takeOffAudio" ref={takeOffAudioRef}>
           <source src={TakeOffAudio} type="audio/mp3" />
           Your browser does not support the audio element.
         </audio>
 
         {/* Flew Away Audio Section */}
-        <button ref={flewAwayBtnRef} onClick={() => playAudio("flew_away")}>
-          play flew away
-        </button>
-        <audio id="flewAwayAudio" ref={flewAwayAudioRef} autoPlay>
+        <audio id="flewAwayAudio" ref={flewAwayAudioRef}>
           <source src={FlewAwayAudio} type="audio/mp3" />
           Your browser does not support the audio element.
         </audio>
@@ -135,7 +129,7 @@ function App() {
           </div>
         </div>
       )}
-      <Header audioStatus={audioStatus} setAudioStatus={setAudioStatus} />
+      <Header />
       <div className="game-container">
         <BetsUsers />
         <Main />

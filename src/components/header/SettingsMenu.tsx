@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PiListBold } from "react-icons/pi";
 import { GiServerRack } from "react-icons/gi";
 
@@ -16,6 +16,8 @@ import { ImCopy } from "react-icons/im";
 import { RxAvatar } from "react-icons/rx";
 
 import Context from "../../context";
+import axios from "axios";
+import config from "../../config.json";
 
 const settingItems: { label: string; handleType: string }[] = [
   {
@@ -36,8 +38,8 @@ const settingItems: { label: string; handleType: string }[] = [
   },
 ];
 
-const Menu = ({ audioStatus, setAudioStatus, setHowto }) => {
-  const { state, handleGetSeed } = React.useContext(Context);
+const Menu = ({ setHowto }) => {
+  const { state, update, handleGetSeed } = React.useContext(Context);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("");
@@ -89,20 +91,44 @@ const Menu = ({ audioStatus, setAudioStatus, setHowto }) => {
     }
   };
 
-  const handleToggleMainAudio = async (e) => {
-    let mainEle: any = document.getElementById("mainAudio");
-    if (e.target.checked === true) {
-      mainEle.muted = false;
-      mainEle.play();
-    } else {
-      mainEle.muted = true;
-      mainEle.pause();
-    }
-    setAudioStatus({
-      ...audioStatus,
-      soundStatus: e.target.checked,
-    });
-  };
+  const handleToggleMainAudio = useCallback(
+    async (e) => {
+      let mainEle: any = document.getElementById("mainAudio");
+      if (e.target.checked === true) {
+        mainEle.muted = false;
+        mainEle.play();
+      } else {
+        mainEle.muted = true;
+        mainEle.pause();
+      }
+      console.log("state.userInfo", state.userInfo);
+      let response = await axios.post(
+        `${
+          process.env.REACT_APP_DEVELOPMENT === "true"
+            ? config.development_api
+            : config.production_api
+        }/update-info`,
+        {
+          userId: state.userInfo.userId,
+          updateData: { soundStatus: e.target.checked },
+        }
+      );
+      console.log("response?.data", response?.data);
+      // if (response?.data?.status) {
+      // }
+      update({
+        userInfo: {
+          ...state.userInfo,
+          soundStatus: e.target.checked,
+        },
+      });
+    },
+    [state]
+  );
+
+  useEffect(() => {
+    console.log('state', state)
+  }, [state])
 
   const handleToggleMusicAudio = async (e) => {
     let takeOffAudioEle: any = document.getElementById("takeOffAudio");
@@ -128,9 +154,26 @@ const Menu = ({ audioStatus, setAudioStatus, setHowto }) => {
       flewAwayAudioEle.muted = true;
       flewAwayAudioEle.pause();
     }
-    setAudioStatus({
-      ...audioStatus,
-      musicStatus: e.target.checked,
+    console.log("state.userInfo", state.userInfo);
+    let response = await axios.post(
+      `${
+        process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
+      }/update-info`,
+      {
+        userId: state.userInfo.userId,
+        updateData: { musicStatus: e.target.checked },
+      }
+    );
+    console.log("response?.data", response?.data);
+    // if (response?.data?.status) {
+    // }
+    update({
+      userInfo: {
+        ...state.userInfo,
+        musicStatus: e.target.checked,
+      },
     });
   };
 
@@ -213,6 +256,7 @@ const Menu = ({ audioStatus, setAudioStatus, setHowto }) => {
                       <input
                         className="aviator-input"
                         type="checkbox"
+                        checked={state.userInfo.soundStatus || false}
                         onChange={(e) => handleToggleMainAudio(e)}
                       />
                       <span className="aviator-slider round"></span>
@@ -229,6 +273,7 @@ const Menu = ({ audioStatus, setAudioStatus, setHowto }) => {
                       <input
                         className="aviator-input"
                         type="checkbox"
+                        checked={state.userInfo.musicStatus || false}
                         onChange={(e) => handleToggleMusicAudio(e)}
                       />
                       <span className="aviator-slider round"></span>
@@ -252,7 +297,7 @@ const Menu = ({ audioStatus, setAudioStatus, setHowto }) => {
                   );
                 })}
               </div>
-              <a href="javascript:void(0)" className="logout">
+              <a href={config.production_wss} className="logout">
                 <span>
                   <HiOutlineHome size={16} />
                 </span>
