@@ -31,7 +31,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   } = context;
   const [cashOut, setCashOut] = React.useState(2);
 
-  // const auto = index === "f" ? state.userInfo.f.auto : state.userInfo.s.auto;
+  const auto = index === "f" ? state.userInfo.f.auto : state.userInfo.s.auto;
   const betted = index === "f" ? fbetted : sbetted;
   const deState = index === "f" ? state.fdeState : state.sdeState;
   const inState = index === "f" ? state.finState : state.sinState;
@@ -449,7 +449,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
           <>
             <div className="border-line"></div>
             <div className="second-row">
-              {/* <div className="auto-bet-wrapper">
+              <div className="auto-bet-wrapper">
                 <div className="auto-bet">
                   {auto ? (
                     <button
@@ -469,7 +469,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                     </button>
                   )}
                 </div>
-              </div> */}
+              </div>
               <div className="cashout-block">
                 <div className="cashout-switcher">
                   <label className="label">Auto Cash Out</label>
