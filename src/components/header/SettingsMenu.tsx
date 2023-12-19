@@ -101,8 +101,7 @@ const Menu = ({ setHowto }) => {
         mainEle.muted = true;
         mainEle.pause();
       }
-      console.log("state.userInfo", state.userInfo);
-      let response = await axios.post(
+      await axios.post(
         `${
           process.env.REACT_APP_DEVELOPMENT === "true"
             ? config.development_api
@@ -113,9 +112,6 @@ const Menu = ({ setHowto }) => {
           updateData: { soundStatus: checked },
         }
       );
-      console.log("response?.data", response?.data);
-      // if (response?.data?.status) {
-      // }
       update({
         userInfo: {
           ...state.userInfo,
@@ -151,8 +147,7 @@ const Menu = ({ setHowto }) => {
         flewAwayAudioEle.muted = true;
         flewAwayAudioEle.pause();
       }
-      console.log("state.userInfo", state.userInfo);
-      let response = await axios.post(
+      await axios.post(
         `${
           process.env.REACT_APP_DEVELOPMENT === "true"
             ? config.development_api
@@ -163,9 +158,6 @@ const Menu = ({ setHowto }) => {
           updateData: { musicStatus: checked },
         }
       );
-      console.log("response?.data", response?.data);
-      // if (response?.data?.status) {
-      // }
       update({
         userInfo: {
           ...state.userInfo,
