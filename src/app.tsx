@@ -45,7 +45,6 @@ function App() {
     if (
       GameState === "PLAYING" &&
       unityState === true &&
-      takeOffAudioRef.current &&
       audioStatus.soundStatus === true
     ) {
       if (takeOffAudioRef.current) takeOffAudioRef.current.play();
@@ -57,7 +56,6 @@ function App() {
     if (
       GameState === "GAMEEND" &&
       unityState === true &&
-      flewAwayAudioRef.current &&
       audioStatus.soundStatus === true
     ) {
       if (flewAwayAudioRef.current) flewAwayAudioRef.current.click();
