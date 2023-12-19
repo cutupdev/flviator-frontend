@@ -1,6 +1,7 @@
 import React from "react";
 import AllData from "./all-data";
 import MyBets from "./my-bets";
+import TopHistory from "./top-history";
 import Context, { BettedUserType, UserType } from "../../context";
 
 export default function BetsUsers() {
@@ -15,6 +16,7 @@ export default function BetsUsers() {
   const header = [
     { type: "all", value: "All Bets" },
     { type: "my", value: "My Bets", onClick: "myBet" },
+    { type: "top", value: "Top" },
   ];
 
   const getData = (e) => {
@@ -38,7 +40,9 @@ export default function BetsUsers() {
               {header.map((item, index) => (
                 <button
                   key={index}
-                  className={`tab ${headerType === item.type ? "click active" : "inactive"}`}
+                  className={`tab ${
+                    headerType === item.type ? "click active" : "inactive"
+                  }`}
                   onClick={() => {
                     setHeaderType(item.type);
                     item.onClick && getData(item.onClick);
@@ -53,8 +57,10 @@ export default function BetsUsers() {
         <div className="data-list">
           {headerType === "all" ? (
             <AllData setPre={setPre} pre={pre} allData={allData} />
-          ) : (
+          ) : headerType === "my" ? (
             <MyBets />
+          ) : (
+            <TopHistory />
           )}
         </div>
         <div className="bets-footer">
