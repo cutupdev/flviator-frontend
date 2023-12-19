@@ -6,7 +6,8 @@ const toaster = (
   type: string,
   msg: string,
   currency: string,
-  point: number
+  point: number,
+  cashoutAmount: number
 ) => {
   switch (type) {
     case "success":
@@ -22,7 +23,7 @@ const toaster = (
               <span className="currency ">, {currency}</span>
             </div>
             <div className="value ">
-              <span>{point}</span>
+              <span>{cashoutAmount}</span>
             </div>
           </div>
           <button

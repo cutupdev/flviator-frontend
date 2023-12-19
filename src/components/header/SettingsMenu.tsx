@@ -92,8 +92,7 @@ const Menu = ({ setHowto }) => {
   };
 
   const handleToggleMainAudio = useCallback(
-    async (e) => {
-      let checked = e.target.checked;
+    async (checked) => {
       let mainEle: any = document.getElementById("mainAudio");
       if (checked === true) {
         mainEle.muted = false;
@@ -127,53 +126,55 @@ const Menu = ({ setHowto }) => {
     [state]
   );
 
-  const handleToggleMusicAudio = async (e) => {
-    let checked = e.target.checked;
-    let takeOffAudioEle: any = document.getElementById("takeOffAudio");
-    let flewAwayAudioEle: any = document.getElementById("flewAwayAudio");
-    if (checked === true) {
-      takeOffAudioEle.muted = true;
-      takeOffAudioEle.playbackRate = 10;
-      takeOffAudioEle.play();
-      setTimeout(() => {
-        takeOffAudioEle.playbackRate = 1;
-        takeOffAudioEle.muted = false;
-      }, 200);
-      flewAwayAudioEle.muted = true;
-      flewAwayAudioEle.playbackRate = 10;
-      flewAwayAudioEle.play();
-      setTimeout(() => {
-        flewAwayAudioEle.playbackRate = 1;
-        flewAwayAudioEle.muted = false;
-      }, 200);
-    } else {
-      takeOffAudioEle.muted = true;
-      takeOffAudioEle.pause();
-      flewAwayAudioEle.muted = true;
-      flewAwayAudioEle.pause();
-    }
-    console.log("state.userInfo", state.userInfo);
-    let response = await axios.post(
-      `${
-        process.env.REACT_APP_DEVELOPMENT === "true"
-          ? config.development_api
-          : config.production_api
-      }/update-info`,
-      {
-        userId: state.userInfo.userId,
-        updateData: { musicStatus: checked },
+  const handleToggleMusicAudio = useCallback(
+    async (checked) => {
+      let takeOffAudioEle: any = document.getElementById("takeOffAudio");
+      let flewAwayAudioEle: any = document.getElementById("flewAwayAudio");
+      if (checked === true) {
+        takeOffAudioEle.muted = true;
+        takeOffAudioEle.playbackRate = 10;
+        takeOffAudioEle.play();
+        setTimeout(() => {
+          takeOffAudioEle.playbackRate = 1;
+          takeOffAudioEle.muted = false;
+        }, 200);
+        flewAwayAudioEle.muted = true;
+        flewAwayAudioEle.playbackRate = 10;
+        flewAwayAudioEle.play();
+        setTimeout(() => {
+          flewAwayAudioEle.playbackRate = 1;
+          flewAwayAudioEle.muted = false;
+        }, 200);
+      } else {
+        takeOffAudioEle.muted = true;
+        takeOffAudioEle.pause();
+        flewAwayAudioEle.muted = true;
+        flewAwayAudioEle.pause();
       }
-    );
-    console.log("response?.data", response?.data);
-    // if (response?.data?.status) {
-    // }
-    update({
-      userInfo: {
-        ...state.userInfo,
-        musicStatus: checked,
-      },
-    });
-  };
+      console.log("state.userInfo", state.userInfo);
+      let response = await axios.post(
+        `${
+          process.env.REACT_APP_DEVELOPMENT === "true"
+            ? config.development_api
+            : config.production_api
+        }/update-info`,
+        {
+          userId: state.userInfo.userId,
+          updateData: { musicStatus: checked },
+        }
+      );
+      console.log("response?.data", response?.data);
+      // if (response?.data?.status) {
+      // }
+      update({
+        userInfo: {
+          ...state.userInfo,
+          musicStatus: checked,
+        },
+      });
+    },
+    [state]
+  );
 
   const handleOpenSettings = (type: string) => {
     if (type === "fair") {
@@ -187,6 +188,21 @@ const Menu = ({ setHowto }) => {
       setShowDropDown(false);
     }
   };
+
+  useEffect(() => {
+    window?.addEventListener("click", () => {
+      try {
+        if (localStorage.getItem("aviator-audio") !== "true") {
+          let mainEle: any = document.getElementById("mainAudio");
+          mainEle.play();
+          localStorage.setItem("aviator-audio", "true");
+        }
+      } catch (error) {
+        handleToggleMainAudio(true);
+        handleToggleMusicAudio(true);
+      }
+    });
+  }, []);
 
   return (
     <div
@@ -255,7 +271,9 @@ const Menu = ({ setHowto }) => {
                         className="aviator-input"
                         type="checkbox"
                         checked={state.userInfo.soundStatus || false}
-                        onChange={(e) => handleToggleMainAudio(e)}
+                        onChange={(e) =>
+                          handleToggleMainAudio(e.target.checked)
+                        }
                       />
                       <span className="aviator-slider round"></span>
                     </label>
@@ -272,7 +290,9 @@ const Menu = ({ setHowto }) => {
                         className="aviator-input"
                         type="checkbox"
                         checked={state.userInfo.musicStatus || false}
-                        onChange={(e) => handleToggleMusicAudio(e)}
+                        onChange={(e) =>
+                          handleToggleMusicAudio(e.target.checked)
+                        }
                       />
                       <span className="aviator-slider round"></span>
                     </label>

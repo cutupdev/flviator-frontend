@@ -307,6 +307,7 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("myInfo", (user: UserType) => {
+        localStorage.setItem("aviator-audio", "");
         let attrs = state;
         attrs.userInfo.balance = user.balance;
         attrs.userInfo.userType = user.userType;
@@ -449,7 +450,7 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("success", (data) => {
-        toaster("success", data.msg, data.currency, data.point);
+        toaster("success", data.msg, data.currency, data.point, data.cashoutAmount);
       });
       return () => {
         socket.off("connect");
