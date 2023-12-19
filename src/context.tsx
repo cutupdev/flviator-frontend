@@ -4,9 +4,10 @@ import { UnityContext } from "react-unity-webgl";
 import { useLocation } from "react-router";
 import { io } from "socket.io-client";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 import config from "./config.json";
+import toaster from "./components/Toast";
 
 export interface BettedUserType {
   name: string;
@@ -317,7 +318,7 @@ export const Provider = ({ children }: any) => {
       socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
         setBettedUsers(bettedUsers);
       });
-  
+
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
         var { user } = userInfo;
         var attrs = { ...userBetState };
@@ -327,23 +328,23 @@ export const Provider = ({ children }: any) => {
         attrs.sbetted = user.s.betted;
         setUserBetState(attrs);
       });
-  
+
       socket.on("history", (history: any) => {
         setHistory(history);
       });
-  
+
       socket.on("gameState", (gameState: GameStatusType) => {
         setGameState(gameState);
       });
-  
+
       socket.on("serverSeed", (seed: string) => {
         handleServerSeed(seed);
       });
-  
+
       socket.on("previousHand", (previousHand: UserType[]) => {
         setPreviousHand(previousHand);
       });
-  
+
       socket.on("finishGame", (user: UserType) => {
         console.log("user", user);
         let attrs = newState;
@@ -424,15 +425,15 @@ export const Provider = ({ children }: any) => {
         update(attrs);
         setUserBetState(betStatus);
       });
-  
+
       socket.on("getBetLimits", (betAmounts: { max: number; min: number }) => {
         setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min });
       });
-  
+
       socket.on("recharge", () => {
         setRechargeState(true);
       });
-  
+
       socket.on("error", (data) => {
         setUserBetState({
           ...userBetState,
@@ -440,9 +441,9 @@ export const Provider = ({ children }: any) => {
         });
         toast.error(data.message);
       });
-  
+
       socket.on("success", (data) => {
-        toast.success(data);
+        toaster("success", data.msg, data.currency, data.point);
       });
       return () => {
         socket.off("connect");

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 // import { useCrashContext } from "../context";
-import { toast } from "react-toastify";
-import { ImCross } from "react-icons/im";
+import toast from "react-hot-toast";
 import Context, { callCashOut } from "../../context";
+import toaster from "../Toast";
 
 interface BetProps {
   index: "f" | "s";
