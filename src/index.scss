@@ -434,19 +434,21 @@ code {
   }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 1300px) {
   .game-container {
     flex-direction: column-reverse !important;
     padding-left: 5px !important;
     padding-right: 5px !important;
     height: auto !important;
   }
-
   .info-board {
     height: 80vh !important;
     padding-left: 0 !important;
     padding-top: 20px !important;
   }
+}
+
+@media (max-width: 991.98px) {
 }
 
 .info-board {
@@ -459,13 +461,21 @@ code {
   display: flex;
   flex-direction: column;
   position: relative;
+  flex: 1;
 
   @media (min-width: 992px) {
-    min-width: 320px !important;
-    max-width: 320px !important;
+    // min-width: 320px !important;
+    // max-width: 320px !important;
+    width: 100% !important;
   }
 
   @media (min-width: 1200px) {
+    // min-width: 370px !important;
+    // max-width: 370px !important;
+    width: 100% !important;
+  }
+
+  @media (min-width: 1300px) {
     min-width: 370px !important;
     max-width: 370px !important;
   }
@@ -1248,14 +1258,24 @@ audio {
   height: 100%;
 }
 
-
 .game-container {
   width: calc(100% - 282px);
   height: 100%;
   display: flex;
   flex-direction: row;
+  flex: 1 1;
 }
 
 .chat-info-board {
   width: 282px;
+  @media (max-width: 600px) {
+    position: absolute !important;
+    padding-top: 0px !important;
+    width: 100%;
+    z-index: 1000;
+  }
+}
+
+.flex {
+  display: flex;
 }

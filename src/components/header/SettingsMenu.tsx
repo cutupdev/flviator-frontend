@@ -39,7 +39,8 @@ const settingItems: { label: string; handleType: string }[] = [
 ];
 
 const Menu = ({ setHowto }) => {
-  const { state, update, handleGetSeed } = React.useContext(Context);
+  const { state, update, handleGetSeed, toggleMsgTab } =
+    React.useContext(Context);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("");
@@ -188,6 +189,7 @@ const Menu = ({ setHowto }) => {
       onBlur={() => {
         if (mouseCursorStatus === false) setShowDropDown(false);
       }}
+      className="flex"
     >
       <button
         className={`setting-button ${showDropDown ? "active" : ""}`}
@@ -195,6 +197,12 @@ const Menu = ({ setHowto }) => {
         onBlur={(e: React.FocusEvent<HTMLButtonElement>): void =>
           dismissHandler(e)
         }
+      >
+        <PiListBold color="#83878e" size={20} />
+      </button>
+      <button
+        className={`setting-button ${showDropDown ? "active" : ""}`}
+        onClick={toggleMsgTab}
       >
         <PiListBold color="#83878e" size={20} />
       </button>
