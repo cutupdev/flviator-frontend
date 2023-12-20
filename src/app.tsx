@@ -111,11 +111,13 @@ function App() {
           </div>
         </div>
       )}
-      <Header />
-      <div className="game-container">
-        <BetsUsers />
-        <Main />
-        {/* <PerfectLiveChat /> */}
+      <div className="contianer">
+        <div className="game-container">
+          <Header />
+          <BetsUsers />
+          <Main />
+        </div>
+        <PerfectLiveChat />
       </div>
     </div>
   );

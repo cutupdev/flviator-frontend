@@ -31,26 +31,17 @@
   height: 100%;
   flex-grow: 0;
   flex-shrink: 0;
-  width: 100%;
-  padding-left: 10px;
-  padding-top: 10px;
   display: flex;
   flex-direction: column;
   position: relative;
 
-  @media (min-width: 992px) {
-    min-width: 280px !important;
-    max-width: 280px !important;
-  }
-
-  @media (min-width: 1200px) {
-    min-width: 330px !important;
-    max-width: 330px !important;
-  }
-
-  @media (min-width: 1399.98px) {
-    min-width: 370px !important;
-    max-width: 370px !important;
+  @media (max-width: 767.98px) {
+    .chat-bar {
+      position: fixed !important;
+      width: 100%;
+      top: 0;
+      height: 100%;
+    }
   }
 
   .chat-block {
@@ -76,7 +67,53 @@
     align-items: center;
   }
 
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 7px 13px;
+    height: 38px;
+    position: relative;
+    align-items: center;
+
+    .online-wrapper {
+      left: 50%;
+      transform: translate(-50%);
+      font-size: 14px;
+      display: flex;
+      position: absolute;
+      align-items: center;
+
+      .green-circle {
+        width: 6px;
+        height: 6px;
+        background: #28a909;
+        border-radius: 50%;
+        margin: 0 3px;
+      }
+    }
+
+    .close {
+      float: right;
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: 0 1px 0 #fff;
+      opacity: 0.5;
+    }
+
+    button.close {
+      color: #97a4ae;
+      text-shadow: 0 1px 0 #97a4ae;
+      padding: 0;
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+  }
+
   .input-message {
+    width: 100%;
     margin: 0 auto;
     height: 67px;
     position: relative;
@@ -109,10 +146,22 @@
       display: flex;
       align-items: flex-end;
       font-size: 13px;
+
+      .gif {
+        margin-left: 5px;
+      }
+
+      .left-length {
+        margin-left: auto;
+        margin-right: 5px;
+        cursor: auto;
+        line-height: 1;
+      }
     }
 
     .enter {
       position: absolute;
+      cursor: pointer;
       right: 10px;
       top: 50%;
       transform: translateY(-50%);

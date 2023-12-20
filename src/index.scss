@@ -366,14 +366,6 @@ code {
 .bold {
   font-weight: bold;
 }
-
-.game-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-}
-
 .platformmyloading {
   position: absolute;
   top: 0;
@@ -1246,4 +1238,24 @@ audio {
   background-color: #123405;
   border: 1px solid #427f00;
   font-size: 14px;
+}
+
+// New UI
+
+.contianer {
+  position: relative;
+  display: flex;
+  height: 100%;
+}
+
+
+.game-container {
+  width: calc(100% - 282px);
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.chat-info-board {
+  width: 282px;
 }
