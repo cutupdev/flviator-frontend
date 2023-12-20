@@ -264,30 +264,30 @@ export const Provider = ({ children }: any) => {
 
   React.useEffect(
     function () {
-      setPlatformLoading(false);
-      unityContext.on("GameController", function (message) {
-        if (message === "Ready") {
-          setUnity({
-            currentProgress: 100,
-            unityLoading: true,
-            unityState: true,
-          });
-        }
-      });
-      unityContext.on("progress", (progression) => {
-        const currentProgress = progression * 100;
-        if (progression === 1) {
-          setUnity({ currentProgress, unityLoading: true, unityState: true });
-        } else {
-          setUnity({
-            currentProgress,
-            unityLoading: false,
-            unityState: false,
-          });
-        }
-      });
-      return () => unityContext.removeAllEventListeners();
       if (secure) {
+        setPlatformLoading(false);
+        unityContext.on("GameController", function (message) {
+          if (message === "Ready") {
+            setUnity({
+              currentProgress: 100,
+              unityLoading: true,
+              unityState: true,
+            });
+          }
+        });
+        unityContext.on("progress", (progression) => {
+          const currentProgress = progression * 100;
+          if (progression === 1) {
+            setUnity({ currentProgress, unityLoading: true, unityState: true });
+          } else {
+            setUnity({
+              currentProgress,
+              unityLoading: false,
+              unityState: false,
+            });
+          }
+        });
+        return () => unityContext.removeAllEventListeners();
       }
     },
     [secure]
@@ -321,152 +321,158 @@ export const Provider = ({ children }: any) => {
       });
     }
 
-    socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
-      setBettedUsers(bettedUsers);
-    });
-
-    socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
-      var { user } = userInfo;
-      var attrs = { ...userBetState };
-      attrs.fbetState = false;
-      attrs.fbetted = user.f.betted;
-      attrs.sbetState = false;
-      attrs.sbetted = user.s.betted;
-      setUserBetState(attrs);
-    });
-
-    socket.on("history", (history: any) => {
-      setHistory(history);
-    });
-
-    socket.on("gameState", (gameState: GameStatusType) => {
-      console.log("here");
-      setGameState(gameState);
-    });
-
-    socket.on("serverSeed", (seed: string) => {
-      handleServerSeed(seed);
-    });
-
-    socket.on("previousHand", (previousHand: UserType[]) => {
-      setPreviousHand(previousHand);
-    });
-
-    socket.on("finishGame", (user: UserType) => {
-      console.log("user", user);
-      let attrs = newState;
-      let fauto = attrs.userInfo.f.auto;
-      let sauto = attrs.userInfo.s.auto;
-      let fbetAmount = attrs.userInfo.f.betAmount;
-      let sbetAmount = attrs.userInfo.s.betAmount;
-      let betStatus = newBetState;
-      attrs.userInfo = user;
-      attrs.userInfo.f.betAmount = fbetAmount;
-      attrs.userInfo.s.betAmount = sbetAmount;
-      attrs.userInfo.f.auto = fauto;
-      attrs.userInfo.s.auto = sauto;
-      if (!user.f.betted) {
-        betStatus.fbetted = false;
-        if (attrs.userInfo.f.auto) {
-          if (user.f.cashouted) {
-            fIncreaseAmount += user.f.cashAmount;
-            if (attrs.finState && attrs.fincrease - fIncreaseAmount <= 0) {
-              attrs.userInfo.f.auto = false;
-              betStatus.fbetState = false;
-              fIncreaseAmount = 0;
-            } else if (
-              attrs.fsingle &&
-              attrs.fsingleAmount <= user.f.cashAmount
-            ) {
-              attrs.userInfo.f.auto = false;
-              betStatus.fbetState = false;
-            } else {
-              attrs.userInfo.f.auto = true;
-              betStatus.fbetState = true;
-            }
-          } else {
-            fDecreaseAmount += user.f.betAmount;
-            if (attrs.fdeState && attrs.fdecrease - fDecreaseAmount <= 0) {
-              attrs.userInfo.f.auto = false;
-              betStatus.fbetState = false;
-              fDecreaseAmount = 0;
-            } else {
-              attrs.userInfo.f.auto = true;
-              betStatus.fbetState = true;
-            }
-          }
-        }
-      }
-      if (!user.s.betted) {
-        betStatus.sbetted = false;
-        if (user.s.auto) {
-          if (user.s.cashouted) {
-            sIncreaseAmount += user.s.cashAmount;
-            if (attrs.sinState && attrs.sincrease - sIncreaseAmount <= 0) {
-              attrs.userInfo.s.auto = false;
-              betStatus.sbetState = false;
-              sIncreaseAmount = 0;
-            } else if (
-              attrs.ssingle &&
-              attrs.ssingleAmount <= user.s.cashAmount
-            ) {
-              attrs.userInfo.s.auto = false;
-              betStatus.sbetState = false;
-            } else {
-              attrs.userInfo.s.auto = true;
-              betStatus.sbetState = true;
-            }
-          } else {
-            sDecreaseAmount += user.s.betAmount;
-            if (attrs.sdeState && attrs.sdecrease - sDecreaseAmount <= 0) {
-              attrs.userInfo.s.auto = false;
-              betStatus.sbetState = false;
-              sDecreaseAmount = 0;
-            } else {
-              attrs.userInfo.s.auto = true;
-              betStatus.sbetState = true;
-            }
-          }
-        }
-      }
-      update(attrs);
-      setUserBetState(betStatus);
-    });
-
-    socket.on("getBetLimits", (betAmounts: { max: number; min: number }) => {
-      setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min });
-    });
-
-    socket.on("recharge", () => {
-      setRechargeState(true);
-    });
-
-    socket.on("error", (data) => {
-      setUserBetState({
-        ...userBetState,
-        [`${data.index}betted`]: false,
-      });
-      toast.error(data.message);
-    });
-
-    socket.on("success", (data) => {
-      toaster("success", data.msg, data.currency, data.point, data.cashoutAmount);
-    });
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("myBetState");
-      socket.off("myInfo");
-      socket.off("history");
-      socket.off("gameState");
-      socket.off("previousHand");
-      socket.off("finishGame");
-      socket.off("getBetLimits");
-      socket.off("recharge");
-      socket.off("error");
-      socket.off("success");
-    };
     if (secure) {
+      socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
+        setBettedUsers(bettedUsers);
+      });
+
+      socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
+        var { user } = userInfo;
+        var attrs = { ...userBetState };
+        attrs.fbetState = false;
+        attrs.fbetted = user.f.betted;
+        attrs.sbetState = false;
+        attrs.sbetted = user.s.betted;
+        setUserBetState(attrs);
+      });
+
+      socket.on("history", (history: any) => {
+        setHistory(history);
+      });
+
+      socket.on("gameState", (gameState: GameStatusType) => {
+        console.log("here");
+        setGameState(gameState);
+      });
+
+      socket.on("serverSeed", (seed: string) => {
+        handleServerSeed(seed);
+      });
+
+      socket.on("previousHand", (previousHand: UserType[]) => {
+        setPreviousHand(previousHand);
+      });
+
+      socket.on("finishGame", (user: UserType) => {
+        console.log("user", user);
+        let attrs = newState;
+        let fauto = attrs.userInfo.f.auto;
+        let sauto = attrs.userInfo.s.auto;
+        let fbetAmount = attrs.userInfo.f.betAmount;
+        let sbetAmount = attrs.userInfo.s.betAmount;
+        let betStatus = newBetState;
+        attrs.userInfo = user;
+        attrs.userInfo.f.betAmount = fbetAmount;
+        attrs.userInfo.s.betAmount = sbetAmount;
+        attrs.userInfo.f.auto = fauto;
+        attrs.userInfo.s.auto = sauto;
+        if (!user.f.betted) {
+          betStatus.fbetted = false;
+          if (attrs.userInfo.f.auto) {
+            if (user.f.cashouted) {
+              fIncreaseAmount += user.f.cashAmount;
+              if (attrs.finState && attrs.fincrease - fIncreaseAmount <= 0) {
+                attrs.userInfo.f.auto = false;
+                betStatus.fbetState = false;
+                fIncreaseAmount = 0;
+              } else if (
+                attrs.fsingle &&
+                attrs.fsingleAmount <= user.f.cashAmount
+              ) {
+                attrs.userInfo.f.auto = false;
+                betStatus.fbetState = false;
+              } else {
+                attrs.userInfo.f.auto = true;
+                betStatus.fbetState = true;
+              }
+            } else {
+              fDecreaseAmount += user.f.betAmount;
+              if (attrs.fdeState && attrs.fdecrease - fDecreaseAmount <= 0) {
+                attrs.userInfo.f.auto = false;
+                betStatus.fbetState = false;
+                fDecreaseAmount = 0;
+              } else {
+                attrs.userInfo.f.auto = true;
+                betStatus.fbetState = true;
+              }
+            }
+          }
+        }
+        if (!user.s.betted) {
+          betStatus.sbetted = false;
+          if (user.s.auto) {
+            if (user.s.cashouted) {
+              sIncreaseAmount += user.s.cashAmount;
+              if (attrs.sinState && attrs.sincrease - sIncreaseAmount <= 0) {
+                attrs.userInfo.s.auto = false;
+                betStatus.sbetState = false;
+                sIncreaseAmount = 0;
+              } else if (
+                attrs.ssingle &&
+                attrs.ssingleAmount <= user.s.cashAmount
+              ) {
+                attrs.userInfo.s.auto = false;
+                betStatus.sbetState = false;
+              } else {
+                attrs.userInfo.s.auto = true;
+                betStatus.sbetState = true;
+              }
+            } else {
+              sDecreaseAmount += user.s.betAmount;
+              if (attrs.sdeState && attrs.sdecrease - sDecreaseAmount <= 0) {
+                attrs.userInfo.s.auto = false;
+                betStatus.sbetState = false;
+                sDecreaseAmount = 0;
+              } else {
+                attrs.userInfo.s.auto = true;
+                betStatus.sbetState = true;
+              }
+            }
+          }
+        }
+        update(attrs);
+        setUserBetState(betStatus);
+      });
+
+      socket.on("getBetLimits", (betAmounts: { max: number; min: number }) => {
+        setBetLimit({ maxBet: betAmounts.max, minBet: betAmounts.min });
+      });
+
+      socket.on("recharge", () => {
+        setRechargeState(true);
+      });
+
+      socket.on("error", (data) => {
+        setUserBetState({
+          ...userBetState,
+          [`${data.index}betted`]: false,
+        });
+        toast.error(data.message);
+      });
+
+      socket.on("success", (data) => {
+        toaster(
+          "success",
+          data.msg,
+          data.currency,
+          data.point,
+          data.cashoutAmount
+        );
+      });
+      return () => {
+        socket.off("connect");
+        socket.off("disconnect");
+        socket.off("myBetState");
+        socket.off("myInfo");
+        socket.off("history");
+        socket.off("gameState");
+        socket.off("previousHand");
+        socket.off("finishGame");
+        socket.off("getBetLimits");
+        socket.off("recharge");
+        socket.off("error");
+        socket.off("success");
+      };
     }
     // eslint-disable-next-line
   }, [socket, secure, token]);

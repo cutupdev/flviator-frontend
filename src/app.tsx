@@ -34,13 +34,9 @@ function App() {
     musicStatus: state.userInfo.musicStatus || false,
   });
 
-  const mainAudioRef = useRef<HTMLAudioElement>(new Audio(MainAudio) || null);
-  const takeOffAudioRef = useRef<HTMLAudioElement>(
-    new Audio(FlewAwayAudio) || null
-  );
-  const flewAwayAudioRef = useRef<HTMLAudioElement>(
-    new Audio(TakeOffAudio) || null
-  );
+  const mainAudioRef = useRef<HTMLAudioElement>(null);
+  const takeOffAudioRef = useRef<HTMLAudioElement>(null);
+  const flewAwayAudioRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
     if (
