@@ -13,6 +13,7 @@ import propeller from "./assets/images/propeller.png";
 
 import Context from "./context";
 import CustomToastContainer from "./components/Toast";
+import PerfectLiveChat from "./components/chat";
 // import "./App.scss";
 
 function App() {
@@ -118,6 +119,7 @@ function App() {
       <div className="game-container">
         <BetsUsers />
         <Main />
+        {/* <PerfectLiveChat /> */}
       </div>
     </div>
   );
