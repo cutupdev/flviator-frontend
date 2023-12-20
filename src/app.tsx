@@ -19,6 +19,7 @@ import PerfectLiveChat from "./components/chat";
 function App() {
   const {
     state,
+    msgTab,
     platformLoading,
     errorBackend,
     unityLoading,
@@ -117,7 +118,7 @@ function App() {
           <BetsUsers />
           <Main />
         </div>
-        <PerfectLiveChat />
+        {msgTab && <PerfectLiveChat />}
       </div>
     </div>
   );

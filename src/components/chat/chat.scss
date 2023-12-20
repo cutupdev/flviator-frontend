@@ -292,3 +292,24 @@
     }
   }
 }
+
+.emoji-picker {
+  height: 320px;
+  width: 268px;
+  position: absolute;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  right: 5px;
+  bottom: 60px;
+}
+
+.gif-picker {
+  position: absolute;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  right: 5px;
+  height: auto;
+  bottom: 60px;
+}

@@ -1,16 +1,28 @@
 import React, { useContext, useState } from "react";
+import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
 
 import { HiOutlineFaceSmile, HiOutlineGif } from "react-icons/hi2";
 
 import Context from "../../context";
 import "./chat.scss";
+import GifPicker from "gif-picker-react";
 
 export default function PerfectLiveChat() {
   const { socket, toggleMsgTab } = useContext(Context);
   const [msgContent, setMsgContent] = useState<string>("");
+  const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
+  const [gifPicker, setGifPicker] = useState<boolean>(false);
+  const tenorApiKey = "AIzaSyAgrtott_iV2sRi-9cH_BKAdLKxpzbsIJY";
 
   const handleInputText = (e) => {
-    setMsgContent(e.target.value);
+    if (e.keyCode === 13) {
+      socket.emit("sendMsg", msgContent);
+      setMsgContent("");
+    }
+  };
+
+  const handleTextChange = (text) => {
+    setMsgContent(text);
   };
 
   const handleSendMsg = () => {
@@ -43,7 +55,38 @@ export default function PerfectLiveChat() {
               <div>This is Chat Content</div>
             </div>
           </div>
-
+          <div
+            tabIndex={0}
+            className="emoji-picker"
+            // onBlur={() => setEmojiPicker(false)}
+          >
+            {emojiPicker && (
+              <EmojiPicker
+                width={"268px"}
+                height={"320px"}
+                theme={Theme.DARK}
+                emojiStyle={EmojiStyle.NATIVE}
+                onEmojiClick={(emoji) => {
+                  console.log(emoji.imageUrl);
+                }}
+              />
+            )}
+          </div>
+          <div
+            tabIndex={0}
+            className="gif-picker"
+            // onBlur={() => setGifPicker(false)}
+          >
+            {gifPicker && (
+              <GifPicker
+                width={"268px"}
+                height={"320px"}
+                theme={Theme.DARK}
+                tenorApiKey={tenorApiKey}
+                onGifClick={(gif) => console.log(gif)}
+              />
+            )}
+          </div>
           <div className="input-message">
             <textarea
               minLength={1}
@@ -51,13 +94,17 @@ export default function PerfectLiveChat() {
               placeholder="Reply"
               maxLength={160}
               value={msgContent}
-              onChange={(e) => handleInputText(e)}
+              onKeyUp={(e) => handleInputText(e)}
+              onChange={(e) => handleTextChange(e.target.value)}
             ></textarea>
             <div className="tools">
-              <div className="smiles ng-star-inserted">
+              <div
+                className="smiles"
+                onClick={() => setEmojiPicker(!emojiPicker)}
+              >
                 <HiOutlineFaceSmile cursor={"pointer"} size={14} />
               </div>
-              <div className="gif ng-star-inserted">
+              <div className="gif" onClick={() => setGifPicker(!gifPicker)}>
                 <HiOutlineGif cursor={"pointer"} size={14} />
               </div>
               <div className="left-length">{160 - msgContent.length}</div>

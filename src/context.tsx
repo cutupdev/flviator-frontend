@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { UnityContext } from "react-unity-webgl";
 import { useLocation } from "react-router";
 import { Socket, io } from "socket.io-client";
@@ -215,6 +215,8 @@ export const Provider = ({ children }: any) => {
   const UserID = new URLSearchParams(useLocation().search).get("UserID");
   const currency = new URLSearchParams(useLocation().search).get("currency");
   const returnurl = new URLSearchParams(useLocation().search).get("returnurl");
+
+  const [msgList, setMsgList] =  useState([]);
 
   const [secure, setSecure] = React.useState<boolean>(false);
   const [errorBackend, setErrorBackend] = React.useState<boolean>(false);
