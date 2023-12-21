@@ -92,7 +92,7 @@ export default function PerfectLiveChat() {
                   </div>
                 </div>
               ))}
-              {selectedGif.url && (
+              {selectedGif && (
                 <>
                   <img
                     src={selectedGif.url}
