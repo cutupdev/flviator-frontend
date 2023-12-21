@@ -15,7 +15,6 @@
     padding-right: 5px !important;
     height: auto !important;
   }
-
 }
 
 .scroll-y {
@@ -380,5 +379,74 @@
     justify-content: flex-end;
     align-items: center;
     flex-basis: 32px;
+  }
+}
+
+.gif-preview {
+  width: 200px;
+}
+
+.name-wrapper {
+  margin-right: 6px;
+  align-items: center;
+  .name {
+    color: #ffffff80;
+    cursor: pointer;
+  }
+  .name:hover {
+    cursor: pointer;
+    color: #fff;
+  }
+  .prefix {
+    color: #013674;
+    font-size: 11px;
+    margin-left: 3px;
+    padding: 1px 3px;
+    border-radius: 4px;
+  }
+  .prefix-mod {
+    background-color: #27a708;
+  }
+  .prefix-bot {
+    background-color: #1279f1;
+  }
+}
+
+.btn-block {
+  margin-top: 4px;
+  height: 12px;
+  display: flex;
+  justify-content: center;
+  color: #767b85;
+
+  .likes-number {
+    position: relative;
+  }
+
+  .btn-like {
+    height: 100%;
+    width: 12px;
+    padding: 0;
+    margin: 0 2px;
+    cursor: pointer;
+    background-image: var(--urlImgLike);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    --urlImgLike: url(../../assets/images/like.svg);
+    --urlImgLikeH: url(../../assets/images/like-h.svg);
+  }
+  .btn-like.active {
+    background-image: var(--urlImgLikeH);
+  }
+  .btn-like:active {
+    transform: translateY(1px);
+    background-image: var(--urlImgLikeH);
+  }
+
+  @media (pointer: fine) and (hover: hover) {
+    .btn-like:hover {
+      background-image: var(--urlImgLikeH);
+    }
   }
 }

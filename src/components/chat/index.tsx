@@ -117,7 +117,7 @@ export default function PerfectLiveChat() {
             <div
               className="emoji-picker"
               tabIndex={0}
-              onBlur={() => setEmojiPicker(!emojiPicker)}
+              onBlur={() => setEmojiPicker(false)}
             >
               <Picker
                 set={"emojione"}
@@ -131,8 +131,8 @@ export default function PerfectLiveChat() {
           {gifPicker && (
             <div
               className="gif-picker"
-              // tabIndex={0}
-              // onBlur={() => setGifPicker(!gifPicker)}
+              tabIndex={0}
+              onBlur={() => setGifPicker(false)}
             >
               <GifPicker
                 width={278}
@@ -156,11 +156,20 @@ export default function PerfectLiveChat() {
             <div className="tools">
               <div
                 className="smiles"
-                onClick={() => setEmojiPicker(!emojiPicker)}
+                onClick={() => {
+                  setGifPicker(false);
+                  setEmojiPicker(!emojiPicker);
+                }}
               >
                 <HiOutlineFaceSmile cursor={"pointer"} size={14} />
               </div>
-              <div className="gif" onClick={() => setGifPicker(!gifPicker)}>
+              <div
+                className="gif"
+                onClick={() => {
+                  setEmojiPicker(false);
+                  setGifPicker(!gifPicker);
+                }}
+              >
                 <HiOutlineGif cursor={"pointer"} size={14} />
               </div>
               <div className="left-length">{160 - msgContent.length}</div>
