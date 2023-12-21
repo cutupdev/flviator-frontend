@@ -32,6 +32,7 @@ export default function PerfectLiveChat() {
     } else {
       console.log("message empty");
     }
+    setEmojiPicker(false);
   };
 
   const handleChooseGif = (item) => {
@@ -42,6 +43,7 @@ export default function PerfectLiveChat() {
     } else {
       console.log("message empty");
     }
+    setGifPicker(false);
   };
 
   const handleEmojiSelect = (emoji) => {
