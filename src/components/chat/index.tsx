@@ -10,7 +10,7 @@ import "./chat.scss";
 import config from "../../config.json";
 
 export default function PerfectLiveChat() {
-  const { state, socket, msgReceived, msgData, setMsgData, toggleMsgTab } =
+  const { state, socket, msgReceived, setMsgReceived, msgData, setMsgData, toggleMsgTab } =
     useContext(Context);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
@@ -72,6 +72,7 @@ export default function PerfectLiveChat() {
       }/get-all-chat`
     );
     setMsgData(response?.data?.data || []);
+    setMsgReceived(!msgReceived);
   };
 
   const handleLikeChat = async (chatItem: any) => {

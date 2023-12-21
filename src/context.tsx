@@ -127,6 +127,7 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   myUnityContext: UnityContext;
   currentTarget: number;
   setCurrentTarget(attrs: Partial<number>);
+  setMsgReceived(attrs: Partial<boolean>);
   update(attrs: Partial<ContextDataType>);
   getMyBets();
   updateUserBetState(attrs: Partial<UserStatusType>);
@@ -649,6 +650,7 @@ export const Provider = ({ children }: any) => {
         history: [...history],
         setMsgData,
         setCurrentTarget,
+        setMsgReceived,
         update,
         getMyBets,
         updateUserBetState,
