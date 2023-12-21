@@ -92,20 +92,22 @@ export default function PerfectLiveChat() {
                   </div>
                 </div>
               ))}
-              <>
-                <img
-                  src={selectedGif.url}
-                  className="gif-preview"
-                  alt="Selected GIF"
-                />
-                <a
-                  href={selectedGif.shortTenorUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {selectedGif.shortTenorUrl}
-                </a>
-              </>
+              {selectedGif.url && (
+                <>
+                  <img
+                    src={selectedGif.url}
+                    className="gif-preview"
+                    alt="Selected GIF"
+                  />
+                  <a
+                    href={selectedGif.shortTenorUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {selectedGif.shortTenorUrl}
+                  </a>
+                </>
+              )}
             </div>
           </div>
           {emojiPicker && (
