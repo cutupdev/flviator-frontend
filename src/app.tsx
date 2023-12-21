@@ -109,10 +109,12 @@ function App() {
         </div>
       )}
       <div className="contianer">
-        <div className="game-container">
-          <Header />
-          <BetsUsers />
-          <Main />
+        <div className="main-game-container">
+          <div className="game-container">
+            <Header />
+            <BetsUsers />
+            <Main />
+          </div>
         </div>
         {msgTab && <PerfectLiveChat />}
       </div>

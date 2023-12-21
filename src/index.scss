@@ -1,10 +1,5 @@
-$back-color: linear-gradient(
-  0deg,
-  rgba(21, 13, 46, 1) 100%,
-  rgba(51, 43, 71, 1) 100%,
-  rgba(40, 7, 68, 1) 100%,
-  rgba(27, 0, 55, 1) 100%
-);
+$back-color: #0e0e0e;
+
 $howto-color: linear-gradient(
   163deg,
   rgba(44, 71, 38, 1) 0%,
@@ -439,7 +434,7 @@ code {
     flex-direction: column-reverse !important;
     padding-left: 5px !important;
     padding-right: 5px !important;
-    height: auto !important;
+    height: 150vh !important;
   }
   .info-board {
     height: 80vh !important;
@@ -448,7 +443,22 @@ code {
   }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 992px) {
+  .game-container {
+    flex-direction: column-reverse !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    height: 120vh !important;
+  }
+}
+
+@media (max-width: 634px) {
+  .game-container {
+    flex-direction: column-reverse !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    height: 140vh !important;
+  }
 }
 
 .info-board {
@@ -1256,22 +1266,20 @@ audio {
   height: 100%;
 }
 
-.game-container {
-  width: calc(100% - 282px);
-  height: 100%;
+.main-game-container {
+  width: calc(100% - 290px);
+  height: calc(100vh - 38px);
+  overflow: auto;
   display: flex;
   flex-direction: row;
   flex: 1 1;
 }
 
-.chat-info-board {
-  width: 282px;
-  @media (max-width: 600px) {
-    position: absolute !important;
-    padding-top: 0px !important;
-    width: 100%;
-    z-index: 1000;
-  }
+.game-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex: 1 1;
 }
 
 .flex {
