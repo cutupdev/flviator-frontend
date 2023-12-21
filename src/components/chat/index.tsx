@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
-import EmojiPicker, { EmojiStyle, Theme } from "emoji-picker-react";
-
 import { HiOutlineFaceSmile, HiOutlineGif } from "react-icons/hi2";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+import GifPicker, { Theme } from "gif-picker-react";
 
 import Context from "../../context";
 import "./chat.scss";
-import GifPicker from "gif-picker-react";
 
 export default function PerfectLiveChat() {
-  const { socket, toggleMsgTab } = useContext(Context);
+  const { socket, msgData, toggleMsgTab } = useContext(Context);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
   const [gifPicker, setGifPicker] = useState<boolean>(false);
@@ -16,7 +16,7 @@ export default function PerfectLiveChat() {
 
   const handleInputText = (e) => {
     if (e.keyCode === 13) {
-      socket.emit("sendMsg", msgContent);
+      handleSendMsg();
       setMsgContent("");
     }
   };
@@ -26,7 +26,16 @@ export default function PerfectLiveChat() {
   };
 
   const handleSendMsg = () => {
-    console.log("send message");
+    if (msgContent) {
+      socket.emit("sendMsg", msgContent);
+      console.log("send message");
+    } else {
+      console.log("message empty");
+    }
+  };
+
+  const handleEmojiSelect = (emoji) => {
+    setMsgContent(`${msgContent}${emoji.native}`);
   };
 
   return (
@@ -52,41 +61,68 @@ export default function PerfectLiveChat() {
 
           <div className="cdk-virtual-scroll-viewport">
             <div className="cdk-virtual-scroll-content-wrapper">
-              <div>This is Chat Content</div>
+              {msgData.map((item, index) => (
+                <div key={index} className="message-wrapper ng-star-inserted">
+                  <div className="avatar-block">
+                    <img
+                      className="avatar"
+                      src={item.avatar || "./avatars/av-6.png"}
+                      alt={item.avatar || "./avatars/av-6.png"}
+                    />
+                  </div>
+                  <div className="msg-block">
+                    <div className="msg-data">
+                      <span className="text canSelect">
+                        <span className="name-wrapper">
+                          <span className="name canSelect">
+                            {item.userId?.slice(0, 1) +
+                              "***" +
+                              item.userId?.slice(-1)}
+                          </span>
+                        </span>
+                        <span className="ng-star-inserted">{item.msg}</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="likes-block">
+                    <div className="btn-block">
+                      <div className="btn-like"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          <div
-            tabIndex={0}
-            className="emoji-picker"
-            // onBlur={() => setEmojiPicker(false)}
-          >
-            {emojiPicker && (
-              <EmojiPicker
-                width={"268px"}
-                height={"320px"}
-                theme={Theme.DARK}
-                emojiStyle={EmojiStyle.NATIVE}
-                onEmojiClick={(emoji) => {
-                  console.log(emoji.imageUrl);
-                }}
+          {emojiPicker && (
+            <div
+              className="emoji-picker"
+              tabIndex={0}
+              onBlur={() => setEmojiPicker(!emojiPicker)}
+            >
+              <Picker
+                set={"emojione"}
+                emojiSize={20}
+                perLine={8}
+                data={data}
+                onEmojiSelect={(emoji) => handleEmojiSelect(emoji)}
               />
-            )}
-          </div>
-          <div
-            tabIndex={0}
-            className="gif-picker"
-            // onBlur={() => setGifPicker(false)}
-          >
-            {gifPicker && (
+            </div>
+          )}
+          {gifPicker && (
+            <div
+              className="emoji-picker"
+              tabIndex={0}
+              onBlur={() => setGifPicker(!gifPicker)}
+            >
               <GifPicker
-                width={"268px"}
-                height={"320px"}
+                width={278}
+                height={320}
                 theme={Theme.DARK}
                 tenorApiKey={tenorApiKey}
-                onGifClick={(gif) => console.log(gif)}
+                onGifClick={(item) => console.log(item)}
               />
-            )}
-          </div>
+            </div>
+          )}
           <div className="input-message">
             <textarea
               minLength={1}

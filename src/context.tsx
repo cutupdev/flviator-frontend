@@ -111,6 +111,7 @@ interface ContextDataType {
 interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   state: ContextDataType;
   socket: Socket;
+  msgData: MsgUserType[];
   platformLoading: boolean;
   msgTab: boolean;
   errorBackend: boolean;
@@ -129,6 +130,13 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   updateUserBetState(attrs: Partial<UserStatusType>);
   handleGetSeed();
   toggleMsgTab();
+}
+
+interface MsgUserType {
+  userId: string;
+  userName: string;
+  avatar: string;
+  msg: string;
 }
 
 const unityContext = new UnityContext({
@@ -216,7 +224,7 @@ export const Provider = ({ children }: any) => {
   const currency = new URLSearchParams(useLocation().search).get("currency");
   const returnurl = new URLSearchParams(useLocation().search).get("returnurl");
 
-  const [msgList, setMsgList] =  useState([]);
+  const [msgData, setMsgData] = useState<MsgUserType[]>([]);
 
   const [secure, setSecure] = React.useState<boolean>(false);
   const [errorBackend, setErrorBackend] = React.useState<boolean>(false);
@@ -270,6 +278,24 @@ export const Provider = ({ children }: any) => {
 
   const handleGetSeed = () => {
     socket.emit("getSeed");
+  };
+
+  const updateUserMsg = (
+    userId: string,
+    userName: string,
+    avatar: string,
+    msg: string
+  ) => {
+    console.log("msgData", msgData);
+    setMsgData([
+      ...msgData,
+      {
+        userId,
+        userName,
+        avatar,
+        msg,
+      },
+    ]);
   };
 
   React.useEffect(
@@ -330,6 +356,10 @@ export const Provider = ({ children }: any) => {
         setSecure(true);
       });
     }
+
+    socket.on("newMsg", ({ userId, userName, avatar, msg }) => {
+      updateUserMsg(userId, userName, avatar, msg);
+    });
 
     socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
       setBettedUsers(bettedUsers);
@@ -472,6 +502,9 @@ export const Provider = ({ children }: any) => {
       socket.off("connect");
       socket.off("disconnect");
       socket.off("myBetState");
+      socket.off("sessionSecure");
+      socket.off("myInfo");
+      socket.off("newMsg");
       socket.off("myInfo");
       socket.off("history");
       socket.off("gameState");
@@ -583,6 +616,7 @@ export const Provider = ({ children }: any) => {
         ...unity,
         ...gameState,
         socket,
+        msgData,
         platformLoading,
         msgTab,
         errorBackend,
