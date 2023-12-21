@@ -9,7 +9,6 @@ import "./chat.scss";
 
 export default function PerfectLiveChat() {
   const { socket, msgData, toggleMsgTab } = useContext(Context);
-  const [selectedGif, setSelectedGif] = useState<TenorImage>(null!);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
   const [gifPicker, setGifPicker] = useState<boolean>(false);
@@ -28,7 +27,17 @@ export default function PerfectLiveChat() {
 
   const handleSendMsg = () => {
     if (msgContent) {
-      socket.emit("sendMsg", msgContent);
+      socket.emit("sendMsg", { msgType: "normal", msgContent });
+      console.log("send message");
+    } else {
+      console.log("message empty");
+    }
+  };
+
+  const handleChooseGif = (item) => {
+    let gif: any = { ...item };
+    if (item) {
+      socket.emit("sendMsg", { msgType: "gif", msgContent: gif.url });
       console.log("send message");
     } else {
       console.log("message empty");
@@ -81,7 +90,17 @@ export default function PerfectLiveChat() {
                               item.userId?.slice(-1)}
                           </span>
                         </span>
-                        <span className="ng-star-inserted">{item.msg}</span>
+                        {item.msgType === "gif" ? (
+                          <div>
+                            <img
+                              src={item.msg}
+                              className="gif-preview"
+                              alt="Selected GIF"
+                            />
+                          </div>
+                        ) : (
+                          <span className="ng-star-inserted">{item.msg}</span>
+                        )}
                       </span>
                     </div>
                   </div>
@@ -92,22 +111,6 @@ export default function PerfectLiveChat() {
                   </div>
                 </div>
               ))}
-              {selectedGif && (
-                <>
-                  <img
-                    src={selectedGif.url}
-                    className="gif-preview"
-                    alt="Selected GIF"
-                  />
-                  <a
-                    href={selectedGif.shortTenorUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {selectedGif.shortTenorUrl}
-                  </a>
-                </>
-              )}
             </div>
           </div>
           {emojiPicker && (
@@ -136,7 +139,7 @@ export default function PerfectLiveChat() {
                 height={320}
                 theme={Theme.DARK}
                 tenorApiKey={tenorApiKey}
-                onGifClick={setSelectedGif}
+                onGifClick={(item) => handleChooseGif(item)}
               />
             </div>
           )}

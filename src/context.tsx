@@ -136,6 +136,7 @@ interface MsgUserType {
   userId: string;
   userName: string;
   avatar: string;
+  msgType: string;
   msg: string;
 }
 
@@ -284,6 +285,7 @@ export const Provider = ({ children }: any) => {
     userId: string,
     userName: string,
     avatar: string,
+    msgType: string,
     msg: string
   ) => {
     console.log("msgData", msgData);
@@ -293,6 +295,7 @@ export const Provider = ({ children }: any) => {
         userId,
         userName,
         avatar,
+        msgType,
         msg,
       },
     ]);
@@ -357,8 +360,8 @@ export const Provider = ({ children }: any) => {
       });
     }
 
-    socket.on("newMsg", ({ userId, userName, avatar, msg }) => {
-      updateUserMsg(userId, userName, avatar, msg);
+    socket.on("newMsg", ({ userId, userName, avatar, msgType, msg }) => {
+      updateUserMsg(userId, userName, avatar, msgType, msg);
     });
 
     socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
