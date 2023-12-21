@@ -18,6 +18,7 @@ import { RxAvatar } from "react-icons/rx";
 import Context from "../../context";
 import axios from "axios";
 import config from "../../config.json";
+import ChatImg from "../../assets/images/chat.svg";
 
 const settingItems: { label: string; handleType: string }[] = [
   {
@@ -204,7 +205,7 @@ const Menu = ({ setHowto }) => {
         className={`setting-button ${showDropDown ? "active" : ""}`}
         onClick={toggleMsgTab}
       >
-        <PiListBold color="#83878e" size={20} />
+        <img src={ChatImg} alt="chat section" />
       </button>
       <div
         className="aviator-dropdown-menu"
