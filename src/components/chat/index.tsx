@@ -111,8 +111,8 @@ export default function PerfectLiveChat() {
           {gifPicker && (
             <div
               className="emoji-picker"
-              tabIndex={0}
-              onBlur={() => setGifPicker(!gifPicker)}
+              // tabIndex={0}
+              // onBlur={() => setGifPicker(!gifPicker)}
             >
               <GifPicker
                 width={278}
