@@ -126,8 +126,8 @@ export default function PerfectLiveChat() {
                 </button>
               </div>
               <Picker
-                style={{ borderRadius: "0 !important" }}
                 set={"emojione"}
+                theme={"dark"}
                 emojiSize={20}
                 perLine={8}
                 data={data}
