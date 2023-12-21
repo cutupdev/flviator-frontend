@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { HiOutlineFaceSmile, HiOutlineGif } from "react-icons/hi2";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import GifPicker, { TenorImage, Theme } from "gif-picker-react";
+import GifPicker, { Theme } from "gif-picker-react";
 
 import Context from "../../context";
 import "./chat.scss";
@@ -13,6 +13,18 @@ export default function PerfectLiveChat() {
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
   const [gifPicker, setGifPicker] = useState<boolean>(false);
   const tenorApiKey = "AIzaSyAgrtott_iV2sRi-9cH_BKAdLKxpzbsIJY";
+
+  const msgContentRef = useRef(null);
+
+  const scrollToLastFruit = () => {
+    let msgRef: any = msgContentRef.current;
+    const lastChildElement = msgRef?.lastElementChild;
+    lastChildElement?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToLastFruit();
+  }, []);
 
   const handleInputText = (e) => {
     if (e.keyCode === 13) {
@@ -72,7 +84,10 @@ export default function PerfectLiveChat() {
           </div>
 
           <div className="cdk-virtual-scroll-viewport">
-            <div className="cdk-virtual-scroll-content-wrapper">
+            <div
+              className="cdk-virtual-scroll-content-wrapper"
+              ref={msgContentRef}
+            >
               {msgData.map((item, index) => (
                 <div key={index} className="message-wrapper ng-star-inserted">
                   <div className="avatar-block">

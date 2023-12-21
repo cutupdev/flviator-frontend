@@ -133,11 +133,14 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
 }
 
 interface MsgUserType {
+  _id?: number;
   userId: string;
   userName: string;
   avatar: string;
   msgType: string;
   msg: string;
+  likes: number;
+  createdAt?: number;
 }
 
 const unityContext = new UnityContext({
@@ -288,7 +291,6 @@ export const Provider = ({ children }: any) => {
     msgType: string,
     msg: string
   ) => {
-    console.log("msgData", msgData);
     setMsgData([
       ...msgData,
       {
@@ -297,6 +299,7 @@ export const Provider = ({ children }: any) => {
         avatar,
         msgType,
         msg,
+        likes: 0,
       },
     ]);
   };
@@ -336,6 +339,7 @@ export const Provider = ({ children }: any) => {
     socket.on("connect", () => console.log(socket.connected));
     if (token && UserID && currency && returnurl) {
       socket.emit("sessionCheck", { token, UserID, currency, returnurl });
+      socket.emit("getMsgs");
       socket.on("sessionSecure", (data) => {
         if (data.sessionStatus === true) {
           socket.emit("enterRoom", { token, UserID, currency });
@@ -361,6 +365,10 @@ export const Provider = ({ children }: any) => {
     }
 
     if (secure) {
+      socket.on("allMsgs", (msgs) => {
+        setMsgData(msgs);
+      });
+
       socket.on("newMsg", ({ userId, userName, avatar, msgType, msg }) => {
         updateUserMsg(userId, userName, avatar, msgType, msg);
       });
@@ -384,7 +392,6 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("gameState", (gameState: GameStatusType) => {
-        console.log("here");
         setGameState(gameState);
       });
 
@@ -609,6 +616,10 @@ export const Provider = ({ children }: any) => {
   useEffect(() => {
     if (gameState.GameState === "BET") getMyBets();
   }, [gameState.GameState]);
+
+  useEffect(() => {
+    console.log("123123123");
+  }, []);
 
   return (
     <Context.Provider
