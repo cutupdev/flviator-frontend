@@ -57,7 +57,7 @@ export default function PerfectLiveChat() {
           <div className="header">
             <div className="online-wrapper position-absolute d-flex align-items-center">
               <div className="green-circle"></div>
-              <span>91</span>
+              <span>11</span>
             </div>
             <div className="buttons">
               <button
@@ -150,7 +150,7 @@ export default function PerfectLiveChat() {
                 </button>
               </div>
               <GifPicker
-                width={278}
+                width={270}
                 height={320}
                 theme={Theme.DARK}
                 tenorApiKey={tenorApiKey}

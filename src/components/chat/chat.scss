@@ -67,7 +67,7 @@
 
     em-emoji-picker {
       --border-radius: 0 0 10px 10px !important;
-      width: 278px;
+      width: 270px;
     }
 
     .gif-picker {
@@ -312,7 +312,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  right: 5px;
+  right: 6px;
   height: auto;
   bottom: 60px;
 }
@@ -394,6 +394,7 @@
 
 .gif-preview {
   width: 200px;
+  visibility: visible !important;
 }
 
 .name-wrapper {
