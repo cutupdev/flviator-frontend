@@ -2,13 +2,14 @@ import React, { useContext, useState } from "react";
 import { HiOutlineFaceSmile, HiOutlineGif } from "react-icons/hi2";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
-import GifPicker, { Theme } from "gif-picker-react";
+import GifPicker, { TenorImage, Theme } from "gif-picker-react";
 
 import Context from "../../context";
 import "./chat.scss";
 
 export default function PerfectLiveChat() {
   const { socket, msgData, toggleMsgTab } = useContext(Context);
+  const [selectedGif, setSelectedGif] = useState<TenorImage>(null!);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
   const [gifPicker, setGifPicker] = useState<boolean>(false);
@@ -91,6 +92,20 @@ export default function PerfectLiveChat() {
                   </div>
                 </div>
               ))}
+              <>
+                <img
+                  src={selectedGif.url}
+                  className="gif-preview"
+                  alt="Selected GIF"
+                />
+                <a
+                  href={selectedGif.shortTenorUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {selectedGif.shortTenorUrl}
+                </a>
+              </>
             </div>
           </div>
           {emojiPicker && (
@@ -110,7 +125,7 @@ export default function PerfectLiveChat() {
           )}
           {gifPicker && (
             <div
-              className="emoji-picker"
+              className="gif-picker"
               // tabIndex={0}
               // onBlur={() => setGifPicker(!gifPicker)}
             >
@@ -119,7 +134,7 @@ export default function PerfectLiveChat() {
                 height={320}
                 theme={Theme.DARK}
                 tenorApiKey={tenorApiKey}
-                onGifClick={(item) => console.log(item)}
+                onGifClick={setSelectedGif}
               />
             </div>
           )}
