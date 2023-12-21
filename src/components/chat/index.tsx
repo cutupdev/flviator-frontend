@@ -35,13 +35,14 @@ export default function PerfectLiveChat() {
   };
 
   const handleChooseGif = (item) => {
-    let gif: any = { ...item };
-    if (item) {
-      socket.emit("sendMsg", { msgType: "gif", msgContent: gif.url });
-      console.log("send message");
-    } else {
-      console.log("message empty");
-    }
+    console.log(item);
+    // let gif: any = { ...item };
+    // if (item) {
+    //   socket.emit("sendMsg", { msgType: "gif", msgContent: gif.url });
+    //   console.log("send message");
+    // } else {
+    //   console.log("message empty");
+    // }
   };
 
   const handleEmojiSelect = (emoji) => {
@@ -132,7 +133,7 @@ export default function PerfectLiveChat() {
             <div
               className="gif-picker"
               tabIndex={0}
-              onBlur={() => setGifPicker(false)}
+              // onBlur={() => setGifPicker(false)}
             >
               <GifPicker
                 width={278}
