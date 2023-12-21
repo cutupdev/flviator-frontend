@@ -27,6 +27,7 @@ export interface UserType {
   userName: string;
   soundStatus: boolean;
   musicStatus: boolean;
+  msgVisible: boolean;
   f: {
     auto: boolean;
     betted: boolean;
@@ -122,12 +123,14 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
   previousHand: UserType[];
   history: number[];
   rechargeState: boolean;
+  msgReceived: boolean;
   myUnityContext: UnityContext;
   currentTarget: number;
   setCurrentTarget(attrs: Partial<number>);
   update(attrs: Partial<ContextDataType>);
   getMyBets();
   updateUserBetState(attrs: Partial<UserStatusType>);
+  setMsgData(attrs: MsgUserType[]);
   handleGetSeed();
   toggleMsgTab();
 }
@@ -140,6 +143,7 @@ interface MsgUserType {
   msgType: string;
   msg: string;
   likes: number;
+  likesIDs: string[];
   createdAt?: number;
 }
 
@@ -163,6 +167,7 @@ const init_state = {
     currency: "INR",
     soundStatus: false,
     musicStatus: false,
+    msgVisible: false,
     f: {
       auto: false,
       betted: false,
@@ -231,10 +236,13 @@ export const Provider = ({ children }: any) => {
   const [msgData, setMsgData] = useState<MsgUserType[]>([]);
 
   const [secure, setSecure] = React.useState<boolean>(false);
+  const [msgReceived, setMsgReceived] = React.useState<boolean>(false);
   const [errorBackend, setErrorBackend] = React.useState<boolean>(false);
   const [platformLoading, setPlatformLoading] = React.useState<boolean>(true);
-  const [msgTab, setMsgTab] = React.useState<boolean>(true);
   const [state, setState] = React.useState<ContextDataType>(init_state);
+  const [msgTab, setMsgTab] = React.useState<boolean>(
+    state.userInfo.msgVisible
+  );
 
   const toggleMsgTab = () => {
     setMsgTab(!msgTab);
@@ -300,6 +308,7 @@ export const Provider = ({ children }: any) => {
         msgType,
         msg,
         likes: 0,
+        likesIDs: [],
       },
     ]);
   };
@@ -339,7 +348,6 @@ export const Provider = ({ children }: any) => {
     socket.on("connect", () => console.log(socket.connected));
     if (token && UserID && currency && returnurl) {
       socket.emit("sessionCheck", { token, UserID, currency, returnurl });
-      socket.emit("getMsgs");
       socket.on("sessionSecure", (data) => {
         if (data.sessionStatus === true) {
           socket.emit("enterRoom", { token, UserID, currency });
@@ -365,14 +373,6 @@ export const Provider = ({ children }: any) => {
     }
 
     if (secure) {
-      socket.on("allMsgs", (msgs) => {
-        setMsgData(msgs);
-      });
-
-      socket.on("newMsg", ({ userId, userName, avatar, msgType, msg }) => {
-        updateUserMsg(userId, userName, avatar, msgType, msg);
-      });
-
       socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
         setBettedUsers(bettedUsers);
       });
@@ -531,6 +531,16 @@ export const Provider = ({ children }: any) => {
   }, [socket, secure, token]);
 
   React.useEffect(() => {
+    socket.on("newMsg", ({ userId, userName, avatar, msgType, msg }) => {
+      setMsgReceived(!msgReceived);
+      updateUserMsg(userId, userName, avatar, msgType, msg);
+    });
+    return () => {
+      socket.off("newMsg");
+    };
+  }, [socket, msgReceived, msgData]);
+
+  React.useEffect(() => {
     let attrs = state;
     let betStatus = userBetState;
     if (gameState.GameState === "BET") {
@@ -617,10 +627,6 @@ export const Provider = ({ children }: any) => {
     if (gameState.GameState === "BET") getMyBets();
   }, [gameState.GameState]);
 
-  useEffect(() => {
-    console.log("123123123");
-  }, []);
-
   return (
     <Context.Provider
       value={{
@@ -631,6 +637,7 @@ export const Provider = ({ children }: any) => {
         ...gameState,
         socket,
         msgData,
+        msgReceived,
         platformLoading,
         msgTab,
         errorBackend,
@@ -640,6 +647,7 @@ export const Provider = ({ children }: any) => {
         bettedUsers: [...bettedUsers],
         previousHand: [...previousHand],
         history: [...history],
+        setMsgData,
         setCurrentTarget,
         update,
         getMyBets,

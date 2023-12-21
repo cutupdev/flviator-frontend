@@ -3,12 +3,15 @@ import { HiOutlineFaceSmile, HiOutlineGif } from "react-icons/hi2";
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import GifPicker, { Theme } from "gif-picker-react";
+import axios from "axios";
 
 import Context from "../../context";
 import "./chat.scss";
+import config from "../../config.json";
 
 export default function PerfectLiveChat() {
-  const { socket, msgData, toggleMsgTab } = useContext(Context);
+  const { state, socket, msgReceived, msgData, setMsgData, toggleMsgTab } =
+    useContext(Context);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
   const [gifPicker, setGifPicker] = useState<boolean>(false);
@@ -24,7 +27,7 @@ export default function PerfectLiveChat() {
 
   useEffect(() => {
     scrollToLastFruit();
-  }, []);
+  }, [msgReceived]);
 
   const handleInputText = (e) => {
     if (e.keyCode === 13) {
@@ -38,9 +41,8 @@ export default function PerfectLiveChat() {
   };
 
   const handleSendMsg = () => {
-    if (msgContent) {
+    if (msgContent !== "") {
       socket.emit("sendMsg", { msgType: "normal", msgContent });
-      console.log("send message");
     } else {
       console.log("message empty");
     }
@@ -51,7 +53,6 @@ export default function PerfectLiveChat() {
     let gif: any = { ...item };
     if (item) {
       socket.emit("sendMsg", { msgType: "gif", msgContent: gif.url });
-      console.log("send message");
     } else {
       console.log("message empty");
     }
@@ -61,6 +62,38 @@ export default function PerfectLiveChat() {
   const handleEmojiSelect = (emoji) => {
     setMsgContent(`${msgContent}${emoji.native}`);
   };
+
+  const getAllChats = async () => {
+    let response: any = await axios.post(
+      `${
+        process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
+      }/get-all-chat`
+    );
+    setMsgData(response?.data?.data || []);
+  };
+
+  const handleLikeChat = async (chatItem: any) => {
+    let response = await axios.post(
+      `${
+        process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
+      }/like-chat`,
+      {
+        chatID: chatItem._id,
+        userId: state.userInfo.userId,
+      }
+    );
+    if (response?.data?.status) {
+      getAllChats();
+    }
+  };
+
+  useEffect(() => {
+    getAllChats();
+  }, []);
 
   return (
     <div className="chat-info-board">
@@ -88,46 +121,59 @@ export default function PerfectLiveChat() {
               className="cdk-virtual-scroll-content-wrapper"
               ref={msgContentRef}
             >
-              {msgData.map((item, index) => (
-                <div key={index} className="message-wrapper ng-star-inserted">
-                  <div className="avatar-block">
-                    <img
-                      className="avatar"
-                      src={item.avatar || "./avatars/av-6.png"}
-                      alt={item.avatar || "./avatars/av-6.png"}
-                    />
-                  </div>
-                  <div className="msg-block">
-                    <div className="msg-data">
-                      <span className="text canSelect">
-                        <span className="name-wrapper">
-                          <span className="name canSelect">
-                            {item.userId?.slice(0, 1) +
-                              "***" +
-                              item.userId?.slice(-1)}
+              {msgData?.map((item, index) => {
+                let active = item?.likesIDs?.filter(
+                  (item) => item === state.userInfo.userId
+                ).length;
+                return (
+                  <div key={index} className="message-wrapper ng-star-inserted">
+                    <div className="avatar-block">
+                      <img
+                        className="avatar"
+                        src={item.avatar || "./avatars/av-6.png"}
+                        alt={item.avatar || "./avatars/av-6.png"}
+                      />
+                    </div>
+                    <div className="msg-block">
+                      <div className="msg-data">
+                        <span className="text canSelect">
+                          <span className="name-wrapper">
+                            <span className="name canSelect">
+                              {item.userId?.slice(0, 1) +
+                                "***" +
+                                item.userId?.slice(-1)}
+                            </span>
                           </span>
+                          {item.msgType === "gif" ? (
+                            <div>
+                              <img
+                                src={item.msg}
+                                className="gif-preview"
+                                alt="Selected GIF"
+                              />
+                            </div>
+                          ) : (
+                            <span className="ng-star-inserted">{item.msg}</span>
+                          )}
                         </span>
-                        {item.msgType === "gif" ? (
-                          <div>
-                            <img
-                              src={item.msg}
-                              className="gif-preview"
-                              alt="Selected GIF"
-                            />
+                      </div>
+                    </div>
+                    <div className="likes-block">
+                      <div
+                        className="btn-block"
+                        onClick={() => handleLikeChat(item)}
+                      >
+                        {item?.likesIDs?.length > 0 && (
+                          <div className="font-weight-bold likes-number ng-star-inserted">
+                            {` ${item.likesIDs.length} `}
                           </div>
-                        ) : (
-                          <span className="ng-star-inserted">{item.msg}</span>
                         )}
-                      </span>
+                        <div className={`btn-like ${active && "active"}`}></div>
+                      </div>
                     </div>
                   </div>
-                  <div className="likes-block">
-                    <div className="btn-block">
-                      <div className="btn-like"></div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
           {emojiPicker && (

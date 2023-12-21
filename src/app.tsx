@@ -30,10 +30,6 @@ function App() {
   const return_url = new URLSearchParams(useLocation().search).get(
     "return_url"
   );
-  const [audioStatus, setAudioStatus] = useState({
-    soundStatus: state.userInfo.soundStatus || false,
-    musicStatus: state.userInfo.musicStatus || false,
-  });
 
   const mainAudioRef = useRef<HTMLAudioElement>(null);
   const takeOffAudioRef = useRef<HTMLAudioElement>(null);
