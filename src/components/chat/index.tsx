@@ -35,14 +35,13 @@ export default function PerfectLiveChat() {
   };
 
   const handleChooseGif = (item) => {
-    console.log(item);
-    // let gif: any = { ...item };
-    // if (item) {
-    //   socket.emit("sendMsg", { msgType: "gif", msgContent: gif.url });
-    //   console.log("send message");
-    // } else {
-    //   console.log("message empty");
-    // }
+    let gif: any = { ...item };
+    if (item) {
+      socket.emit("sendMsg", { msgType: "gif", msgContent: gif.url });
+      console.log("send message");
+    } else {
+      console.log("message empty");
+    }
   };
 
   const handleEmojiSelect = (emoji) => {
@@ -115,12 +114,19 @@ export default function PerfectLiveChat() {
             </div>
           </div>
           {emojiPicker && (
-            <div
-              className="emoji-picker"
-              tabIndex={0}
-              onBlur={() => setEmojiPicker(false)}
-            >
+            <div className="emoji-picker">
+              <div className="modal-header">
+                <div className="modal-title text-uppercase">Emoji</div>
+                <button
+                  type="button"
+                  className="close"
+                  onClick={() => setEmojiPicker(false)}
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
               <Picker
+                style={{ borderRadius: "0 !important" }}
                 set={"emojione"}
                 emojiSize={20}
                 perLine={8}
@@ -130,11 +136,17 @@ export default function PerfectLiveChat() {
             </div>
           )}
           {gifPicker && (
-            <div
-              className="gif-picker"
-              tabIndex={0}
-              // onBlur={() => setGifPicker(false)}
-            >
+            <div className="gif-picker">
+              <div className="modal-header">
+                <div className="modal-title text-uppercase">Gif</div>
+                <button
+                  type="button"
+                  className="close"
+                  onClick={() => setGifPicker(false)}
+                >
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
               <GifPicker
                 width={278}
                 height={320}
