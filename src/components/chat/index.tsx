@@ -10,7 +10,7 @@ import "./chat.scss";
 import config from "../../config.json";
 
 export default function PerfectLiveChat() {
-  const { state, socket, msgReceived, setMsgReceived, msgData, setMsgData, toggleMsgTab } =
+  const { state, socket, msgTab, msgReceived, setMsgReceived, msgData, setMsgData, toggleMsgTab } =
     useContext(Context);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export default function PerfectLiveChat() {
 
   useEffect(() => {
     scrollToLastFruit();
-  }, [msgReceived]);
+  }, [msgTab, msgReceived]);
 
   const handleInputText = (e) => {
     if (e.keyCode === 13) {
