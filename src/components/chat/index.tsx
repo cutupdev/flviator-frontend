@@ -104,7 +104,7 @@ export default function PerfectLiveChat() {
 
   useEffect(() => {
     getAllChats(false);
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -137,6 +137,8 @@ export default function PerfectLiveChat() {
                 let active = item?.likesIDs?.filter(
                   (item) => item === state.userInfo.userId
                 ).length;
+                let userid =
+                  item.userId?.slice(0, 1) + "***" + item.userId?.slice(-1);
                 return (
                   <div key={index} className="message-wrapper ng-star-inserted">
                     <div className="avatar-block">
@@ -149,12 +151,13 @@ export default function PerfectLiveChat() {
                     <div className="msg-block">
                       <div className="msg-data">
                         <span className="text canSelect">
-                          <span className="name-wrapper">
-                            <span className="name canSelect">
-                              {item.userId?.slice(0, 1) +
-                                "***" +
-                                item.userId?.slice(-1)}
-                            </span>
+                          <span
+                            className="name-wrapper"
+                            onClick={() =>
+                              handleTextChange(`${msgContent}@${userid}`)
+                            }
+                          >
+                            <span className="name canSelect">{userid}</span>
                           </span>
                           {item.msgType === "gif" ? (
                             <div>

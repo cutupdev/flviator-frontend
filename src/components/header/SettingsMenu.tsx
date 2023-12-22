@@ -14,6 +14,7 @@ import { MdHistory } from "react-icons/md";
 import { CiMoneyBill } from "react-icons/ci";
 import { ImCopy } from "react-icons/im";
 import { RxAvatar } from "react-icons/rx";
+import copy from "copy-to-clipboard";
 
 import Context from "../../context";
 import axios from "axios";
@@ -40,13 +41,20 @@ const settingItems: { label: string; handleType: string }[] = [
 ];
 
 const Menu = ({ setHowto }) => {
-  const { state, update, handleGetSeed, toggleMsgTab } =
-    React.useContext(Context);
+  const {
+    state,
+    update,
+    handleGetSeed,
+    toggleMsgTab,
+    msgReceived,
+    setMsgReceived,
+  } = React.useContext(Context);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalType, setModalType] = useState<string>("");
   const [clientSeedType, setClientSeedType] = useState<number>(0);
   const [mouseCursorStatus, setMouseCursorStatus] = useState<boolean>(false);
+  const [changeSeed, setChangeSeed] = useState<boolean>(false);
 
   const generateRandomString = () => {
     const characters =
@@ -61,6 +69,7 @@ const Menu = ({ setHowto }) => {
   };
 
   const [key, setKey] = useState<string>(generateRandomString());
+  const [customKey, setCustomKey] = useState<string>(generateRandomString());
 
   /**
    * Toggle the drop down menu
@@ -203,7 +212,10 @@ const Menu = ({ setHowto }) => {
       </button>
       <button
         className={`setting-button ${showDropDown ? "active" : ""}`}
-        onClick={toggleMsgTab}
+        onClick={() => {
+          toggleMsgTab();
+          setMsgReceived(!msgReceived);
+        }}
       >
         <img src={ChatImg} alt="chat section" />
       </button>
@@ -336,7 +348,11 @@ const Menu = ({ setHowto }) => {
                     Round result is determined form combination of server seed
                     and first 3 bets of the round.
                   </div>
-                  <div className="client-seed-custom">
+                  <div
+                    className={`client-seed-custom ${
+                      clientSeedType === 1 && "block-key"
+                    }`}
+                  >
                     <div
                       className="label"
                       onClick={() => {
@@ -356,15 +372,23 @@ const Menu = ({ setHowto }) => {
                     </div>
                     <div className="key-container">
                       <div className="key">
-                        <span> Current: </span>
+                        <span className="current"> Current: </span>
                         <span className="main-key">{key}</span>
                       </div>
                       <span className="copy-icon">
-                        <ImCopy color="#868b8d" size={16} />
+                        <ImCopy
+                          color="#868b8d"
+                          size={16}
+                          onClick={() => copy(key)}
+                        />
                       </span>
                     </div>
                   </div>
-                  <div className="client-seed-custom">
+                  <div
+                    className={`client-seed-custom ${
+                      clientSeedType === 0 && "block-key"
+                    }`}
+                  >
                     <div
                       className="label"
                       onClick={() => {
@@ -384,15 +408,27 @@ const Menu = ({ setHowto }) => {
                     </div>
                     <div className="key-container">
                       <div className="key">
-                        <span> Current: </span>
-                        <span className="main-key">{key}</span>
+                        <span className="current"> Current: </span>
+                        <span className="main-key">{customKey}</span>
                       </div>
                       <span className="copy-icon">
-                        <ImCopy color="#868b8d" size={16} />
+                        <ImCopy
+                          color="#868b8d"
+                          size={16}
+                          onClick={() => copy(customKey)}
+                        />
                       </span>
                     </div>
                     <div className="key-change">
-                      <button className="btn btn-success">CHANGE</button>
+                      <button
+                        className="btn btn-success"
+                        onClick={() => {
+                          setChangeSeed(true);
+                        }}
+                        disabled={clientSeedType === 0}
+                      >
+                        CHANGE
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -415,6 +451,60 @@ const Menu = ({ setHowto }) => {
               </div>
             </div>
           </div>
+
+          {changeSeed === true && (
+            <div className="seed-wrapper">
+              <div className="seed-change">
+                <div className="seed-header">
+                  <div>CHANGE SEED</div>
+                  <button
+                    type="button"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    className="close"
+                    onClick={() => setChangeSeed(false)}
+                  >
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="seed-body">
+                  <div className="seed-body-title">Enter new seed:</div>
+                  <div className="seed-value">
+                    <input
+                      type="text"
+                      title="Seed"
+                      className="ng-untouched ng-pristine ng-valid"
+                      value={customKey}
+                      onChange={(e) => setCustomKey(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-warning btn-random"
+                      onClick={() => setCustomKey(generateRandomString())}
+                    >
+                      <span className="text-uppercase">Random</span>
+                    </button>
+                  </div>
+                  <div className="actions">
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={() => setChangeSeed(false)}
+                    >
+                      <span className="text-uppercase">Save</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      onClick={() => setChangeSeed(false)}
+                    >
+                      <span className="text-uppercase">Cancel</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
