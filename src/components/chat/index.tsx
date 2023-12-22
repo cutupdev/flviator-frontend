@@ -104,6 +104,7 @@ export default function PerfectLiveChat() {
 
   useEffect(() => {
     getAllChats(false);
+    // eslint-disable-next-line
   }, []);
 
   return (

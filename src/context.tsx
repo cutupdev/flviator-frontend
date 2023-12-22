@@ -375,7 +375,6 @@ export const Provider = ({ children }: any) => {
 
     if (secure) {
       socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
-        console.log("This is test section")
         setBettedUsers(bettedUsers);
       });
 

@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLocation } from "react-router";
 import Header from "./components/header";
 import BetsUsers from "./components/bet-users";
 import Main from "./components/Main";
-// import { useCrashContext } from "./components/Main/context";
 
 import MainAudio from "./assets/audio/main.wav";
 import FlewAwayAudio from "./assets/audio/flew_away.mp3";
@@ -12,9 +11,7 @@ import TakeOffAudio from "./assets/audio/take_off.mp3";
 import propeller from "./assets/images/propeller.png";
 
 import Context from "./context";
-import CustomToastContainer from "./components/Toast";
 import PerfectLiveChat from "./components/chat";
-// import "./App.scss";
 
 function App() {
   const {
