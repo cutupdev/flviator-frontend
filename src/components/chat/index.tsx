@@ -154,7 +154,7 @@ export default function PerfectLiveChat() {
                           <span
                             className="name-wrapper"
                             onClick={() =>
-                              handleTextChange(`${msgContent}@${userid}`)
+                              handleTextChange(`${msgContent}@${userid} `)
                             }
                           >
                             <span className="name canSelect">{userid}</span>
