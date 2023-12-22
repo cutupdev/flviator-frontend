@@ -10,8 +10,16 @@ import "./chat.scss";
 import config from "../../config.json";
 
 export default function PerfectLiveChat() {
-  const { state, socket, msgTab, msgReceived, setMsgReceived, msgData, setMsgData, toggleMsgTab } =
-    useContext(Context);
+  const {
+    state,
+    socket,
+    msgTab,
+    msgReceived,
+    setMsgReceived,
+    msgData,
+    setMsgData,
+    toggleMsgTab,
+  } = useContext(Context);
   const [msgContent, setMsgContent] = useState<string>("");
   const [emojiPicker, setEmojiPicker] = useState<boolean>(false);
   const [gifPicker, setGifPicker] = useState<boolean>(false);
@@ -63,7 +71,7 @@ export default function PerfectLiveChat() {
     setMsgContent(`${msgContent}${emoji.native}`);
   };
 
-  const getAllChats = async () => {
+  const getAllChats = async (flag: boolean) => {
     let response: any = await axios.post(
       `${
         process.env.REACT_APP_DEVELOPMENT === "true"
@@ -72,7 +80,9 @@ export default function PerfectLiveChat() {
       }/get-all-chat`
     );
     setMsgData(response?.data?.data || []);
-    setMsgReceived(!msgReceived);
+    if (flag === false) {
+      setMsgReceived(!msgReceived);
+    }
   };
 
   const handleLikeChat = async (chatItem: any) => {
@@ -88,12 +98,12 @@ export default function PerfectLiveChat() {
       }
     );
     if (response?.data?.status) {
-      getAllChats();
+      getAllChats(true);
     }
   };
 
   useEffect(() => {
-    getAllChats();
+    getAllChats(false);
   }, []);
 
   return (
