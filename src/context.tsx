@@ -18,6 +18,12 @@ export interface BettedUserType {
   img: string;
 }
 
+export interface BetResults {
+  members: number;
+  betAmount: number;
+  cashouted: number;
+}
+
 export interface UserType {
   balance: number;
   userType: boolean;

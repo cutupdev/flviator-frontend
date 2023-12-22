@@ -159,3 +159,20 @@
 .w-50 {
   width: 50%;
 }
+
+.betted-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #28a909;
+  border-radius: 8px;
+  padding: 4px;
+
+  .info-item {
+    cursor: pointer;
+    &:hover {
+      color: #d0021b;
+    }
+  }
+}

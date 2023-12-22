@@ -1,24 +1,39 @@
 import React from "react";
-import Context, { BettedUserType, UserType } from "../../context";
+import Context, { BetResults, BettedUserType, UserType } from "../../context";
 
 interface AllDataProps {
   pre: boolean;
   setPre: React.Dispatch<React.SetStateAction<boolean>>;
   allData: UserType[] | BettedUserType[];
+  betsResults: BetResults;
 }
 
-const AllData = ({ pre, setPre, allData }: AllDataProps) => {
+const AllData = ({ pre, setPre, allData, betsResults }: AllDataProps) => {
   const { state, bettedUsers } = React.useContext(Context);
 
   return (
     <>
+      <div className="betted-info">
+        <div className="info-item">
+          <div className="uppercase">Number of players</div>
+          <div>{betsResults?.members}</div>
+        </div>
+        <div className="info-item">
+          <div className="uppercase">Total bets</div>
+          <div>{betsResults?.betAmount.toFixed(2)}</div>
+        </div>
+        <div className="info-item">
+          <div className="uppercase">Total winnings</div>
+          <div>{betsResults?.cashouted.toFixed(2)}</div>
+        </div>
+      </div>
       <div>
         <div className="all-bets-block">
           <div>
             <div className="uppercase">ALL BETS</div>
             <div>{bettedUsers?.length}</div>
           </div>
-          {/* <div
+          <div
             className={`previous-hand items-center flex justify-between ${
               pre ? "click" : ""
             }`}
@@ -32,7 +47,7 @@ const AllData = ({ pre, setPre, allData }: AllDataProps) => {
             >
               Previous hand
             </span>
-          </div> */}
+          </div>
         </div>
         <div className="spacer"></div>
         <div className="legend">
