@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 // import { useCrashContext } from "../context";
 import toast from "react-hot-toast";
 import Context, { callCashOut } from "../../context";
-import toaster from "../Toast";
+// import toaster from "../Toast";
 
 interface BetProps {
   index: "f" | "s";
@@ -203,12 +203,13 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   };
 
   useEffect(() => {
-    if (betted && autoCashoutState && cashOut < currentSecondNum) {
+    if (GameState === "PLAYING" && betted && autoCashoutState && cashOut < currentSecondNum) {
       updateUserBetState({ [`${index}betted`]: false });
       callCashOut(cashOut, index);
     }
     // eslint-disable-next-line
   }, [
+    GameState,
     currentSecondNum,
     fbetted,
     sbetted,
