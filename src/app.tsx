@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useLocation } from "react-router";
-import Header from "./components/header";
-import BetsUsers from "./components/bet-users";
+import Header from "./components/Header";
+import BetsUsers from "./components/BetUsers";
 import Main from "./components/Main";
 
 import MainAudio from "./assets/audio/main.wav";
@@ -11,7 +11,7 @@ import TakeOffAudio from "./assets/audio/take_off.mp3";
 import propeller from "./assets/images/propeller.png";
 
 import Context from "./context";
-import PerfectLiveChat from "./components/chat";
+import PerfectLiveChat from "./components/Chat";
 
 function App() {
   const {

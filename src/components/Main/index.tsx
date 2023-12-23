@@ -1,7 +1,7 @@
 import React from "react";
 import "./main.scss";
 import History from "./history";
-import Crash from "../crash/index";
+import Crash from "../Crash/index";
 import Bet from "./bet";
 import Context from "../../context";
 

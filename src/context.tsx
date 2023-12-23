@@ -27,7 +27,7 @@ export interface BetResults {
 export interface UserType {
   balance: number;
   userType: boolean;
-  img: string;
+  avatar: string;
   userId: string;
   currency: string;
   userName: string;
@@ -169,7 +169,7 @@ const init_state = {
     balance: 0,
     userType: false,
     userId: "",
-    img: "",
+    avatar: "",
     userName: "",
     currency: "INR",
     soundStatus: false,
@@ -352,7 +352,9 @@ export const Provider = ({ children }: any) => {
   );
 
   React.useEffect(() => {
-    socket.on("connect", () => console.log(socket.connected));
+    socket.on("connect", () =>
+      console.log(`Socket connection is ${socket.connected}`)
+    );
     if (token && UserID && currency && returnurl) {
       socket.emit("sessionCheck", { token, UserID, currency, returnurl });
       socket.on("sessionSecure", (data) => {
@@ -371,6 +373,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.userType = user.userType;
         attrs.userInfo.userId = user.userId;
         attrs.userInfo.userName = user.userName;
+        attrs.userInfo.avatar = user.avatar;
         attrs.userInfo.currency = user.currency;
         attrs.userInfo.soundStatus = user.soundStatus;
         attrs.userInfo.musicStatus = user.musicStatus;
