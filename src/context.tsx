@@ -414,7 +414,6 @@ export const Provider = ({ children }: any) => {
       });
 
       socket.on("finishGame", (user: UserType) => {
-        console.log("user", user);
         let attrs = newState;
         let fauto = attrs.userInfo.f.auto;
         let sauto = attrs.userInfo.s.auto;
