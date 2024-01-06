@@ -336,12 +336,12 @@ const Menu = ({ setHowto }) => {
                   );
                 })}
               </div>
-              <a href={config.production_wss} className="logout">
+              {/* <a href={config.production_wss} className="logout">
                 <span>
                   <HiOutlineHome size={16} />
                 </span>
                 <span>Home</span>
-              </a>
+              </a> */}
             </div>
           </div>
         )}
