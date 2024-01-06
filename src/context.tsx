@@ -31,7 +31,7 @@ export interface UserType {
   userId: string;
   currency: string;
   userName: string;
-  soundStatus: boolean;
+  audioStatus: boolean;
   musicStatus: boolean;
   msgVisible: boolean;
   f: {
@@ -172,7 +172,7 @@ const init_state = {
     avatar: "",
     userName: "",
     currency: "INR",
-    soundStatus: false,
+    audioStatus: false,
     musicStatus: false,
     msgVisible: false,
     f: {
@@ -375,7 +375,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.userName = user.userName;
         attrs.userInfo.avatar = user.avatar;
         attrs.userInfo.currency = user.currency;
-        attrs.userInfo.soundStatus = user.soundStatus;
+        attrs.userInfo.audioStatus = user.audioStatus;
         attrs.userInfo.musicStatus = user.musicStatus;
         update(attrs);
         setSecure(true);

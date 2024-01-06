@@ -104,13 +104,13 @@ const Menu = ({ setHowto }) => {
         }/update-info`,
         {
           userId: state.userInfo.userId,
-          updateData: { soundStatus: checked },
+          updateData: { audioStatus: checked },
         }
       );
       update({
         userInfo: {
           ...state.userInfo,
-          soundStatus: checked,
+          audioStatus: checked,
         },
       });
     },
@@ -295,7 +295,7 @@ const Menu = ({ setHowto }) => {
                       <input
                         className="aviator-input"
                         type="checkbox"
-                        checked={state.userInfo.soundStatus || false}
+                        checked={state.userInfo.audioStatus || false}
                         onChange={(e) => handleToggleSound(e.target.checked)}
                       />
                       <span className="aviator-slider round"></span>

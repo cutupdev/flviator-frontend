@@ -10,7 +10,7 @@ interface BetProps {
   setAdd: any;
 }
 type FieldNameType = "betAmount" | "decrease" | "increase" | "singleAmount";
-type BetOptType = "20.00" | "50.00" | "100.00" | "1000.00";
+type BetOptType = "" | "20.00" | "50.00" | "100.00" | "1000.00";
 type GameType = "manual" | "auto";
 
 const Bet = ({ index, add, setAdd }: BetProps) => {
@@ -50,7 +50,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   const [gameType, setGameType] = React.useState<GameType>("manual");
   const [betOpt, setBetOpt] = React.useState<BetOptType>("20.00");
   const [showModal, setShowModal] = React.useState(false);
-  const [myBetAmount, setMyBetAmount] = React.useState(20);
+  const [myBetAmount, setMyBetAmount] = React.useState<number | string>(20);
   // const { index } = props;
 
   const minus = (type: FieldNameType) => {
@@ -227,17 +227,17 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
       <div className="controls">
         {index === "f"
           ? !add && (
-              <div
-                className="sec-hand-btn add"
-                onClick={() => setAdd(true)}
-              ></div>
-            )
+            <div
+              className="sec-hand-btn add"
+              onClick={() => setAdd(true)}
+            ></div>
+          )
           : add && (
-              <div
-                className="sec-hand-btn minus"
-                onClick={() => setAdd(false)}
-              ></div>
-            )}
+            <div
+              className="sec-hand-btn minus"
+              onClick={() => setAdd(false)}
+            ></div>
+          )}
         <div className="navigation">
           <div className="navigation-switcher">
             {betted || betState ? (
@@ -291,39 +291,28 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   {betState || betted ? (
                     <input
                       type="number"
-                      value={Number(myBetAmount).toFixed(2)}
+                      value={myBetAmount === "" ? "" : Number(myBetAmount).toFixed(2)}
                       readOnly
                     ></input>
                   ) : (
                     <input
                       type="number"
-                      value={Number(myBetAmount).toFixed(2)}
+                      value={myBetAmount === "" ? "" : Number(myBetAmount).toFixed(2)}
                       onChange={(e) => {
+                        let betAmount: number | string = 0;
                         Number(e.target.value) > maxBet
-                          ? update({
-                              ...state,
-                              userInfo: {
-                                ...state.userInfo,
-                                [`${index}`]: { betAmount: maxBet },
-                              },
-                            })
+                          ? betAmount = maxBet
                           : Number(e.target.value) < 0
-                          ? update({
-                              ...state,
-                              userInfo: {
-                                ...state.userInfo,
-                                [`${index}`]: { betAmount: 0 },
-                              },
-                            })
-                          : update({
-                              ...state,
-                              userInfo: {
-                                ...state.userInfo,
-                                [`${index}`]: {
-                                  betAmount: Number(e.target.value),
-                                },
-                              },
-                            });
+                            ? betAmount = 0
+                            : betAmount = Number(e.target.value);
+                        if (betAmount === 0) betAmount = "";
+                        update({
+                          ...state,
+                          userInfo: {
+                            ...state.userInfo,
+                            [`${index}`]: { betAmount },
+                          },
+                        })
                       }}
                     ></input>
                   )}
@@ -397,11 +386,10 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                       <span>
                         {Number(betAmount * currentTarget).toFixed(2)}
                       </span>
-                      <span className="currency">{`${
-                        state?.userInfo?.currency
-                          ? state?.userInfo?.currency
-                          : "INR"
-                      }`}</span>
+                      <span className="currency">{`${state?.userInfo?.currency
+                        ? state?.userInfo?.currency
+                        : "INR"
+                        }`}</span>
                     </label>
                   </span>
                 </button>
@@ -434,11 +422,10 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   <label>BET</label>
                   <label className="amount">
                     <span>{Number(betAmount).toFixed(2)}&nbsp;</span>
-                    <span className="currency">{`${
-                      state?.userInfo?.currency
-                        ? state?.userInfo?.currency
-                        : "INR"
-                    }`}</span>
+                    <span className="currency">{`${state?.userInfo?.currency
+                      ? state?.userInfo?.currency
+                      : "INR"
+                      }`}</span>
                   </label>
                 </span>
               </button>
@@ -476,9 +463,8 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   <label className="label">Auto Cash Out</label>
                   {betted || betState ? (
                     <div
-                      className={`input-switch ${
-                        autoCashoutState ? "" : "off"
-                      }`}
+                      className={`input-switch ${autoCashoutState ? "" : "off"
+                        }`}
                     >
                       <span className="oval"></span>
                     </div>
@@ -489,9 +475,8 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                           [`${index}autoCashoutState`]: !autoCashoutState,
                         });
                       }}
-                      className={`input-switch ${
-                        autoCashoutState ? "" : "off"
-                      }`}
+                      className={`input-switch ${autoCashoutState ? "" : "off"
+                        }`}
                     >
                       <span className="oval"></span>
                     </div>
@@ -500,9 +485,8 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 <div className="cashout-snipper-wrapper">
                   <div className="cashout-snipper">
                     <div
-                      className={`snipper small ${
-                        autoCashoutState && !betState ? "" : "disabled"
-                      }`}
+                      className={`snipper small ${autoCashoutState && !betState ? "" : "disabled"
+                        }`}
                     >
                       <div className="input">
                         {autoCashoutState && !betState ? (
@@ -562,33 +546,29 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   <span>Number of Rounds:</span>
                   <div className="rounds-wrap">
                     <button
-                      className={`btn-secondary ${
-                        autoCound === 10 ? "onClick" : ""
-                      }`}
+                      className={`btn-secondary ${autoCound === 10 ? "onClick" : ""
+                        }`}
                       onClick={() => setCount(10)}
                     >
                       10
                     </button>
                     <button
-                      className={`btn-secondary ${
-                        autoCound === 20 ? "onClick" : ""
-                      }`}
+                      className={`btn-secondary ${autoCound === 20 ? "onClick" : ""
+                        }`}
                       onClick={() => setCount(20)}
                     >
                       20
                     </button>
                     <button
-                      className={`btn-secondary ${
-                        autoCound === 50 ? "onClick" : ""
-                      }`}
+                      className={`btn-secondary ${autoCound === 50 ? "onClick" : ""
+                        }`}
                       onClick={() => setCount(50)}
                     >
                       50
                     </button>
                     <button
-                      className={`btn-secondary ${
-                        autoCound === 100 ? "onClick" : ""
-                      }`}
+                      className={`btn-secondary ${autoCound === 100 ? "onClick" : ""
+                        }`}
                       onClick={() => setCount(100)}
                     >
                       100
@@ -659,11 +639,10 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                       </div>
                     )}
                   </div>
-                  <span>{`${
-                    state?.userInfo?.currency
-                      ? state?.userInfo?.currency
-                      : "INR"
-                  }`}</span>
+                  <span>{`${state?.userInfo?.currency
+                    ? state?.userInfo?.currency
+                    : "INR"
+                    }`}</span>
                 </div>
                 <div className="content-part">
                   <div
@@ -726,11 +705,10 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                       </div>
                     )}
                   </div>
-                  <span>{`${
-                    state?.userInfo?.currency
-                      ? state?.userInfo?.currency
-                      : "INR"
-                  }`}</span>
+                  <span>{`${state?.userInfo?.currency
+                    ? state?.userInfo?.currency
+                    : "INR"
+                    }`}</span>
                 </div>
                 <div className="content-part">
                   <div
@@ -798,11 +776,10 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                       </div>
                     )}
                   </div>
-                  <span>{`${
-                    state?.userInfo?.currency
-                      ? state?.userInfo?.currency
-                      : "INR"
-                  }`}</span>
+                  <span>{`${state?.userInfo?.currency
+                    ? state?.userInfo?.currency
+                    : "INR"
+                    }`}</span>
                 </div>
               </div>
               <div className="modal-footer">
