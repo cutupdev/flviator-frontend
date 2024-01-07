@@ -672,8 +672,8 @@ export const Provider = ({ children }: any) => {
 
   const updateMyIpAddress = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
-    setIP(res.data.ip)
     try {
+      console.log(res.data.ip)
       let response = await axios.post(
         `${process.env.REACT_APP_DEVELOPMENT === "true"
           ? config.development_api
@@ -693,6 +693,7 @@ export const Provider = ({ children }: any) => {
         });
       }
     } catch (error) { }
+    setIP(res.data.ip)
   }
 
   useEffect(() => {
