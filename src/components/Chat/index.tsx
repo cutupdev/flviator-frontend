@@ -108,11 +108,6 @@ export default function PerfectLiveChat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log(msgData)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [msgData]);
-
   return (
     <div className="chat-info-board">
       <div className="chat-block">

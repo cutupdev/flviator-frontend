@@ -173,8 +173,8 @@ const init_state = {
     avatar: "",
     userName: "",
     currency: "INR",
-    isSoundEnable: false,
-    isMusicEnable: false,
+    isSoundEnable: true,
+    isMusicEnable: true,
     msgVisible: false,
     f: {
       auto: false,
