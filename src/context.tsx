@@ -692,15 +692,23 @@ export const Provider = ({ children }: any) => {
           }
         });
       }
-    } catch (error) { }
+    } catch (error) {
+      console.log(error)
+    }
     setIP(res.data.ip)
   }
 
   useEffect(() => {
-    if (state.userInfo.userId) {
-      if ((state.userInfo.ipAddress === "0.0.0.0" || state.userInfo.ipAddress === "") && ip === "") updateMyIpAddress();
+    console.log("1")
+    console.log(state.userInfo, UserID)
+    if (UserID) {
+      console.log("2")
+      if ((state.userInfo.ipAddress === "0.0.0.0" || state.userInfo.ipAddress === "") && ip === "") {
+        console.log("3")
+        updateMyIpAddress();
+      }
     }
-  }, [state.userInfo, ip]);
+  }, [state.userInfo, UserID, ip]);
 
   return (
     <Context.Provider
