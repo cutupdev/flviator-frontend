@@ -31,6 +31,7 @@ export interface UserType {
   userId: string;
   currency: string;
   userName: string;
+  ipAddress: string;
   isSoundEnable: boolean;
   isMusicEnable: boolean;
   msgVisible: boolean;
@@ -172,6 +173,7 @@ const init_state = {
     userId: "",
     avatar: "",
     userName: "",
+    ipAddress: "",
     currency: "INR",
     isSoundEnable: true,
     isMusicEnable: true,
@@ -243,12 +245,12 @@ export const Provider = ({ children }: any) => {
 
   const [msgData, setMsgData] = useState<MsgUserType[]>([]);
 
-  const [secure, setSecure] = React.useState<boolean>(false);
-  const [msgReceived, setMsgReceived] = React.useState<boolean>(false);
-  const [errorBackend, setErrorBackend] = React.useState<boolean>(false);
-  const [platformLoading, setPlatformLoading] = React.useState<boolean>(true);
-  const [state, setState] = React.useState<ContextDataType>(init_state);
-  const [msgTab, setMsgTab] = React.useState<boolean>(
+  const [secure, setSecure] = useState<boolean>(false);
+  const [msgReceived, setMsgReceived] = useState<boolean>(false);
+  const [errorBackend, setErrorBackend] = useState<boolean>(false);
+  const [platformLoading, setPlatformLoading] = useState<boolean>(true);
+  const [state, setState] = useState<ContextDataType>(init_state);
+  const [msgTab, setMsgTab] = useState<boolean>(
     state.userInfo.msgVisible
   );
 
@@ -257,33 +259,34 @@ export const Provider = ({ children }: any) => {
   };
 
   newState = state;
-  const [unity, setUnity] = React.useState({
+  const [unity, setUnity] = useState({
     unityState: false,
     unityLoading: false,
     currentProgress: 0,
   });
-  const [gameState, setGameState] = React.useState({
+  const [gameState, setGameState] = useState({
     currentNum: 0,
     currentSecondNum: 0,
     GameState: "",
     time: 0,
   });
 
-  const [bettedUsers, setBettedUsers] = React.useState<BettedUserType[]>([]);
+  const [bettedUsers, setBettedUsers] = useState<BettedUserType[]>([]);
   const update = (attrs: Partial<ContextDataType>) => {
     setState({ ...state, ...attrs });
   };
-  const [previousHand, setPreviousHand] = React.useState<UserType[]>([]);
-  const [history, setHistory] = React.useState<number[]>([]);
-  const [userBetState, setUserBetState] = React.useState<UserStatusType>({
+  const [previousHand, setPreviousHand] = useState<UserType[]>([]);
+  const [history, setHistory] = useState<number[]>([]);
+  const [userBetState, setUserBetState] = useState<UserStatusType>({
     fbetState: false,
     fbetted: false,
     sbetState: false,
     sbetted: false,
   });
   newBetState = userBetState;
-  const [rechargeState, setRechargeState] = React.useState(false);
-  const [currentTarget, setCurrentTarget] = React.useState(0);
+  const [rechargeState, setRechargeState] = useState(false);
+  const [currentTarget, setCurrentTarget] = useState(0);
+  const [ip, setIP] = useState<string>("");
   const updateUserBetState = (attrs: Partial<UserStatusType>) => {
     setUserBetState({ ...userBetState, ...attrs });
   };
@@ -291,7 +294,7 @@ export const Provider = ({ children }: any) => {
     setState({ ...state, seed });
   };
 
-  const [betLimit, setBetLimit] = React.useState<GameBetLimit>({
+  const [betLimit, setBetLimit] = useState<GameBetLimit>({
     minBet: 10,
     maxBet: 100000,
   });
@@ -386,6 +389,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.currency = user.currency;
         attrs.userInfo.isSoundEnable = user.isSoundEnable;
         attrs.userInfo.isMusicEnable = user.isMusicEnable;
+        attrs.userInfo.ipAddress = user.ipAddress;
         update(attrs);
         setSecure(true);
       });
@@ -665,6 +669,37 @@ export const Provider = ({ children }: any) => {
   useEffect(() => {
     if (gameState.GameState === "BET") getMyBets();
   }, [gameState.GameState]);
+
+  const updateMyIpAddress = async () => {
+    const res = await axios.get("https://api.ipify.org/?format=json");
+    setIP(res.data.ip)
+    try {
+      let response = await axios.post(
+        `${process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
+        }/update-info`,
+        {
+          userId: state.userInfo.userId,
+          updateData: { ipAddress: res.data.ip },
+        }
+      );
+      if (response?.data?.status) {
+        update({
+          userInfo: {
+            ...state.userInfo,
+            ipAddress: res.data.ip
+          }
+        });
+      }
+    } catch (error) { }
+  }
+
+  useEffect(() => {
+    if (state.userInfo.userId) {
+      if ((state.userInfo.ipAddress === "0.0.0.0" || state.userInfo.ipAddress === "") && ip === "") updateMyIpAddress();
+    }
+  }, [state.userInfo, ip]);
 
   return (
     <Context.Provider
