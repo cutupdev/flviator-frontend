@@ -673,14 +673,13 @@ export const Provider = ({ children }: any) => {
   const updateMyIpAddress = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
     try {
-      console.log(res.data.ip)
       let response = await axios.post(
         `${process.env.REACT_APP_DEVELOPMENT === "true"
           ? config.development_api
           : config.production_api
         }/update-info`,
         {
-          userId: state.userInfo.userId,
+          userId: UserID,
           updateData: { ipAddress: res.data.ip },
         }
       );
@@ -691,20 +690,16 @@ export const Provider = ({ children }: any) => {
             ipAddress: res.data.ip
           }
         });
+        setIP(res.data.ip)
       }
     } catch (error) {
       console.log(error)
     }
-    setIP(res.data.ip)
   }
 
   useEffect(() => {
-    console.log("1")
-    console.log(state.userInfo, UserID)
     if (UserID) {
-      console.log("2")
       if ((state.userInfo.ipAddress === "0.0.0.0" || state.userInfo.ipAddress === "") && ip === "") {
-        console.log("3")
         updateMyIpAddress();
       }
     }
