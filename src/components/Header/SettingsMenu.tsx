@@ -104,13 +104,13 @@ const Menu = ({ setHowto }) => {
         }/update-info`,
         {
           userId: state.userInfo.userId,
-          updateData: { audioStatus: checked },
+          updateData: { isSoundEnable: checked },
         }
       );
       update({
         userInfo: {
           ...state.userInfo,
-          audioStatus: checked,
+          isSoundEnable: checked,
         },
       });
     },
@@ -134,13 +134,13 @@ const Menu = ({ setHowto }) => {
         }/update-info`,
         {
           userId: state.userInfo.userId,
-          updateData: { musicStatus: checked },
+          updateData: { isMusicEnable: checked },
         }
       );
       update({
         userInfo: {
           ...state.userInfo,
-          musicStatus: checked,
+          isMusicEnable: checked,
         },
       });
     },
@@ -199,7 +199,7 @@ const Menu = ({ setHowto }) => {
       try {
         if (
           localStorage.getItem("aviator-audio") !== "true" &&
-          state.userInfo.musicStatus === true
+          state.userInfo.isMusicEnable === true
         ) {
           let mainEle: any = document.getElementById("mainAudio");
           mainEle.volume = 0.2;
@@ -295,7 +295,7 @@ const Menu = ({ setHowto }) => {
                       <input
                         className="aviator-input"
                         type="checkbox"
-                        checked={state.userInfo.audioStatus || false}
+                        checked={state.userInfo.isSoundEnable || false}
                         onChange={(e) => handleToggleSound(e.target.checked)}
                       />
                       <span className="aviator-slider round"></span>
@@ -312,7 +312,7 @@ const Menu = ({ setHowto }) => {
                       <input
                         className="aviator-input"
                         type="checkbox"
-                        checked={state.userInfo.musicStatus || false}
+                        checked={state.userInfo.isMusicEnable || false}
                         onChange={(e) => handleToggleMusic(e.target.checked)}
                       />
                       <span className="aviator-slider round"></span>
