@@ -143,15 +143,16 @@ interface ContextType extends GameBetLimit, UserStatusType, GameStatusType {
 }
 
 interface MsgUserType {
-  _id?: number;
+  _id?: string;
   userId: string;
   userName: string;
   avatar: string;
-  msgType: string;
-  msg: string;
+  message: string;
+  img: string;
   likes: number;
   likesIDs: string[];
-  createdAt?: number;
+  disLikes: number;
+  disLikesIDs: string[];
 }
 
 const unityContext = new UnityContext({
@@ -300,22 +301,30 @@ export const Provider = ({ children }: any) => {
   };
 
   const updateUserMsg = (
+    _id: string,
     userId: string,
     userName: string,
     avatar: string,
-    msgType: string,
-    msg: string
+    message: string,
+    img: string,
+    likes: number,
+    likesIDs: string[],
+    disLikes: number,
+    disLikesIDs: string[],
   ) => {
     setMsgData([
       ...msgData,
       {
+        _id,
         userId,
         userName,
         avatar,
-        msgType,
-        msg,
-        likes: 0,
-        likesIDs: [],
+        message,
+        img,
+        likes,
+        likesIDs,
+        disLikes,
+        disLikesIDs
       },
     ]);
   };
@@ -540,9 +549,31 @@ export const Provider = ({ children }: any) => {
   }, [socket, secure, token]);
 
   React.useEffect(() => {
-    socket.on("newMsg", ({ userId, userName, avatar, msgType, msg }) => {
+    socket.on("newMsg", ({
+      _id,
+      userId,
+      userName,
+      avatar,
+      message,
+      img,
+      likes,
+      likesIDs,
+      disLikes,
+      disLikesIDs
+    }) => {
       setMsgReceived(!msgReceived);
-      updateUserMsg(userId, userName, avatar, msgType, msg);
+      updateUserMsg(
+        _id,
+        userId,
+        userName,
+        avatar,
+        message,
+        img,
+        likes,
+        likesIDs,
+        disLikes,
+        disLikesIDs
+      );
     });
     return () => {
       socket.off("newMsg");
@@ -615,10 +646,9 @@ export const Provider = ({ children }: any) => {
   const getMyBets = async () => {
     try {
       let response = await axios.post(
-        `${
-          process.env.REACT_APP_DEVELOPMENT === "true"
-            ? config.development_api
-            : config.production_api
+        `${process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
         }/my-info`,
         {
           userId: state.userInfo.userId,
