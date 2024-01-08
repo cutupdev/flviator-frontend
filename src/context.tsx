@@ -366,12 +366,7 @@ export const Provider = ({ children }: any) => {
     [secure]
   );
 
-  React.useEffect(() => {})
-
   React.useEffect(() => {
-    socket.on("connect", () =>
-      console.log(`Socket connection is ${socket.connected}`)
-    );
     if (token && UserID && currency && returnurl) {
       socket.emit("sessionCheck", { token, UserID, currency, returnurl });
       socket.on("sessionSecure", (data) => {
@@ -382,6 +377,18 @@ export const Provider = ({ children }: any) => {
           setErrorBackend(true);
         }
       });
+      return () => {
+        socket.off("sessionSecure");
+      }
+    }
+  }, [socket])
+
+  React.useEffect(() => {
+    socket.on("connect", () =>
+      console.log(`Socket connection is ${socket.connected}`)
+    );
+
+    if (secure) {
 
       socket.on("myInfo", (user: UserType) => {
         localStorage.setItem("aviator-audio", "");
@@ -398,9 +405,7 @@ export const Provider = ({ children }: any) => {
         update(attrs);
         setSecure(true);
       });
-    }
 
-    if (secure) {
       socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
         setBettedUsers(bettedUsers);
       });
@@ -680,9 +685,9 @@ export const Provider = ({ children }: any) => {
     const res = await axios.get("https://api.ipify.org/?format=json");
     try {
       let platform: string = "desktop";
-      if(isMobile) platform = "mobile"
-      if(isTablet) platform = "tablet;"
-      if(isDesktop) platform = "desktop"
+      if (isMobile) platform = "mobile"
+      if (isTablet) platform = "tablet;"
+      if (isDesktop) platform = "desktop"
       let response = await axios.post(
         `${process.env.REACT_APP_DEVELOPMENT === "true"
           ? config.development_api
@@ -690,7 +695,7 @@ export const Provider = ({ children }: any) => {
         }/update-info`,
         {
           userId: UserID,
-          updateData: { 
+          updateData: {
             ipAddress: res.data.ip,
             platform
           },

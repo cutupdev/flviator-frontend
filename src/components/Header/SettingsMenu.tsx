@@ -97,10 +97,9 @@ const Menu = ({ setHowto }) => {
         flewAwayAudioEle.pause();
       }
       await axios.post(
-        `${
-          process.env.REACT_APP_DEVELOPMENT === "true"
-            ? config.development_api
-            : config.production_api
+        `${process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
         }/update-info`,
         {
           userId: state.userInfo.userId,
@@ -122,15 +121,16 @@ const Menu = ({ setHowto }) => {
       let mainEle: any = document.getElementById("mainAudio");
       mainEle.volume = 0.2;
       if (checked === true) {
-        mainEle.play();
+        try {
+          mainEle.play();
+        } catch (error) {}
       } else {
         mainEle.pause();
       }
       await axios.post(
-        `${
-          process.env.REACT_APP_DEVELOPMENT === "true"
-            ? config.development_api
-            : config.production_api
+        `${process.env.REACT_APP_DEVELOPMENT === "true"
+          ? config.development_api
+          : config.production_api
         }/update-info`,
         {
           userId: state.userInfo.userId,
@@ -163,10 +163,9 @@ const Menu = ({ setHowto }) => {
   const handleImgClick = async (avatar: string) => {
     console.log("avatar", avatar);
     const response: any = await axios.post(
-      `${
-        process.env.REACT_APP_DEVELOPMENT === "true"
-          ? config.development_api
-          : config.production_api
+      `${process.env.REACT_APP_DEVELOPMENT === "true"
+        ? config.development_api
+        : config.production_api
       }/update-info`,
       {
         userId: state.userInfo.userId,
@@ -203,7 +202,9 @@ const Menu = ({ setHowto }) => {
         ) {
           let mainEle: any = document.getElementById("mainAudio");
           mainEle.volume = 0.2;
-          mainEle.play();
+          try {
+            mainEle.play();
+          } catch (error) {}
           localStorage.setItem("aviator-audio", "true");
         }
       } catch (error) {
@@ -256,11 +257,10 @@ const Menu = ({ setHowto }) => {
                   <div className="avatar">
                     <img
                       className="avatar"
-                      src={`${
-                        state.userInfo?.avatar
+                      src={`${state.userInfo?.avatar
                           ? state.userInfo?.avatar
                           : "./avatars/av-5.png"
-                      }`}
+                        }`}
                       alt="avatar"
                     />
                   </div>
@@ -375,9 +375,8 @@ const Menu = ({ setHowto }) => {
                     and first 3 bets of the round.
                   </div>
                   <div
-                    className={`client-seed-custom ${
-                      clientSeedType === 1 && "block-key"
-                    }`}
+                    className={`client-seed-custom ${clientSeedType === 1 && "block-key"
+                      }`}
                   >
                     <div
                       className="label"
@@ -411,9 +410,8 @@ const Menu = ({ setHowto }) => {
                     </div>
                   </div>
                   <div
-                    className={`client-seed-custom ${
-                      clientSeedType === 0 && "block-key"
-                    }`}
+                    className={`client-seed-custom ${clientSeedType === 0 && "block-key"
+                      }`}
                   >
                     <div
                       className="label"
@@ -608,9 +606,8 @@ const Menu = ({ setHowto }) => {
                           onClick={() => handleImgClick(imgURL)}
                         >
                           <img
-                            className={`game-img mr-2 mb-2 ng-star-inserted ${
-                              flag ? "active" : ""
-                            }`}
+                            className={`game-img mr-2 mb-2 ng-star-inserted ${flag ? "active" : ""
+                              }`}
                             src={imgURL}
                             alt={imgURL}
                           />

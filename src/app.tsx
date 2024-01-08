@@ -38,7 +38,10 @@ function App() {
       unityState === true &&
       state.userInfo.isSoundEnable === true
     ) {
-      if (takeOffAudioRef.current) takeOffAudioRef.current.play();
+      try {
+        if (takeOffAudioRef.current) takeOffAudioRef.current.play();
+
+      } catch (error) { }
     }
     // eslint-disable-next-line
   }, [takeOffAudioRef, GameState, state.userInfo.isSoundEnable]);
@@ -49,7 +52,9 @@ function App() {
       unityState === true &&
       state.userInfo.isSoundEnable === true
     ) {
-      if (flewAwayAudioRef.current) flewAwayAudioRef.current.play();
+      try {
+        if (flewAwayAudioRef.current) flewAwayAudioRef.current.play();
+      } catch (error) {}
     }
     // eslint-disable-next-line
   }, [flewAwayAudioRef.current, GameState, state.userInfo.isSoundEnable]);
