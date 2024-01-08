@@ -366,6 +366,8 @@ export const Provider = ({ children }: any) => {
     [secure]
   );
 
+  React.useEffect(() => {})
+
   React.useEffect(() => {
     socket.on("connect", () =>
       console.log(`Socket connection is ${socket.connected}`)
@@ -534,25 +536,25 @@ export const Provider = ({ children }: any) => {
           data.cashoutAmount
         );
       });
-      return () => {
-        socket.off("connect");
-        socket.off("enterRoom");
-        socket.off("disconnect");
-        socket.off("myBetState");
-        socket.off("sessionSecure");
-        socket.off("myInfo");
-        socket.off("newMsg");
-        socket.off("myInfo");
-        socket.off("history");
-        socket.off("gameState");
-        socket.off("previousHand");
-        socket.off("finishGame");
-        socket.off("getBetLimits");
-        socket.off("recharge");
-        socket.off("error");
-        socket.off("success");
-      };
     }
+    return () => {
+      socket.off("connect");
+      socket.off("enterRoom");
+      socket.off("disconnect");
+      socket.off("myBetState");
+      socket.off("sessionSecure");
+      socket.off("myInfo");
+      socket.off("newMsg");
+      socket.off("myInfo");
+      socket.off("history");
+      socket.off("gameState");
+      socket.off("previousHand");
+      socket.off("finishGame");
+      socket.off("getBetLimits");
+      socket.off("recharge");
+      socket.off("error");
+      socket.off("success");
+    };
     // eslint-disable-next-line
   }, [socket, secure, token]);
 
