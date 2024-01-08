@@ -5,6 +5,7 @@ import { useLocation } from "react-router";
 import { Socket, io } from "socket.io-client";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { isMobile, isTablet, isDesktop } from 'react-device-detect';
 
 import config from "./config.json";
 import toaster from "./components/Toast";
@@ -32,6 +33,7 @@ export interface UserType {
   currency: string;
   userName: string;
   ipAddress: string;
+  platform: string;
   isSoundEnable: boolean;
   isMusicEnable: boolean;
   msgVisible: boolean;
@@ -174,6 +176,7 @@ const init_state = {
     avatar: "",
     userName: "",
     ipAddress: "",
+    platform: "desktop",
     currency: "INR",
     isSoundEnable: true,
     isMusicEnable: true,
@@ -673,6 +676,10 @@ export const Provider = ({ children }: any) => {
   const updateMyIpAddress = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");
     try {
+      let platform: string = "desktop";
+      if(isMobile) platform = "mobile"
+      if(isTablet) platform = "tablet;"
+      if(isDesktop) platform = "desktop"
       let response = await axios.post(
         `${process.env.REACT_APP_DEVELOPMENT === "true"
           ? config.development_api
@@ -680,14 +687,18 @@ export const Provider = ({ children }: any) => {
         }/update-info`,
         {
           userId: UserID,
-          updateData: { ipAddress: res.data.ip },
+          updateData: { 
+            ipAddress: res.data.ip,
+            platform
+          },
         }
       );
       if (response?.data?.status) {
         update({
           userInfo: {
             ...state.userInfo,
-            ipAddress: res.data.ip
+            ipAddress: res.data.ip,
+            platform
           }
         });
         setIP(res.data.ip)
