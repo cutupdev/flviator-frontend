@@ -367,41 +367,6 @@ export const Provider = ({ children }: any) => {
   );
 
   React.useEffect(() => {
-    if (token && UserID && currency && returnurl) {
-      socket.emit("sessionCheck", { token, UserID, currency, returnurl });
-      socket.on("sessionSecure", (data) => {
-        if (data.sessionStatus === true) {
-          socket.emit("enterRoom", { token, UserID, currency });
-        } else {
-          toast.error(data.message);
-          setErrorBackend(true);
-        }
-      });
-
-      socket.on("myInfo", (user: UserType) => {
-        localStorage.setItem("aviator-audio", "");
-        let attrs = state;
-        attrs.userInfo.balance = user.balance;
-        attrs.userInfo.userType = user.userType;
-        attrs.userInfo.userId = user.userId;
-        attrs.userInfo.userName = user.userName;
-        attrs.userInfo.avatar = user.avatar;
-        attrs.userInfo.currency = user.currency;
-        attrs.userInfo.isSoundEnable = user.isSoundEnable;
-        attrs.userInfo.isMusicEnable = user.isMusicEnable;
-        attrs.userInfo.ipAddress = user.ipAddress;
-        update(attrs);
-        setSecure(true);
-      });
-
-      return () => {
-        socket.off("sessionSecure");
-        socket.off("myInfo");
-      }
-    }
-  }, [socket])
-
-  React.useEffect(() => {
     socket.on("connect", () =>
       console.log(`Socket connection is ${socket.connected}`)
     );
@@ -564,6 +529,42 @@ export const Provider = ({ children }: any) => {
     };
     // eslint-disable-next-line
   }, [socket, secure, token]);
+
+  React.useEffect(() => {
+    if (token && UserID && currency && returnurl) {
+      socket.emit("sessionCheck", { token, UserID, currency, returnurl });
+      socket.on("sessionSecure", (data) => {
+        if (data.sessionStatus === true) {
+          socket.emit("enterRoom", { token, UserID, currency });
+        } else {
+          toast.error(data.message);
+          setErrorBackend(true);
+        }
+      });
+
+      socket.on("myInfo", (user: UserType) => {
+        localStorage.setItem("aviator-audio", "");
+        let attrs = state;
+        attrs.userInfo.balance = user.balance;
+        attrs.userInfo.userType = user.userType;
+        attrs.userInfo.userId = user.userId;
+        attrs.userInfo.userName = user.userName;
+        attrs.userInfo.avatar = user.avatar;
+        attrs.userInfo.currency = user.currency;
+        attrs.userInfo.isSoundEnable = user.isSoundEnable;
+        attrs.userInfo.isMusicEnable = user.isMusicEnable;
+        attrs.userInfo.ipAddress = user.ipAddress;
+        update(attrs);
+        setSecure(true);
+      });
+
+      return () => {
+        socket.off("sessionSecure");
+        socket.off("myInfo");
+      }
+    }
+    // eslint-disable-next-line
+  }, [socket])
 
   React.useEffect(() => {
     socket.on("newMsg", ({
