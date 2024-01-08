@@ -377,18 +377,6 @@ export const Provider = ({ children }: any) => {
           setErrorBackend(true);
         }
       });
-      return () => {
-        socket.off("sessionSecure");
-      }
-    }
-  }, [socket])
-
-  React.useEffect(() => {
-    socket.on("connect", () =>
-      console.log(`Socket connection is ${socket.connected}`)
-    );
-
-    if (secure) {
 
       socket.on("myInfo", (user: UserType) => {
         localStorage.setItem("aviator-audio", "");
@@ -405,6 +393,20 @@ export const Provider = ({ children }: any) => {
         update(attrs);
         setSecure(true);
       });
+
+      return () => {
+        socket.off("sessionSecure");
+        socket.off("myInfo");
+      }
+    }
+  }, [socket])
+
+  React.useEffect(() => {
+    socket.on("connect", () =>
+      console.log(`Socket connection is ${socket.connected}`)
+    );
+
+    if (secure) {
 
       socket.on("bettedUserInfo", (bettedUsers: BettedUserType[]) => {
         setBettedUsers(bettedUsers);
