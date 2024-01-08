@@ -536,6 +536,7 @@ export const Provider = ({ children }: any) => {
       });
       return () => {
         socket.off("connect");
+        socket.off("enterRoom");
         socket.off("disconnect");
         socket.off("myBetState");
         socket.off("sessionSecure");
