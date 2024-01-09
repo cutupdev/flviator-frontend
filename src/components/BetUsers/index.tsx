@@ -56,7 +56,7 @@ export default function BetsUsers() {
 
   useEffect(() => {
     let flag = false;
-    if (allData.length != bettedUsers.length) {
+    if (allData.length !== bettedUsers.length) {
       flag = true;
     } else {
       for (let i = 0; i < allData.length; i++) {

@@ -38,9 +38,9 @@ const MyBets = () => {
               >
                 <div className="user">
                   <div className="username">
-                    {new Date(user.date).getHours() +
+                    {new Date(user.createdAt).getHours() +
                       ":" +
-                      new Date(user.date).getMinutes()}
+                      new Date(user.createdAt).getMinutes()}
                   </div>
                 </div>
                 <div className="bet">{Number(user.betAmount).toFixed(2)}</div>

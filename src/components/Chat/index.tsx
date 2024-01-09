@@ -144,8 +144,8 @@ export default function PerfectLiveChat() {
                     <div className="avatar-block">
                       <img
                         className="avatar"
-                        src={item.avatar || "./avatars/av-6.png"}
-                        alt={item.avatar || "./avatars/av-6.png"}
+                        src={item.avatar || "./avatars/av-5.png"}
+                        alt={item.avatar || "./avatars/av-5.png"}
                       />
                     </div>
                     <div className="msg-block">

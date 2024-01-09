@@ -93,11 +93,11 @@ const TopHistory = () => {
                 <div key={index} className="bet-item">
                   <div className="main">
                     <div className="icon">
-                      {item.userinfo[0]?.img ? (
+                      {item.userinfo[0]?.avatar ? (
                         <img
                           className="avatar"
-                          alt={item.userinfo[0]?.img}
-                          src={item.userinfo[0]?.img}
+                          alt={item.userinfo[0]?.avatar}
+                          src={item.userinfo[0]?.avatar}
                         ></img>
                       ) : (
                         <img
@@ -107,7 +107,7 @@ const TopHistory = () => {
                         ></img>
                       )}
                       <div className="username">
-                        {displayName(item.userinfo[0]?.name)}
+                        {displayName(item.userinfo[0]?.userName)}
                       </div>
                     </div>
                     <div className="score">

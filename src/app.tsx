@@ -19,8 +19,8 @@ function App() {
     msgTab,
     platformLoading,
     errorBackend,
-    unityLoading,
-    currentProgress,
+    // unityLoading,
+    // currentProgress,
     unityState,
     GameState,
   } = React.useContext(Context);
@@ -38,10 +38,12 @@ function App() {
       unityState === true &&
       state.userInfo.isSoundEnable === true
     ) {
-      try {
-        if (takeOffAudioRef.current) takeOffAudioRef.current.play();
+      if (takeOffAudioRef.current) {
+        try {
+          takeOffAudioRef.current.play();
+        } catch (error) { }
+      }
 
-      } catch (error) { }
     }
     // eslint-disable-next-line
   }, [takeOffAudioRef, GameState, state.userInfo.isSoundEnable]);
@@ -52,9 +54,11 @@ function App() {
       unityState === true &&
       state.userInfo.isSoundEnable === true
     ) {
-      try {
-        if (flewAwayAudioRef.current) flewAwayAudioRef.current.play();
-      } catch (error) {}
+      if (flewAwayAudioRef.current) {
+        try {
+          flewAwayAudioRef.current.play();
+        } catch (error) { }
+      }
     }
     // eslint-disable-next-line
   }, [flewAwayAudioRef.current, GameState, state.userInfo.isSoundEnable]);
@@ -95,7 +99,7 @@ function App() {
           </div>
         </div>
       )}
-      {!platformLoading && !unityLoading && (
+      {/* {!platformLoading && !unityLoading && (
         <div className="myloading">
           <div className="loading-container">
             <div className="rotation">
@@ -109,7 +113,7 @@ function App() {
             <p>{Number(currentProgress * 1.111 + 0.01).toFixed(2)}%</p>
           </div>
         </div>
-      )}
+      )} */}
       <div className="contianer">
         <div className="main-game-container">
           <div className="game-container">

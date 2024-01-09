@@ -82,7 +82,7 @@ declare interface GameHistory {
   betAmount: number;
   cashoutAt: number;
   cashouted: boolean;
-  date: number;
+  createdAt: string;
 }
 
 interface UserStatusType {
@@ -227,8 +227,8 @@ const socket = io(
     : config.production_wss
 );
 
-export const callCashOut = (at: number, index: "f" | "s") => {
-  let data = { type: index, endTarget: at };
+export const callCashOut = (userId: string, at: number, index: "f" | "s") => {
+  let data = { userId,type: index, endTarget: at };
   socket.emit("cashOut", data);
 };
 
@@ -517,7 +517,6 @@ export const Provider = ({ children }: any) => {
       socket.off("sessionSecure");
       socket.off("myInfo");
       socket.off("newMsg");
-      socket.off("myInfo");
       socket.off("history");
       socket.off("gameState");
       socket.off("previousHand");
@@ -544,7 +543,7 @@ export const Provider = ({ children }: any) => {
 
       socket.on("myInfo", (user: UserType) => {
         localStorage.setItem("aviator-audio", "");
-        let attrs = state;
+        let attrs = { ...state };
         attrs.userInfo.balance = user.balance;
         attrs.userInfo.userType = user.userType;
         attrs.userInfo.userId = user.userId;
@@ -554,6 +553,8 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.isSoundEnable = user.isSoundEnable;
         attrs.userInfo.isMusicEnable = user.isMusicEnable;
         attrs.userInfo.ipAddress = user.ipAddress;
+        console.log(user);
+        console.log(attrs);
         update(attrs);
         setSecure(true);
       });
@@ -612,12 +613,15 @@ export const Provider = ({ children }: any) => {
           }
         }
         let data = {
+          userId: state.userInfo.userId,
           betAmount: state.userInfo.f.betAmount,
           target: state.userInfo.f.target,
           type: "f",
           auto: state.userInfo.f.auto,
         };
         if (attrs.userInfo.balance - state.userInfo.f.betAmount < 0) {
+          console.log("here")
+          console.log(attrs.userInfo)
           toast.error("Your balance is not enough");
           betStatus.fbetState = false;
           betStatus.fbetted = false;
@@ -640,6 +644,7 @@ export const Provider = ({ children }: any) => {
           }
         }
         let data = {
+          userId: state.userInfo.userId,
           betAmount: state.userInfo.s.betAmount,
           target: state.userInfo.s.target,
           type: "s",
@@ -659,7 +664,7 @@ export const Provider = ({ children }: any) => {
         setUserBetState(betStatus);
       }
     }
-  }, [gameState.GameState, userBetState.fbetState, userBetState.sbetState]);
+  }, [state, gameState.GameState, userBetState.fbetState, userBetState.sbetState]);
 
   const getMyBets = async () => {
     try {
