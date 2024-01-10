@@ -605,7 +605,18 @@ export const Provider = ({ children }: any) => {
     let attrs = state;
     let betStatus = userBetState;
     if (gameState.GameState === "BET") {
+      if(betStatus.fbetState) {
+        let fbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
+        attrs.userInfo.f.betid = fbetid;
+        attrs.userInfo.f.betted = true;
+      }
+      if(betStatus.sbetState) {
+        let sbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
+        attrs.userInfo.s.betid = sbetid;
+        attrs.userInfo.s.betted = true;
+      }
       if (betStatus.fbetState) {
+        console.log("attrs.fautoCashoutState", attrs.fautoCashoutState)
         if (state.userInfo.f.auto) {
           if (state.fautoCound > 0) attrs.fautoCound -= 1;
           else {
@@ -614,9 +625,6 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
-        let fbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
-        attrs.userInfo.f.betid = fbetid;
-        attrs.userInfo.f.betted = true;
         let data = {
           type: "f",
           userInfo: attrs.userInfo,
@@ -635,6 +643,7 @@ export const Provider = ({ children }: any) => {
         setUserBetState(betStatus);
       }
       if (betStatus.sbetState) {
+        console.log("attrs.sautoCashoutState", attrs.sautoCashoutState)
         if (state.userInfo.s.auto) {
           if (state.sautoCound > 0) attrs.sautoCound -= 1;
           else {
@@ -643,9 +652,6 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
-        let sbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
-        attrs.userInfo.s.betid = sbetid;
-        attrs.userInfo.s.betted = true;
         let data = {
           type: "s",
           userInfo: attrs.userInfo,

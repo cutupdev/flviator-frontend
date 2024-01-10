@@ -240,21 +240,20 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
           )}
         <div className="navigation">
           <div className="navigation-switcher">
-            {betted || betState ? (
-              <>
-                <button
-                  className={gameType === "manual" ? "active" : "inactive"}
-                  onClick={() => changeBetType("manual")}
-                >
-                  Bet
-                </button>
-                <button
-                  className={gameType === "auto" ? "active" : "inactive"}
-                  onClick={() => changeBetType("auto")}
-                >
-                  Auto
-                </button>
-              </>
+            <button
+              className={gameType === "manual" ? "active" : "inactive"}
+              onClick={() => changeBetType("manual")}
+            >
+              Bet
+            </button>
+            <button
+              className={gameType === "auto" ? "active" : "inactive"}
+              onClick={() => changeBetType("auto")}
+            >
+              Auto
+            </button>
+            {/* {betted || betState ? (
+              
             ) : (
               <>
                 <button
@@ -270,7 +269,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                   Auto
                 </button>
               </>
-            )}
+            )} */}
           </div>
         </div>
         <div className="first-row">
