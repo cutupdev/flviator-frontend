@@ -615,16 +615,15 @@ export const Provider = ({ children }: any) => {
           }
         }
         attrs.userInfo.f.betted = true;
-        let betid = `Crash-${Date.now()}`;
-        attrs.userInfo.f.betid = betid;
+        let fbetid = `Crash-${Date.now()}`;
+        attrs.userInfo.f.betid = fbetid;
         let data = {
-          userId: state.userInfo.userId,
-          betAmount: state.userInfo.f.betAmount,
-          target: state.userInfo.f.target,
+          userId: attrs.userInfo.userId,
+          betAmount: attrs.userInfo.f.betAmount,
+          target: attrs.userInfo.f.target,
           type: "f",
-          betid,
-          auto: state.userInfo.f.auto,
-          userInfo: state.userInfo,
+          auto: attrs.userInfo.f.auto,
+          userInfo: attrs.userInfo,
         };
         if (attrs.userInfo.balance - state.userInfo.f.betAmount < 0) {
           toast.error("Your balance is not enough");
@@ -648,17 +647,16 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
-        let betid = `Crash-${Date.now()}`;
-        attrs.userInfo.s.betid = betid;
+        let sbetid = `Crash-${Date.now()}`;
+        attrs.userInfo.s.betid = sbetid;
         attrs.userInfo.s.betted = true;
         let data = {
-          userId: state.userInfo.userId,
-          betAmount: state.userInfo.s.betAmount,
-          target: state.userInfo.s.target,
+          userId: attrs.userInfo.userId,
+          betAmount: attrs.userInfo.s.betAmount,
+          target: attrs.userInfo.s.target,
           type: "s",
-          betid,
-          auto: state.userInfo.s.auto,
-          userInfo: state.userInfo,
+          auto: attrs.userInfo.s.auto,
+          userInfo: attrs.userInfo,
         };
         if (attrs.userInfo.balance - state.userInfo.s.betAmount < 0) {
           toast.error("Your balance is not enough");
