@@ -614,9 +614,9 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
-        attrs.userInfo.f.betted = true;
-        let fbetid = `Crash-${Date.now()}`;
+        let fbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
         attrs.userInfo.f.betid = fbetid;
+        attrs.userInfo.f.betted = true;
         let data = {
           userId: attrs.userInfo.userId,
           betAmount: attrs.userInfo.f.betAmount,
@@ -647,7 +647,7 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
-        let sbetid = `Crash-${Date.now()}`;
+        let sbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
         attrs.userInfo.s.betid = sbetid;
         attrs.userInfo.s.betted = true;
         let data = {
