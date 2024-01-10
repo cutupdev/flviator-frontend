@@ -39,6 +39,7 @@ export interface UserType {
   msgVisible: boolean;
   f: {
     auto: boolean;
+    betid: string;
     betted: boolean;
     cashouted: boolean;
     betAmount: number;
@@ -47,6 +48,7 @@ export interface UserType {
   };
   s: {
     auto: boolean;
+    betid: string;
     betted: boolean;
     cashouted: boolean;
     betAmount: number;
@@ -183,6 +185,7 @@ const init_state = {
     msgVisible: false,
     f: {
       auto: false,
+      betid: '0',
       betted: false,
       cashouted: false,
       cashAmount: 0,
@@ -191,6 +194,7 @@ const init_state = {
     },
     s: {
       auto: false,
+      betid: '0',
       betted: false,
       cashouted: false,
       cashAmount: 0,
@@ -611,11 +615,14 @@ export const Provider = ({ children }: any) => {
           }
         }
         attrs.userInfo.f.betted = true;
+        let betid = `Crash-${Date.now()}`;
+        attrs.userInfo.f.betid = betid;
         let data = {
           userId: state.userInfo.userId,
           betAmount: state.userInfo.f.betAmount,
           target: state.userInfo.f.target,
           type: "f",
+          betid,
           auto: state.userInfo.f.auto,
           userInfo: state.userInfo,
         };
@@ -641,12 +648,15 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
+        let betid = `Crash-${Date.now()}`;
+        attrs.userInfo.s.betid = betid;
         attrs.userInfo.s.betted = true;
         let data = {
           userId: state.userInfo.userId,
           betAmount: state.userInfo.s.betAmount,
           target: state.userInfo.s.target,
           type: "s",
+          betid,
           auto: state.userInfo.s.auto,
           userInfo: state.userInfo,
         };
