@@ -138,7 +138,7 @@ export default function PerfectLiveChat() {
                 let active = item?.likesIDs?.filter(
                   (item) => item === state.userInfo.userId
                 ).length;
-                let userid = displayName(item.userId);
+                let userName = displayName(item.userName);
                 return (
                   <div key={index} className="message-wrapper ng-star-inserted">
                     <div className="avatar-block">
@@ -154,10 +154,10 @@ export default function PerfectLiveChat() {
                           <span
                             className="name-wrapper"
                             onClick={() =>
-                              handleTextChange(`${msgContent}@${userid} `)
+                              handleTextChange(`${msgContent}@${userName} `)
                             }
                           >
-                            <span className="name canSelect">{userid}</span>
+                            <span className="name canSelect">{userName}</span>
                           </span>
                           {item.img !== "" ? (
                             <div>

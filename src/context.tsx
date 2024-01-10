@@ -227,8 +227,8 @@ const socket = io(
     : config.production_wss
 );
 
-export const callCashOut = (userId: string, at: number, index: "f" | "s") => {
-  let data = { userId,type: index, endTarget: at };
+export const callCashOut = (userInfo: any, userId: string, at: number, index: "f" | "s") => {
+  let data = { userInfo, userId, type: index, endTarget: at };
   socket.emit("cashOut", data);
 };
 
@@ -553,8 +553,6 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.isSoundEnable = user.isSoundEnable;
         attrs.userInfo.isMusicEnable = user.isMusicEnable;
         attrs.userInfo.ipAddress = user.ipAddress;
-        console.log(user);
-        console.log(attrs);
         update(attrs);
         setSecure(true);
       });
@@ -612,16 +610,16 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
+        attrs.userInfo.f.betted = true;
         let data = {
           userId: state.userInfo.userId,
           betAmount: state.userInfo.f.betAmount,
           target: state.userInfo.f.target,
           type: "f",
           auto: state.userInfo.f.auto,
+          userInfo: state.userInfo,
         };
         if (attrs.userInfo.balance - state.userInfo.f.betAmount < 0) {
-          console.log("here")
-          console.log(attrs.userInfo)
           toast.error("Your balance is not enough");
           betStatus.fbetState = false;
           betStatus.fbetted = false;
@@ -631,7 +629,7 @@ export const Provider = ({ children }: any) => {
         socket.emit("playBet", data);
         betStatus.fbetState = false;
         betStatus.fbetted = true;
-        // update(attrs);
+        update(attrs);
         setUserBetState(betStatus);
       }
       if (betStatus.sbetState) {
@@ -643,12 +641,14 @@ export const Provider = ({ children }: any) => {
             return;
           }
         }
+        attrs.userInfo.s.betted = true;
         let data = {
           userId: state.userInfo.userId,
           betAmount: state.userInfo.s.betAmount,
           target: state.userInfo.s.target,
           type: "s",
           auto: state.userInfo.s.auto,
+          userInfo: state.userInfo,
         };
         if (attrs.userInfo.balance - state.userInfo.s.betAmount < 0) {
           toast.error("Your balance is not enough");
@@ -660,7 +660,7 @@ export const Provider = ({ children }: any) => {
         socket.emit("playBet", data);
         betStatus.sbetState = false;
         betStatus.sbetted = true;
-        // update(attrs);
+        update(attrs);
         setUserBetState(betStatus);
       }
     }
@@ -674,7 +674,7 @@ export const Provider = ({ children }: any) => {
           : config.production_api
         }/my-info`,
         {
-          userId: state.userInfo.userId,
+          userId: UserID,
         }
       );
       if (response?.data?.status) {
@@ -686,8 +686,19 @@ export const Provider = ({ children }: any) => {
   };
 
   useEffect(() => {
-    if (gameState.GameState === "BET") getMyBets();
+    if (gameState.GameState === "BET") {
+      getMyBets();
+    } else if (gameState.GameState === "GAMEEND") {
+      let attrs = state;
+      attrs.userInfo.f.betted = false;
+      attrs.userInfo.s.betted = false;
+      update(attrs);
+    }
   }, [gameState.GameState]);
+
+  useEffect(() => {
+    if (UserID) getMyBets();
+  }, [UserID])
 
   const updateMyIpAddress = async () => {
     const res = await axios.get("https://api.ipify.org/?format=json");

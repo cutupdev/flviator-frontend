@@ -205,7 +205,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
   useEffect(() => {
     if (GameState === "PLAYING" && betted && autoCashoutState && cashOut < currentSecondNum) {
       updateUserBetState({ [`${index}betted`]: false });
-      callCashOut(state.userInfo.userId, cashOut, index);
+      callCashOut(state.userInfo, state.userInfo.userId, cashOut, index);
     }
     // eslint-disable-next-line
   }, [
@@ -377,7 +377,7 @@ const Bet = ({ index, add, setAdd }: BetProps) => {
                 <button
                   className="btn-waiting"
                   onClick={() => {
-                    callCashOut(state.userInfo.userId, currentTarget, index);
+                    callCashOut(state.userInfo, state.userInfo.userId, currentTarget, index);
                   }}
                 >
                   <span>
