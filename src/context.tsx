@@ -618,11 +618,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.f.betid = fbetid;
         attrs.userInfo.f.betted = true;
         let data = {
-          userId: attrs.userInfo.userId,
-          betAmount: attrs.userInfo.f.betAmount,
-          target: attrs.userInfo.f.target,
           type: "f",
-          auto: attrs.userInfo.f.auto,
           userInfo: attrs.userInfo,
         };
         if (attrs.userInfo.balance - state.userInfo.f.betAmount < 0) {
@@ -651,11 +647,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.s.betid = sbetid;
         attrs.userInfo.s.betted = true;
         let data = {
-          userId: attrs.userInfo.userId,
-          betAmount: attrs.userInfo.s.betAmount,
-          target: attrs.userInfo.s.target,
           type: "s",
-          auto: attrs.userInfo.s.auto,
           userInfo: attrs.userInfo,
         };
         if (attrs.userInfo.balance - state.userInfo.s.betAmount < 0) {
