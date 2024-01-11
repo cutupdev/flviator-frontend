@@ -34,6 +34,7 @@ export interface UserType {
   userName: string;
   ipAddress: string;
   platform: string;
+  Session_Token: string;
   isSoundEnable: boolean;
   isMusicEnable: boolean;
   msgVisible: boolean;
@@ -68,6 +69,7 @@ export interface PlayerType {
 
 interface GameStatusType {
   currentNum: number;
+  lastSecondNum: number;
   currentSecondNum: number;
   GameState: string;
   time: number;
@@ -179,6 +181,7 @@ const init_state = {
     userName: "",
     ipAddress: "",
     platform: "desktop",
+    Session_Token: '',
     currency: "INR",
     isSoundEnable: true,
     isMusicEnable: true,
@@ -273,6 +276,7 @@ export const Provider = ({ children }: any) => {
   });
   const [gameState, setGameState] = useState({
     currentNum: 0,
+    lastSecondNum: 0,
     currentSecondNum: 0,
     GameState: "",
     time: 0,
@@ -384,10 +388,13 @@ export const Provider = ({ children }: any) => {
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
         var { user } = userInfo;
         var attrs = { ...userBetState };
+        var mainAttrs = { ...state };
         attrs.fbetState = false;
         attrs.fbetted = user.f.betted;
         attrs.sbetState = false;
         attrs.sbetted = user.s.betted;
+        mainAttrs.userInfo.balance = user.balance;
+        update(mainAttrs)
         setUserBetState(attrs);
       });
 
@@ -557,6 +564,7 @@ export const Provider = ({ children }: any) => {
         attrs.userInfo.isSoundEnable = user.isSoundEnable;
         attrs.userInfo.isMusicEnable = user.isMusicEnable;
         attrs.userInfo.ipAddress = user.ipAddress;
+        attrs.userInfo.Session_Token = user.Session_Token;
         update(attrs);
         setSecure(true);
       });
@@ -605,18 +613,17 @@ export const Provider = ({ children }: any) => {
     let attrs = state;
     let betStatus = userBetState;
     if (gameState.GameState === "BET") {
-      if(betStatus.fbetState) {
+      if (betStatus.fbetState) {
         let fbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
         attrs.userInfo.f.betid = fbetid;
         attrs.userInfo.f.betted = true;
       }
-      if(betStatus.sbetState) {
+      if (betStatus.sbetState) {
         let sbetid = `Crash-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
         attrs.userInfo.s.betid = sbetid;
         attrs.userInfo.s.betted = true;
       }
       if (betStatus.fbetState) {
-        console.log("attrs.fautoCashoutState", attrs.fautoCashoutState)
         if (state.userInfo.f.auto) {
           if (state.fautoCound > 0) attrs.fautoCound -= 1;
           else {
@@ -635,7 +642,7 @@ export const Provider = ({ children }: any) => {
           betStatus.fbetted = false;
           return;
         }
-        attrs.userInfo.balance -= state.userInfo.f.betAmount;
+        // attrs.userInfo.balance -= state.userInfo.f.betAmount;
         socket.emit("playBet", data);
         betStatus.fbetState = false;
         betStatus.fbetted = true;
@@ -643,7 +650,6 @@ export const Provider = ({ children }: any) => {
         setUserBetState(betStatus);
       }
       if (betStatus.sbetState) {
-        console.log("attrs.sautoCashoutState", attrs.sautoCashoutState)
         if (state.userInfo.s.auto) {
           if (state.sautoCound > 0) attrs.sautoCound -= 1;
           else {
@@ -662,7 +668,7 @@ export const Provider = ({ children }: any) => {
           betStatus.sbetted = false;
           return;
         }
-        attrs.userInfo.balance -= state.userInfo.s.betAmount;
+        // attrs.userInfo.balance -= state.userInfo.s.betAmount;
         socket.emit("playBet", data);
         betStatus.sbetState = false;
         betStatus.sbetted = true;
@@ -695,6 +701,8 @@ export const Provider = ({ children }: any) => {
     if (gameState.GameState === "BET") {
       getMyBets();
     } else if (gameState.GameState === "GAMEEND") {
+      // update-cashout
+      console.log("lastSecondNum => ", gameState.lastSecondNum)
       let attrs = state;
       attrs.userInfo.f.betted = false;
       attrs.userInfo.s.betted = false;
