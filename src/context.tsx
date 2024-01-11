@@ -388,13 +388,13 @@ export const Provider = ({ children }: any) => {
       socket.on("myBetState", (userInfo: { user: UserType; type: string }) => {
         var { user } = userInfo;
         var attrs = { ...userBetState };
-        var mainAttrs = { ...state };
+        // var mainAttrs = { ...state };
         attrs.fbetState = false;
         attrs.fbetted = user.f.betted;
         attrs.sbetState = false;
         attrs.sbetted = user.s.betted;
-        mainAttrs.userInfo.balance = user.balance;
-        update(mainAttrs)
+        // mainAttrs.userInfo.balance = user.balance;
+        // update(mainAttrs)
         setUserBetState(attrs);
       });
 
@@ -642,7 +642,7 @@ export const Provider = ({ children }: any) => {
           betStatus.fbetted = false;
           return;
         }
-        // attrs.userInfo.balance -= state.userInfo.f.betAmount;
+        attrs.userInfo.balance -= state.userInfo.f.betAmount;
         socket.emit("playBet", data);
         betStatus.fbetState = false;
         betStatus.fbetted = true;
@@ -668,7 +668,7 @@ export const Provider = ({ children }: any) => {
           betStatus.sbetted = false;
           return;
         }
-        // attrs.userInfo.balance -= state.userInfo.s.betAmount;
+        attrs.userInfo.balance -= state.userInfo.s.betAmount;
         socket.emit("playBet", data);
         betStatus.sbetState = false;
         betStatus.sbetted = true;
